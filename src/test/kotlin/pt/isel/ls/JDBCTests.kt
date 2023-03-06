@@ -8,7 +8,7 @@ import kotlin.test.assertTrue
 class JDBCTests {
 
     private val dataSource = PGSimpleDataSource().apply {
-        this.setUrl("jdbc:postgresql://localhost/postgres?user=postgres&password=superuser")
+        this.setUrl(System.getenv("JDBC_DATABASE_URL"))
     }
 
     @Test
