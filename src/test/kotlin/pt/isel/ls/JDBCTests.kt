@@ -13,20 +13,19 @@ class JDBCTests {
 
     @Test
     fun `DELETE test`() {
-        val connection = dataSource.connection.apply {
+        dataSource.connection.apply {
             this.autoCommit = false
+        }.use {
+            it.prepareStatement("INSERT INTO students(course, number, name) values (1, 8080, 'Test')")
+            val rsA = it.prepareStatement("SELECT * FROM students").executeQuery()
+            assertTrue(rsA.next())
+
+            it.prepareStatement("DELETE FROM students").execute()
+            val rsB = it.prepareStatement("SELECT * FROM students").executeQuery()
+
+            assertFalse(rsB.next())
+
+            it.rollback()
         }
-
-        connection.prepareStatement("INSERT INTO students(course, number, name) values (1, 8080, 'Test')")
-        val rsA = connection.prepareStatement("SELECT * FROM students").executeQuery()
-        assertTrue(rsA.next())
-
-        connection.prepareStatement("DELETE FROM students").execute()
-        val rsB = connection.prepareStatement("SELECT * FROM students").executeQuery()
-
-        assertFalse(rsB.next())
-
-        connection.rollback()
-        connection.close()
     }
 }
