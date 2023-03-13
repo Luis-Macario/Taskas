@@ -1,0 +1,237 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/RicardoPinto26/TaskManagementApp/1.0.0
+  - description: localhost
+    url: https://localhost:8080
+info:
+  description: Simple Task Management API
+  version: "0.1.0"
+  title: Task Management API
+  license:
+    name: GNU Affero General Public License 3.0
+    url: 'https://www.gnu.org/licenses/agpl-3.0.en.html'
+tags:
+  - name: User Management
+    description: Operations regarding the user
+  - name: Board Management
+    description: Operations regarding the board
+paths:
+  /users:
+    post:
+      tags:
+        - User Management
+      summary: creates a new user
+      description: |
+        Create a user, given a name and email.
+      requestBody:
+        description: User object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        '201':
+          description: User was created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateUserResponse'
+        '400':
+          description: Invalid Request Body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '409':
+          description: Provided email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+  /users/{id}:
+    get:
+      tags:
+        - User Management
+      summary: get the details of a user
+      description: |
+        Get the name and email of a user
+      parameters:
+        - name: id
+          in: path
+          description: The user's id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The user's details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserResponse'
+        '400':
+          description: Invalid ID provideed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+  /boards/:
+    post:
+      tags:
+        - Board Management
+      summary: create a new board
+      description: |
+        Create a board, with the given name and description
+      requestBody:
+        description: Board object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBoardRequest'
+      responses:
+        '201':
+          description: Board was created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateBoardResponse'
+        '400':
+          description: Invalid Request Body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '401':
+          description: User not logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '409':
+          description: Provided name already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+components:
+  responses:
+    InternalServerErrorResponse:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/AppError'
+  schemas:
+    CreateUserRequest:
+      type: object
+      required:
+        - id
+        - name
+        - email
+      properties:
+        id:
+          type: integer
+          description: User's Unique Identifier
+          example: 1
+        name:
+          type: string
+          description: User's Name
+          example: "Ricardo Pinto"
+        email:
+          type: string
+          description: User's Unique Email
+          example: "a47673@alunos.isel.pt"
+    CreateUserResponse:
+      type: object
+      required:
+        - token
+        - id
+      properties:
+        token:
+          type: string
+          description: User's Token
+          example: "06a3e08d-b893-451c-bfa4-3e3641d1b9b5"
+        id:
+          type: integer
+          description: User's Unique Identifier
+          example: 1
+
+    GetUserResponse:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+          description: User's Name
+          example: "Ricardo Pinto"
+        email:
+          type: string
+          description: User's Unique Email
+          example: "a47673@alunos.isel.pt"
+
+    CreateBoardRequest:
+      type: object
+      required:
+        - name
+        - description
+      properties:
+        name:
+          type: string
+          description: Board's Unique Name
+          example: "aBoard"
+        description:
+          type: string
+          description: Board's Description
+          example: "aBoard's Description"
+    CreateBoardResponse:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: Board's Unique Identifier
+          example: 1
+
+    AppError:
+      type: object
+      required:
+        - internalErrorNumber
+        - internalErrorName
+        - description
+      properties:
+        internalErrorNumber:
+          type: integer
+          description: The internal error's number
+          example: 1000
+        internalErrorName:
+          type: string
+          description: The internal error's name
+          example: "Bad Request"
+        description:
+          type: string
+          description: A description of the error
+          example: "Failed to read the request body"
