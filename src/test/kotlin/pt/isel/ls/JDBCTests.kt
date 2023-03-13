@@ -44,6 +44,7 @@ class JDBCTests {
 
             val rs = it.prepareStatement("select * from students where name !='Alice'").executeQuery()
             rs.next()
+            rs.next()
 
             assertEquals("Luís", rs.getString("name"))
             rs.next()
@@ -54,5 +55,40 @@ class JDBCTests {
             it.rollback()
         }
 
+    }
+
+    @Test
+    fun `INSERT new student `(){
+        dataSource.connection.apply {
+            this.autoCommit = false
+        }.use {
+            it.prepareStatement("insert into students(course, number, name) values (1, 46634, 'Miguel');").execute()
+            val rs = it.prepareStatement("select * from students where number = 46634").executeQuery()
+
+            assertTrue(rs.next())
+            assertEquals("Miguel", rs.getString("name") )
+
+            it.rollback()
+            it.close()
+        }
+    }
+
+
+    @Test
+    fun `UPDATE a student name`(){
+        dataSource.connection.apply {
+            this.autoCommit = false
+        }.use {
+            it.prepareStatement("insert into students(course, number, name) values (1, 47784, 'Luis');").execute()
+            it.prepareStatement("update students set name = 'Francisco' where number = 47784").execute()
+
+            val rs = it.prepareStatement("select * from students where number = 47784").executeQuery()
+
+            assertTrue(rs.next())
+            assertEquals("Francisco", rs.getString("name"))
+
+            it.rollback()
+            it.close()
+        }
     }
 }
