@@ -4,7 +4,7 @@ servers:
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/RicardoPinto26/TaskManagementApp/1.0.0
   - description: localhost
-    url: https://localhost:8080
+    url: http://localhost:8080/api
 info:
   description: Simple Task Management API
   version: "0.1.0"
@@ -74,7 +74,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetUserResponse'
+                $ref: '#/components/schemas/SimpleUser'
         '400':
           description: Invalid ID provideed
           content:
@@ -90,7 +90,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
 
-  /boards/:
+  /boards:
     post:
       tags:
         - Board Management
@@ -132,6 +132,103 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
 
+  /boards/{boardID}/users/{userID}:
+    post:
+      tags:
+        - Board Management
+      summary: Adds a user to the given board
+      description: |
+        Adds the user with the provided id to the given board
+      parameters:
+        - name: boardID
+          in: path
+          description: The board's id
+          required: true
+          schema:
+            type: integer
+        - name: userID
+          in: path
+          description: The user's id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User was added
+        '400':
+          description: Invalid Board ID or Invalid Request Body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '401':
+          description: User not logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '403':
+          description: User doesn't have access to that board
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '409':
+          description: User is already in the Board
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+  /users/{id}/boards:
+    get:
+      tags:
+        - Board Management
+      summary: get all user available boards
+      description: |
+        Get a list of all the boards availabe to the provided user
+      parameters:
+        - name: id
+          in: path
+          description: The user's id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The user's boards
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUsersBoardsResponse'
+        '400':
+          description: Invalid ID provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '401':
+          description: User not logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '403':
+          description: User doesn't have access to that user's boards
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '404':
+          description: No boards found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
 components:
   responses:
     InternalServerErrorResponse:
@@ -143,6 +240,46 @@ components:
             items:
               $ref: '#/components/schemas/AppError'
   schemas:
+    SimpleUser:
+      type: object
+      required:
+        - id
+        - name
+        - email
+      properties:
+        id:
+          type: integer
+          description: User's Unique Identifier
+          example: 1
+        name:
+          type: string
+          description: User's Name
+          example: "Ricardo Pinto"
+        email:
+          type: string
+          description: User's Unique Email
+          example: "a47673@alunos.isel.pt"
+
+    SimpleBoard:
+      type: object
+      required:
+        - id
+        - name
+        - description
+      properties:
+        id:
+          type: integer
+          description: Board's Unique Identifier
+          example: 1
+        name:
+          type: string
+          description: Board's Unique Name
+          example: "aBoard"
+        description:
+          type: string
+          description: Board's Description
+          example: "aBoard's Description"
+
     CreateUserRequest:
       type: object
       required:
@@ -177,21 +314,6 @@ components:
           description: User's Unique Identifier
           example: 1
 
-    GetUserResponse:
-      type: object
-      required:
-        - name
-        - email
-      properties:
-        name:
-          type: string
-          description: User's Name
-          example: "Ricardo Pinto"
-        email:
-          type: string
-          description: User's Unique Email
-          example: "a47673@alunos.isel.pt"
-
     CreateBoardRequest:
       type: object
       required:
@@ -206,6 +328,7 @@ components:
           type: string
           description: Board's Description
           example: "aBoard's Description"
+
     CreateBoardResponse:
       type: object
       required:
@@ -215,6 +338,13 @@ components:
           type: integer
           description: Board's Unique Identifier
           example: 1
+
+    GetUsersBoardsResponse:
+      type: object
+      required:
+        - boards
+      items:
+        $ref: '#/components/schemas/SimpleBoard'
 
     AppError:
       type: object
