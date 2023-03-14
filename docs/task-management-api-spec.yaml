@@ -608,6 +608,67 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse' 
           
+  /boards/{boardID}/lists/{listID}/cards/{cardID}/move:
+    post:  
+      tags:
+        - Board Management
+      summary: move a card
+      description: |
+        Moves a card from the current list to the given list
+      parameters:
+        - name: boardID
+          in: path
+          description: The board's id
+          required: true
+          schema:
+            type: integer
+        - name: listID
+          in: path
+          description: The list's id
+          required: true
+          schema:
+            type: integer
+        - name: cardID
+          in: path
+          description: The card's id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Move object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoveCardRequest'
+      responses:
+        '200':
+          description: the card's details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Card'
+        '400':
+          description: Invalid ID provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '401':
+          description: User not logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '403':
+          description: User doesn't have access to that board
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse' 
+          
 components:
   responses:
     InternalServerErrorResponse:
@@ -938,6 +999,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SimpleCard'
+        
+    MoveCardRequest:
+      type: object
+      required:
+        - lid
+      properties:
+        lid:
+          type: integer
+          description: The List's ID where the card is to be moved into
+          example: 1
         
     AppError:
       type: object
