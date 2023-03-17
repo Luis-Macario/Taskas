@@ -15,7 +15,6 @@ import kotlin.collections.List
  */
 data class User(
     val id: Int,
-    val bId: List<Int>,
     val name: String,
     val email: String,
     val token: String
@@ -53,15 +52,12 @@ data class User(
 /**
  * Board representation
  *
- * @property uid id of the user that created the board
  * @property id board's unique identifier
  * @property description a small description of the project, empty string by default
  * @property name project's name
  */
 data class Board(
-    val uid: Int,
     val id: Int,
-    val lId: List<Int>,
     val name: String,
     val description: String = "",
 ) {
@@ -81,8 +77,23 @@ data class Board(
     init {
         require(validName(name)) { "Invalid board username: $name" }
         require(validDescription(description)) { "Invalid board description: $description" }
-        require(validId(uid)) { "Invalid user id: $uid" }
         require(validId(id)) { "Invalid board id: $id" }
+    }
+}
+
+/**
+ * User - Board representation
+ *
+ * @property uId id of the User
+ * @property bId id of the Board
+ */
+data class UserBoard(
+    val uId: Int,
+    val bId: Int,
+){
+    init {
+        require(validId(uId)){"Invalid userid: $uId"}
+        require(validId(uId)){"Invalid board id: $bId"}
     }
 }
 
@@ -94,7 +105,7 @@ data class Board(
  * @property name List's unique identifier
  */
 data class TaskList(
-    val bid: List<Int>,
+    val bid: Int,
     val id: Int,
     val name: String
 ) {
@@ -113,7 +124,7 @@ data class TaskList(
     }
     init {
         require(validId(id)) { "Invalid task id: $id" }
-        require(validId(bid)) { "Invalid board id: $bid" }
+        //require(validId(bid)) { "Invalid board id: $bid" }
         require(validName(name)) { "Invalid task name: $name" }
     }
 }

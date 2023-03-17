@@ -4,24 +4,25 @@ import java.util.*
 
 class DataMem {
 
-    var userId: Int = 0
-    var boardId: Int = 0
-    var listId: Int = 0
-    var cardId: Int = 0
+    private var userId: Int = 0
+    private var boardId: Int = 0
+    private var listId: Int = 0
+    private var cardId: Int = 0
+    private var userBoardId: Int = 0
 
     val users:  MutableMap<Int, User> = mutableMapOf()
     val boards: MutableMap<Int, Board> = mutableMapOf()
-    val lists:  MutableMap<Int, List> = mutableMapOf()
+    val userBoard: MutableMap<Int, UserBoard> = mutableMapOf()
+    val taskLists:  MutableMap<Int, TaskList> = mutableMapOf()
     val cards:  MutableMap<Int, Card> = mutableMapOf()
 
     //Not sure about this Pair(token,id)
     fun createUser(name: String, email: String): Pair<String, Int>{
         val token = UUID.randomUUID().toString()
         val id = userId
-        val boards = listOf<Int>()
         userId += 1
 
-        users[id] = User(id, boards, name, email, token)
+        users[id] = User(id, name, email, token)
         return Pair(token, id)
     }
 
@@ -33,21 +34,19 @@ class DataMem {
     }
 
     //Can a board be created without users??
-    fun createBoard(name: String, description: String, uId: Int): Int{
+    fun createBoard(name: String, description: String): Int{
         val id = boardId
-        val user = listOf<Int>(uId)
-        val lists = listOf<Int>()
         boardId += 1
 
-        boards[id] = Board(user, id, lists, name, description)
+        boards[id] = Board(id, name, description)
         return id
     }
 
     fun addUserToBoard(bId: Int, uId: Int){
-        val newUsersList = (boards[bId]?.uid)?.plus(uId)
-        requireNotNull(newUsersList) {"Board not found"}
+        val id =  userBoardId
+        userBoard[id] = UserBoard(uId, bId)
+        userBoardId += 1
 
-        boards[bId]?.uid = newUsersList
     }
 
     fun getBoard(bId: Int): Board{
@@ -57,41 +56,29 @@ class DataMem {
         return board
     }
 
-    fun getUserAvailableBoards(uId: Int): kotlin.collections.List<Int> {
-        val userBoards = mutableListOf<Int>()
-
-        users[uId]?.bId?.forEach {
-            userBoards += it
-        }
-        return userBoards.toList()
-    }
+    fun getUserAvailableBoards(uId: Int) =
+         userBoard.filter { it.value.uId == uId }.keys.toList()
 
 
-    fun createList(name: String ,bId: Int): Int{
+
+    fun createTaskList(name: String ,bId: Int): Int{
         val id = listId
-        lists[id] = List(listOf(bId), id, name)
+        taskLists[id] = TaskList(bId, id, name)
         listId += 1
 
         return id
     }
 
-    fun getListDetails(listId: Int): List {
-        val list = lists[listId]
+    fun getTaskListDetails(listId: Int): TaskList {
+        val list = taskLists[listId]
         requireNotNull(list)
 
         return list
     }
 
-    fun getBoardLists(bId: Int): kotlin.collections.List<List>{
-        val boardLists = mutableListOf<List>()
+    fun getTaskListsOfBoard(bId: Int) =
+        taskLists.filter { it.value.bid == bId }.keys.toList()
 
-        boards[bId]?.lId?.forEach{
-            boardLists += getListDetails(it)
-
-        }
-
-        return boardLists.toList()
-    }
 
     fun createCard(
         uid: Int,
@@ -109,14 +96,9 @@ class DataMem {
         return id
     }
 
-    fun getSetOfCards(lid: Int) : kotlin.collections.List<Int>{
-        val listCards = mutableListOf<Int>()
-        cards.values.forEach {
-            if(it.lid == lid) listCards += it.id
-        }
+    fun getSetOfCards(lid: Int) =
+        cards.filter { it.value.lid == lid }.keys.toList()
 
-        return listCards.toList()
-    }
 
     fun getCardInformation(cId: Int): Card{
         val cardInfo = cards[cId]
@@ -126,7 +108,7 @@ class DataMem {
     }
 
     //Probably not the best solution
-    fun moveCard(cId: Int, lIdTo: Int){
+    fun moveCard(cId: Int, lIdTo: Int?){
         val card = getCardInformation(cId)
         cards[cId] = card.copy(lid = lIdTo)
     }
