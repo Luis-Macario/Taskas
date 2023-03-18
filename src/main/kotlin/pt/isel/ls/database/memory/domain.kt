@@ -1,8 +1,7 @@
-package pt.isel.ls
+package pt.isel.ls.database.memory
 
 import pt.isel.ls.utils.*
 import java.sql.*
-import kotlin.collections.List
 
 
 /**
@@ -141,7 +140,7 @@ data class TaskList(
  * @property finishDate date the task was finished
  */
 data class Card(
-    val uid: Int,
+    val uid: Int, //TODO: ??
     val bid: Int,
     val lid: Int? = null,
     val id: Int,

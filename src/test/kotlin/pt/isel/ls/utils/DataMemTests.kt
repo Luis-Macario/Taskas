@@ -1,8 +1,8 @@
 package pt.isel.ls.utils
 
 import kotlin.test.Test
-import pt.isel.ls.DataMem
-import pt.isel.ls.User
+import pt.isel.ls.database.DataMem
+import pt.isel.ls.database.memory.User
 import java.sql.Date
 import kotlin.test.assertEquals
 

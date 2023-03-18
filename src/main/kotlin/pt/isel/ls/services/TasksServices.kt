@@ -1,15 +1,17 @@
-package pt.isel.ls
+package pt.isel.ls.services
 
 import kotlinx.serialization.Serializable
 import org.slf4j.LoggerFactory
+import pt.isel.ls.database.AppDatabase
+import pt.isel.ls.database.memory.Board
+import pt.isel.ls.database.memory.Card
+import pt.isel.ls.database.memory.TaskList
+import pt.isel.ls.database.memory.User
 import java.sql.*
 
 private val logger = LoggerFactory.getLogger("pt.isel.ls.http")
 
-@Serializable
-data class CreateUserResponse(val token: String, val id: Int)
-
-class TaskServices {
+class TasksServices(private val database: AppDatabase) : AppServices {
 
     //User Management
 
@@ -35,14 +37,14 @@ class TaskServices {
      *
      * @return user object
      */
-    fun getUser(uid: Int): User = Data_Mem.getUser(uid)
+    fun getUser(uid: Int)/*: User*/ = database.getUserDetails(uid)
 
     /**
      * Get all users
      *
      * @return List of user objects
      */
-    fun getAllUsers(): List<User> = Data_Mem.getAllUsers()
+    fun getAllUsers(): List<User> = database.getAllUsers()
 
 
     //Board Management
@@ -56,7 +58,7 @@ class TaskServices {
      *
      * @return Board's unique identifier
      */
-    fun createBoard(uid: Int, name: String, description: String?): Int = Data_Mem.getBoard(uid, description, name)
+    fun createBoard(uid: Int, name: String, description: String?): Int = database.getBoard(uid, description, name)
 
     /**
      * Add a user to the board
@@ -66,7 +68,7 @@ class TaskServices {
      *
      * @return ?
      */
-    fun addUserToBoard(uid: Int, bid: Int) = Data_Mem.addUserToBoard(uid, bid)
+    fun addUserToBoard(uid: Int, bid: Int) = database.addUserToBoard(uid, bid)
 
     /**
      * Get the list with all user available boards
@@ -76,7 +78,7 @@ class TaskServices {
      * @return List of user's boards
      */
 
-    fun getUserBoards(uid: Int): List<Board> = Data_Mem.getUserBoards(uid)
+    fun getUserBoards(uid: Int): List<Board> = database.getUserBoards(uid)
 
     /**
      * Get the detailed information of a board
@@ -85,7 +87,7 @@ class TaskServices {
      *
      * @return board object
      */
-    fun getBoard(bid: Int): Board = Data_Mem.getUserBoards(bid)
+    fun getBoard(bid: Int): Board = database.getUserBoards(bid)
 
     /**
      * Creates a new list on a board
@@ -94,7 +96,7 @@ class TaskServices {
      *
      * @return list unique identifier
      */
-    fun getList(name: String): Int = Data_Mem
+    fun getList(name: String): Int = database
 
     /**
      * Get the lists of a board.
@@ -103,7 +105,7 @@ class TaskServices {
      *
      * @return List of BList objects
      */
-    fun getBoardsLists(bid: Int): List<TaskList> = Data_Mem
+    fun getBoardsLists(bid: Int): List<TaskList> = database
 
     /**
      * Get detailed information of a list.
@@ -112,7 +114,7 @@ class TaskServices {
      *
      * @return BList object
      */
-    fun getList(lid: Int): TaskList = Data_Mem
+    fun getList(lid: Int): TaskList = database
 
     /**
      * Creates a new card in a list.
@@ -123,7 +125,7 @@ class TaskServices {
      *
      * @return Card's unique identifier
      */
-    fun createCard(name: String, description: String, dueDate: Date? = null, lid: Int): Int = Data_Mem
+    fun createCard(name: String, description: String, dueDate: Date? = null, lid: Int): Int = database
 
     /**
      * Get the set of cards in a list.
@@ -132,7 +134,7 @@ class TaskServices {
      *
      * @return List of Card objects
      */
-    fun getTaskListCards(lid: Int): List<Card> = Data_Mem
+    fun getTaskListCards(lid: Int): List<Card> = database
 
     /**
      * Get the detailed information of a card.
@@ -141,7 +143,7 @@ class TaskServices {
      *
      * @return Card Object
      */
-    fun getCard(cid: Int): Card = Data_Mem
+    fun getCard(cid: Int): Card = database
 
     /**
      * Moves a card, given the following parameter
@@ -150,7 +152,7 @@ class TaskServices {
      *
      * @return ?
      */
-    fun moveCard(lid: Int) = Data_Mem
+    fun moveCard(lid: Int) = database
 
 }
 
