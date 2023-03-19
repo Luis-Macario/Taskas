@@ -1,8 +1,9 @@
-package pt.isel.ls
+package pt.isel.ls.database.memory
+import pt.isel.ls.database.AppDatabase
 import java.sql.Date
 import java.util.*
 
-class DataMem {
+class TasksDataMem : AppDatabase {
 
     private var userId: Int = 0
     private var boardId: Int = 0
