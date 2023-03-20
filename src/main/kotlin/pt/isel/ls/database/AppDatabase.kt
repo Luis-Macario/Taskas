@@ -20,10 +20,10 @@ interface AppDatabase {
         lid: Int,
         name: String,
         description: String,
-        dueDate: Date?
+        dueDate: Date //?
     ): Pair<DataCardCreated?, DataError?>
 
     fun getCardsFromList(lid: Int): Pair<DataListCards?, DataError?>
-    fun getCardDetails(bid: Int, cid: Int): Pair<DataCard?, DataError?>
+    fun getCardDetails(lid: Int, cid: Int): Pair<DataCard?, DataError?>
     fun moveCard(cid: Int, lid: Int): Pair<DataCardMoved?, DataError?>
 }

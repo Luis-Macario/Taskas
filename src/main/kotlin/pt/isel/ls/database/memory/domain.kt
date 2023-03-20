@@ -57,6 +57,7 @@ data class User(
  */
 data class Board(
     val id: Int,
+    val uid: Int,
     val name: String,
     val description: String = "",
 ) {
@@ -140,7 +141,7 @@ data class TaskList(
  * @property finishDate date the task was finished
  */
 data class Card(
-    val uid: Int, //TODO: ??
+    //val uid: Int, //TODO: ??
     val bid: Int,
     val lid: Int? = null,
     val id: Int,
@@ -174,7 +175,7 @@ data class Card(
     }
     init {
         require(validId(id)) { "Invalid card id: $id" }
-        require(validId(uid)) { "Invalid user id: $uid" }
+        //require(validId(uid)) { "Invalid user id: $uid" }
         require(validId(bid)) { "Invalid board id: $bid" }
         if (lid != null) require(validId(bid)) { "Invalid list id: $lid" }
         require(validName(name)) { "Invalid card name: $name" }

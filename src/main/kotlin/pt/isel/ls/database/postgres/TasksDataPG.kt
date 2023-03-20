@@ -45,7 +45,7 @@ class TasksDataPG(url: String) : AppDatabase {
         lid: Int,
         name: String,
         description: String,
-        dueDate: Date?
+        dueDate: Date
     ): Pair<DataCardCreated?, DataError?> {
         TODO("Not yet implemented")
     }
@@ -54,7 +54,7 @@ class TasksDataPG(url: String) : AppDatabase {
         TODO("Not yet implemented")
     }
 
-    override fun getCardDetails(bid: Int, cid: Int): Pair<DataCard?, DataError?> {
+    override fun getCardDetails(lid: Int, cid: Int): Pair<DataCard?, DataError?> {
         TODO("Not yet implemented")
     }
 
