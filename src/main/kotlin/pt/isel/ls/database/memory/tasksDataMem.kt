@@ -13,11 +13,11 @@ class TasksDataMem : AppDatabase {
     private var cardId: Int = 0
     private var userBoardId: Int = 0
 
-    private val users: MutableMap<Int, User> = mutableMapOf()
-    private val boards: MutableMap<Int, Board> = mutableMapOf()
-    private val userBoard: MutableMap<Int, UserBoard> = mutableMapOf()
-    private val taskLists: MutableMap<Int, TaskList> = mutableMapOf()
-    private val cards: MutableMap<Int, Card> = mutableMapOf()
+    val users: MutableMap<Int, User> = mutableMapOf()
+    val boards: MutableMap<Int, Board> = mutableMapOf()
+    val userBoard: MutableMap<Int, UserBoard> = mutableMapOf()
+    val taskLists: MutableMap<Int, TaskList> = mutableMapOf()
+    val cards: MutableMap<Int, Card> = mutableMapOf()
 
 
     override fun createUser(name: String, email: String): DataUserCreated {
@@ -31,7 +31,6 @@ class TasksDataMem : AppDatabase {
     override fun getUserDetails(uid: Int): DataUser {
         val u = users[uid] ?: throw UserNotFound
         val boards = getBoardsFromUser(uid).boards
-        if (boards.isEmpty()) throw BoardsUserDoesNotExist
 
         return DataUser(u.id, u.name, u.email, boards)
     }
@@ -47,15 +46,14 @@ class TasksDataMem : AppDatabase {
     override fun getBoardDetails(bid: Int): DataBoard {
         val board = boards[bid] ?: throw BoardNotFound
         val list = getListsFromBoard(bid).lists
-        val users = mutableListOf<DataSimpleUser>()
 
-        //could be map
-        userBoard.values.forEach {
-            if (it.bId == bid) {
-                val u = getUserDetails(it.uId)
-                users.add(DataSimpleUser(u.id, u.name, u.email))
+        val users = userBoard.values
+            .filter { it.bId == bid }
+            .map {
+                val userDetails = getUserDetails(it.uId)
+                DataSimpleUser(userDetails.id, userDetails.name, userDetails.email)
             }
-        }
+
         return DataBoard(board.id, board.name, board.description, users, list)
     }
 
@@ -66,24 +64,16 @@ class TasksDataMem : AppDatabase {
         return DataUserAdded
     }
 
-
-    /*fun addUserToBoard(bId: Int, uId: Int) {
-        val id = userBoardId
-        userBoard[id] = UserBoard(uId, bId)
-        userBoardId += 1
-    }*/
-
     override fun getBoardsFromUser(uid: Int): DataUserBoards {
-        val boards = mutableListOf<DataSimpleBoard>()
+        val boards : List<DataSimpleBoard> =
+            userBoard.values
+                .filter { it.uId == uid }
+                .map {
+                    val b = getBoardDetails(it.bId)
+                    DataSimpleBoard(b.id, b.name, b.description)
+                }
 
-        //could be map
-        userBoard.values.forEach {
-            if (it.uId == uid) {
-                val b = getBoardDetails(it.bId)
-                boards.add(DataSimpleBoard(b.id, b.name, b.description))
-            }
-        }
-        return DataUserBoards(boards.toList())
+        return DataUserBoards(boards)
     }
 
     override fun createList(bid: Int, name: String): DataListCreated {
@@ -94,22 +84,21 @@ class TasksDataMem : AppDatabase {
     }
 
     override fun getListsFromBoard(bid: Int): DataBoardLists {
-        val lists = mutableListOf<DataSimpleList>()
-
-        // could be map
-        taskLists.values.forEach {
-            if (it.bid == bid) {
+        val lists : List<DataSimpleList> =
+        taskLists.values
+            .filter { it.bid == bid }
+            .map {
                 val l = getListDetails(it.id)
-                lists.add(DataSimpleList(l.id, l.name))
+               DataSimpleList(l.id, l.name)
             }
-        }
-        return DataBoardLists(lists.toList())
+
+        return DataBoardLists(lists)
     }
 
 
     override fun getListDetails(lid: Int): DataList {
         val list = taskLists[lid] ?: throw ListNotFound
-
+        //TODO()
         return DataList(list.id, list.name, listOf())
     }
 
@@ -121,16 +110,15 @@ class TasksDataMem : AppDatabase {
     }
 
     override fun getCardsFromList(lid: Int): DataListCards {
-        val cardsList = mutableListOf<DataSimpleCard>()
-
-        //could be map
-        cards.values.forEach {
-            if (it.lid == lid) {
-                val c = getCardDetails(it.lid, it.id)
-                cardsList.add(DataSimpleCard(c.id, c.name, c.description, c.dueDate))
+        val cardsList : List<DataSimpleCard> =
+        cards.values
+            .filter{ it.lid == lid}
+            .map{
+                val c = getCardDetails(lid, it.id)
+                DataSimpleCard(c.id, c.name, c.description, c.dueDate)
             }
-        }
-        return DataListCards(cardsList.toList())
+
+        return DataListCards(cardsList)
     }
 
     override fun getCardDetails(lid: Int, cid: Int): DataCard {
@@ -141,7 +129,10 @@ class TasksDataMem : AppDatabase {
     }
 
     override fun moveCard(cid: Int, lid: Int): DataCardMoved {
-        TODO("Not yet implemented")
+        val c = getCardDetails(cid, lid)
+        cards[cid] = Card(c.id, lid, cid, c.name, c.description, c.dueDate)
+
+        return DataCardMoved
     }
 
 }
