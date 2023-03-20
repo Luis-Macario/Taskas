@@ -19,9 +19,9 @@ import org.http4k.routing.routes
 import pt.isel.ls.api.routers.ErrorResponse
 import pt.isel.ls.database.memory.EmailAreadyExists
 import pt.isel.ls.database.memory.UserNotFound
-import pt.isel.ls.services.AppServices
+import pt.isel.ls.services.TaskServices
 
-class UsersRoutes(private val services: AppServices) {
+class UsersRoutes(private val services: TaskServices) {
     val routes = routes(
         "/" bind POST to ::createUser,
         "/{id}" bind GET to ::getUserDetails
@@ -30,7 +30,7 @@ class UsersRoutes(private val services: AppServices) {
     private fun createUser(request: Request): Response {
         val userRequest = Json.decodeFromString<CreateUserRequest>(request.bodyString())
         return try {
-            val userResponse = services.createUser(userRequest.name, userRequest.email)
+            val userResponse = services.users.createUser(userRequest.name, userRequest.email)
 
             Response(CREATED)
                 .header("Content-Type", "application/json")
@@ -79,7 +79,7 @@ class UsersRoutes(private val services: AppServices) {
                 )
             )
         return try {
-            val user = services.getUser(uid)
+            val user = services.users.getUser(uid)
             Response(OK)
                 .header("Content-Type", "application/json")
                 .body(Json.encodeToString(user))

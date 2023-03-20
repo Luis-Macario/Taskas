@@ -18,8 +18,8 @@ data class User(
 ) {
     companion object {
         private const val EMAIL_REGEX = "^(.+)@(.+)$"
-        private const val MAX_NAME_LENGTH = 50
-        private const val MIN_NAME_LENGTH = 3
+        const val MAX_NAME_LENGTH = 50
+        const val MIN_NAME_LENGTH = 3
 
         /**
          * Checks whether an email is valid or not

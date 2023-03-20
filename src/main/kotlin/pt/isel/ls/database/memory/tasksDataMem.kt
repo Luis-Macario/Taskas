@@ -68,8 +68,8 @@ class TasksDataMem : AppDatabase {
         val boards : List<DataSimpleBoard> =
             userBoard.values
                 .filter { it.uId == uid }
-                .map {
-                    val b = getBoardDetails(it.bId)
+                .map {board ->
+                    val b = getBoardDetails(board.bId)
                     DataSimpleBoard(b.id, b.name, b.description)
                 }
 

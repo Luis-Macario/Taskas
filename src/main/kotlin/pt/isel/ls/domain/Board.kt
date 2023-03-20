@@ -35,5 +35,6 @@ data class Board(
         require(validName(name)) { "Invalid board username: $name" }
         require(validDescription(description)) { "Invalid board description: $description" }
         require(validId(id)) { "Invalid board id: $id" }
+        require(validId(uid)) { "Invalid board id: $id" }
     }
 }
