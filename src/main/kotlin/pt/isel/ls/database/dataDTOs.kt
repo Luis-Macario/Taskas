@@ -46,7 +46,5 @@ data class DataListCards(val cards: List<DataSimpleCard>)
 
 object DataCardMoved
 
-interface DataError
-
 
 

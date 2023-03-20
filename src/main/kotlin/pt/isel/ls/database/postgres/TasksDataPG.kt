@@ -3,62 +3,57 @@ package pt.isel.ls.database.postgres
 import pt.isel.ls.database.*
 import java.sql.Date
 
-class TasksDataPG(url: String) : AppDatabase {
-    override fun createUser(name: String, email: String): Pair<DataUserCreated?, DataError?> {
+class TasksDataPG(private val url: String) : AppDatabase {
+    override fun createUser(name: String, email: String): DataUserCreated {
         TODO("Not yet implemented")
     }
 
-    override fun getUserDetails(uid: Int): Pair<DataUser?, DataError?> {
+    override fun getUserDetails(uid: Int): DataUser {
         TODO("Not yet implemented")
     }
 
-    override fun createBoard(uid: Int, name: String, description: String): Pair<DataBoardCreated?, DataError?> {
+    override fun createBoard(uid: Int, name: String, description: String): DataBoardCreated {
         TODO("Not yet implemented")
     }
 
-    override fun getBoardDetails(bid: Int): Pair<DataBoard?, DataError?> {
+    override fun getBoardDetails(bid: Int): DataBoard {
         TODO("Not yet implemented")
     }
 
-    override fun addUserToBoard(uid: Int, bid: Int): Pair<DataUserAdded?, DataError?> {
+    override fun addUserToBoard(uid: Int, bid: Int): DataUserAdded {
         TODO("Not yet implemented")
     }
 
-    override fun getBoardsFromUser(uid: Int): Pair<DataUserBoards?, DataError?> {
+    override fun getBoardsFromUser(uid: Int): DataUserBoards {
         TODO("Not yet implemented")
     }
 
-    override fun createList(bid: Int, name: String): Pair<DataListCreated?, DataError?> {
+    override fun createList(bid: Int, name: String): DataListCreated {
         TODO("Not yet implemented")
     }
 
-    override fun getListsFromBoard(bid: Int): Pair<DataBoardLists?, DataError?> {
+    override fun getListsFromBoard(bid: Int): DataBoardLists {
         TODO("Not yet implemented")
     }
 
-    override fun getListDetails(lid: Int): Pair<DataList?, DataError?> {
+    override fun getListDetails(lid: Int): DataList {
         TODO("Not yet implemented")
     }
 
-    override fun createCard(
-        bid: Int,
-        lid: Int,
-        name: String,
-        description: String,
-        dueDate: Date
-    ): Pair<DataCardCreated?, DataError?> {
+    override fun createCard(bid: Int, lid: Int, name: String, description: String, dueDate: Date): DataCardCreated {
         TODO("Not yet implemented")
     }
 
-    override fun getCardsFromList(lid: Int): Pair<DataListCards?, DataError?> {
+    override fun getCardsFromList(lid: Int): DataListCards {
         TODO("Not yet implemented")
     }
 
-    override fun getCardDetails(lid: Int, cid: Int): Pair<DataCard?, DataError?> {
+    override fun getCardDetails(lid: Int, cid: Int): DataCard {
         TODO("Not yet implemented")
     }
 
-    override fun moveCard(cid: Int, lid: Int): Pair<DataCardMoved?, DataError?> {
+    override fun moveCard(cid: Int, lid: Int): DataCardMoved {
         TODO("Not yet implemented")
     }
+
 }
