@@ -17,6 +17,6 @@ interface AppDatabase {
 
     fun createCard(bid: Int, lid: Int, name: String, description: String, dueDate: Date): DataCardCreated
     fun getCardsFromList(lid: Int): DataListCards
-    fun getCardDetails(lid: Int, cid: Int): DataCard
+    fun getCardDetails(cid: Int): DataCard
     fun moveCard(cid: Int, lid: Int): DataCardMoved
 }

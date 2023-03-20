@@ -50,7 +50,7 @@ class TasksDataMem : AppDatabase {
         val users = userBoard.values
             .filter { it.bId == bid }
             .map {
-                val userDetails = getUserDetails(it.uId)
+                val userDetails = users[it.uId] ?: throw BoardsUserDoesNotExist
                 DataSimpleUser(userDetails.id, userDetails.name, userDetails.email)
             }
 
@@ -114,25 +114,38 @@ class TasksDataMem : AppDatabase {
         cards.values
             .filter{ it.lid == lid}
             .map{
-                val c = getCardDetails(lid, it.id)
+                val c = getCardDetails(it.id)
                 DataSimpleCard(c.id, c.name, c.description, c.dueDate)
             }
 
         return DataListCards(cardsList)
     }
 
-    override fun getCardDetails(lid: Int, cid: Int): DataCard {
+    override fun getCardDetails(cid: Int): DataCard {
         val c = cards[cid] ?: throw CardNotFound
-        val list = getListDetails(lid).name
+        val l = taskLists[c.lid] ?: throw ListNotFound
 
-        return DataCard(c.id, c.name, c.description, c.initDate, DataSimpleList(lid, list))
+        return DataCard(c.id, c.name, c.description, c.initDate, DataSimpleList(l.id, l.name))
     }
 
     override fun moveCard(cid: Int, lid: Int): DataCardMoved {
-        val c = getCardDetails(cid, lid)
+        val c = getCardDetails(cid)
         cards[cid] = Card(c.id, lid, cid, c.name, c.description, c.dueDate)
 
         return DataCardMoved
     }
+
+    //Utils
+    fun dataBoardToDataSimple(d1 : DataBoard) =
+         DataSimpleBoard(d1.id, d1.name, d1.description)
+
+    fun dataUserToDataSimple(d1 : DataUser) =
+        DataSimpleUser(d1.id, d1.name, d1.email)
+
+    fun dataListToDataSimple(d1 : DataList) =
+        DataSimpleList(d1.id, d1.name)
+
+    fun dataCardToDataSimple(d1 : DataCard) =
+        DataSimpleCard(d1.id, d1.name, d1.description, d1.dueDate)
 
 }

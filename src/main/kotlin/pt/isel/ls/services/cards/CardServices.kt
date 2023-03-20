@@ -39,7 +39,7 @@ class CardServices(private val database: AppDatabase) {
      *
      * @return Card Object
      */
-    fun getCard(lid: Int, cid: Int): DataCard = database.getCardDetails(lid, cid)
+    fun getCard(cid: Int): DataCard = database.getCardDetails(cid)
 
     /**
      * Moves a card, given the following parameter
