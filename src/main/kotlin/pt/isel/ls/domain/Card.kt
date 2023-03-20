@@ -6,7 +6,6 @@ import java.sql.Date
 
 /**
  * Card representation
- * @property uid id of the user that created the board that contains the card
  * @property bid id of the board that created the card
  * @property lid id of the list that contains the card, null by default
  * @property id card's unique identifier
@@ -16,14 +15,13 @@ import java.sql.Date
  * @property finishDate date the task was finished
  */
 data class Card(
-    //val uid: Int, //TODO: ??
     val bid: Int,
     val lid: Int? = null,
     val id: Int,
     val name: String,
     val description: String = "",
     val initDate: Date,
-    val finishDate: Date = Date.valueOf("9999-9")
+    val finishDate: Date = Date.valueOf("9999-12-30")
 ) {
     companion object{
         private const val MAX_NAME_LENGTH = 100
@@ -50,7 +48,6 @@ data class Card(
     }
     init {
         require(validId(id)) { "Invalid card id: $id" }
-        //require(validId(uid)) { "Invalid user id: $uid" }
         require(validId(bid)) { "Invalid board id: $bid" }
         if (lid != null) require(validId(bid)) { "Invalid list id: $lid" }
         require(validName(name)) { "Invalid card name: $name" }

@@ -1,10 +1,9 @@
 package pt.isel.ls.utils
 
-import pt.isel.ls.database.DataSimpleBoard
-import pt.isel.ls.database.DataSimpleList
 import kotlin.test.Test
 import pt.isel.ls.database.memory.TasksDataMem
 import pt.isel.ls.domain.User
+import java.sql.Date
 import kotlin.test.assertEquals
 
 class DataMemTests {
@@ -98,117 +97,142 @@ class DataMemTests {
         assertEquals(mem.boards[0]?.description, sut.description)
         assertEquals(mem.boards[0]?.uid, sut.users[0].id)
     }
-/*
+
     @Test
     fun `test get user available boards`() {
         val mem = TasksDataMem()
         val donkeyUser = mem.createUser("test", "test@gmail.com")
 
-        val bId = mem.createBoard(donkeyUser.id, "To Do".repeat(4), "ISEL project")
-        val bId2 = mem.createBoard(donkeyUser.id,"To Do 2".repeat(4), "ISEL project 2")
-        val bId3 = mem.createBoard(donkeyUser.id,"To Do 3".repeat(4), "ISEL project 3")
-
-        val bAux = mem.getBoardDetails(bId.id)
-        val bAux2 = mem.getBoardDetails(bId2.id)
-        val bAux3 = mem.getBoardDetails(bId3.id)
-
-        val board = DataSimpleBoard(bAux.id, bAux.name, bAux.description)
-        val board2 = DataSimpleBoard(bAux2.id, bAux2.name, bAux2.description)
-        val board3 = DataSimpleBoard(bAux2.id, bAux2.name, bAux3.description)
+        val b = mem.dataBoardToDataSimple(
+                    mem.getBoardDetails(
+                        mem.createBoard(donkeyUser.id, "To Do".repeat(4), "ISEL project").id))
+        val b2 = mem.dataBoardToDataSimple(
+                    mem.getBoardDetails(
+                        mem.createBoard(donkeyUser.id, "To Do 2".repeat(4), "ISEL project 2").id))
+        val b3 =
+            mem.dataBoardToDataSimple(
+                mem.getBoardDetails(
+                        mem.createBoard(donkeyUser.id, "To Do 3".repeat(4), "ISEL project 3").id))
 
         val sut = mem.getBoardsFromUser(donkeyUser.id)
-        assertEquals(listOf(board, board2, board3), sut.boards)
+        assertEquals(listOf(b, b2, b3), sut.boards)
     }
 
     @Test
     fun `test create tasklist successfully`() {
         val mem = TasksDataMem()
         val name = "Backed Work"
+        val donkeyUser = mem.createUser("test", "test@gmail.com")
+        val board = mem.createBoard(donkeyUser.id, "To Do".repeat(4), "ISEL project")
 
-        val boardId = mem.createBoard("To Do".repeat(4), "ISEL project")
-        val sut = mem.createTaskList(name, boardId)
+        val sut = mem.createList(board.id, name)
 
-        assertEquals(mem.taskLists[0]?.id, sut)
+        assertEquals(mem.taskLists[0]?.id, sut.id)
     }
+
     @Test
     fun `test get tasklist details`() {
         val mem = TasksDataMem()
-        val boardId = mem.createBoard("To Do".repeat(4), "ISEL project")
-        val taskList = mem.createTaskList("some work..", boardId)
+        val donkeyUser = mem.createUser("test", "test@gmail.com")
+        val board = mem.createBoard(donkeyUser.id, "To Do".repeat(4), "ISEL project")
+        val taskList = mem.createList(board.id, "some work..")
 
-        val sut = mem.getTaskListDetails(taskList)
+        val sut = mem.getListDetails(taskList.id)
 
-        assertEquals(mem.taskLists[0], sut)
+        assertEquals(mem.taskLists[0]?.id, sut.id)
+        assertEquals(mem.taskLists[0]?.name, sut.name)
+        assertEquals(emptyList(), sut.cards)
     }
 
     @Test
-    fun `test getTaskListsOfBoard giving the correct id`(){
+    fun `test getTaskListsOfBoard giving the correct id`() {
         val mem = TasksDataMem()
+        val donkeyUser = mem.createUser("test", "test@gmail.com")
+        val board = mem.createBoard(donkeyUser.id, "To Do".repeat(4), "ISEL project")
 
-        val boardId = mem.createBoard("To Do".repeat(4), "ISEL project")
+        val l1 =
+            mem.dataListToDataSimple(
+                mem.getListDetails(
+                        mem.createList(board.id, "Some work 1").id))
+        val l2 =
+            mem.dataListToDataSimple(
+                mem.getListDetails(
+                        mem.createList(board.id, "Some work 2").id))
+        val l3 =
+            mem.dataListToDataSimple(
+                mem.getListDetails(
+                    mem.createList(board.id, "Some work 3").id))
 
-        val l1 = mem.createTaskList("Some work 1", boardId)
-        val l2 = mem.createTaskList("Some work 2", boardId)
-        val l3 = mem.createTaskList("Some work 3", boardId)
+        val sut = mem.getListsFromBoard(board.id)
 
-        val sut =  mem.getTaskListsOfBoard(boardId)
-
-        assertEquals(3, sut.size)
-        assertEquals(listOf(l1,l2,l3), sut)
-        assertEquals(mem.taskLists.keys.toList(), sut)
+        assertEquals(3, sut.lists.size)
+        assertEquals(listOf(l1, l2, l3), sut.lists)
     }
 
     @Test
-    fun `test create card and get details`(){
+    fun `test create card and get details`() {
         val mem = TasksDataMem()
 
-        val uId = mem.createUser("Pedro", "pedro@gmail.com").second
-        val bId = mem.createBoard("To Do".repeat(4), "ISEL project")
-        mem.addUserToBoard(bId, uId)
-        val lId = mem.createTaskList("Some work 1", bId)
+        val uId = mem.createUser("Pedro", "pedro@gmail.com").id
+        val bId = mem.createBoard(uId, "To Do".repeat(4), "ISEL project").id
+        val lId = mem.createList(bId, "Some work 1").id
 
-        val cardId =  mem.createCard(uId, bId, lId, "Team Workk", "some work ".repeat(1), Date(1L), Date(2L))
-        val sut = mem.getCardInformation(cardId)
+        val card = mem.createCard(bId, lId, "Team Workk", "some work ".repeat(1), Date.valueOf("2019-1-26"))
+        val sut = mem.getCardDetails(card.id)
 
-        assertEquals(mem.cards[0], sut)
+        assertEquals(mem.cards[0]?.id, sut.id)
+        assertEquals(mem.cards[0]?.name, sut.name)
+        assertEquals(mem.cards[0]?.description, sut.description)
+        assertEquals(mem.cards[0]?.lid, sut.list.id)
+        assertEquals(mem.cards[0]?.initDate, sut.dueDate)
     }
 
     @Test
-    fun `test get set of cards`(){
+    fun `test get set of cards`() {
         val mem = TasksDataMem()
 
-        val uId = mem.createUser("Miguel", "miguel@gmail.com").second
-        val bId = mem.createBoard("To Do".repeat(4), "ISEL project")
-        mem.addUserToBoard(bId, uId)
-        val lId = mem.createTaskList("Some work ", bId)
+        val uId = mem.createUser("Miguel", "miguel@gmail.com").id
+        val bId = mem.createBoard(uId, "To Do".repeat(4), "ISEL project").id
+        val lId = mem.createList(bId, "Some work ").id
 
-        val cId =  mem.createCard(uId, bId, lId, "Team Work ", "some work ".repeat(1), Date(1L), Date(2L))
-        val cId2 =  mem.createCard(uId, bId, lId, "Team Work2", "some work 2".repeat(1), Date(2L), Date(3L))
-        val cId3 =  mem.createCard(uId, bId, lId, "Team Work3", "some work 3".repeat(1), Date(3L), Date(4L))
-        val cId4 =  mem.createCard(uId, bId, lId, "Team Work4", "some work 4".repeat(1), Date(4L), Date(5L))
+        val cardDate = Date.valueOf("2019-1-26")
+        val c =
+            mem.dataCardToDataSimple(
+                    mem.getCardDetails(
+                         mem.createCard(bId, lId, "Team Work ", "some work ".repeat(1), cardDate).id))
+        val c2 =
+            mem.dataCardToDataSimple(
+                    mem.getCardDetails(
+                        mem.createCard(bId, lId, "Team Work2", "some work 2".repeat(1), cardDate).id))
+        val c3 =
+            mem.dataCardToDataSimple(
+                mem.getCardDetails(
+                    mem.createCard(bId, lId, "Team Work3", "some work 3".repeat(1), cardDate).id))
+        val c4 =
+            mem.dataCardToDataSimple(
+                mem.getCardDetails(
+                    mem.createCard(bId, lId, "Team Work4", "some work 4".repeat(1), cardDate).id))
 
-        val sut = mem.getSetOfCards(lId)
+        val sut = mem.getCardsFromList(lId)
 
-        assertEquals(listOf(cId,cId2,cId3, cId4), sut)
-        assertEquals(mem.cards.keys.toList(), sut)
+        assertEquals(listOf(c, c2, c3, c4), sut.cards)
     }
 
     @Test
     fun `test move a card to another taskList`(){
         val mem = TasksDataMem()
 
-        val uId = mem.createUser("Tiago", "tiago@gmail.com").second
-        val bId = mem.createBoard("To Do".repeat(4), "ISEL project")
-        mem.addUserToBoard(bId, uId)
-        val lId = mem.createTaskList("Some work ", bId)
-        val cId =  mem.createCard(uId, bId, lId, "Team Work ", "some work ".repeat(1), Date(1L), Date(2L))
+        val uId = mem.createUser("Tiago", "tiago@gmail.com").id
+        val bId = mem.createBoard(uId, "To Do".repeat(4), "ISEL project").id
+        val lId = mem.createList(bId, "Some work ").id
+        val cId =  mem.createCard( bId, lId, "Team Work ", "some work ".repeat(1), Date.valueOf("2019-1-26")).id
 
         assertEquals(0, mem.cards[0]?.lid)
 
-        mem.moveCard(cId, null)
+        mem.moveCard(cId, 10)
 
-        assertEquals(null, mem.cards[0]?.lid)
+        assertEquals(10, mem.cards[0]?.lid)
     }
-    */
+
 
 }

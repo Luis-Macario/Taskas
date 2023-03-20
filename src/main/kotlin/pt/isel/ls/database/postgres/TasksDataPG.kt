@@ -48,7 +48,7 @@ class TasksDataPG(private val url: String) : AppDatabase {
         TODO("Not yet implemented")
     }
 
-    override fun getCardDetails(lid: Int, cid: Int): DataCard {
+    override fun getCardDetails( cid: Int): DataCard {
         TODO("Not yet implemented")
     }
 
