@@ -1,8 +1,7 @@
 package pt.isel.ls.services.cards
 
 import pt.isel.ls.database.AppDatabase
-import pt.isel.ls.database.DataCard
-import pt.isel.ls.database.DataListCards
+import pt.isel.ls.domain.Card
 import pt.isel.ls.utils.MAX_DATE
 import java.sql.Date
 
@@ -11,7 +10,6 @@ class CardServices(private val database: AppDatabase) {
     /**
      * Creates a new card in a list.
      *
-     * @param bid id of the board that contains the list
      * @param lid id of the list that contains the task
      * @param name task's name
      * @param description  the task description
@@ -19,8 +17,10 @@ class CardServices(private val database: AppDatabase) {
      *
      * @return Card's unique identifier
      */
-    fun createCard(bid: Int, lid: Int, name: String, description: String, dueDate: Date = Date.valueOf(MAX_DATE)): Int =
-        database.createCard(bid, lid, name, description, dueDate).id
+    fun createCard(lid: Int, name: String, description: String, dueDate: String?): Card {
+        val date = if (dueDate != null) Date.valueOf(dueDate) else Date.valueOf(MAX_DATE)
+        return database.createCard(lid, name, description, date)
+    }
 
     /**
      * Get the set of cards in a list.
@@ -29,17 +29,16 @@ class CardServices(private val database: AppDatabase) {
      *
      * @return List of Card objects
      */
-    fun getTaskListCards(lid: Int): DataListCards = database.getCardsFromList(lid)
+    fun getTaskListCards(lid: Int): List<Card> = database.getCardsFromList(lid)
 
     /**
      * Get the detailed information of a card.
      *
-     * @param lid id of the list that contains the card
      * @param cid card's unique identifier
      *
      * @return Card Object
      */
-    fun getCard(cid: Int): DataCard = database.getCardDetails(cid)
+    fun getCard(cid: Int): Card = database.getCardDetails(cid)
 
     /**
      * Moves a card, given the following parameter

@@ -1,9 +1,9 @@
 package pt.isel.ls.services.users
 
 import pt.isel.ls.database.AppDatabase
-import pt.isel.ls.services.CreateUserResponse
+import pt.isel.ls.domain.User
 
-class UserServices (private val database: AppDatabase) {
+class UserServices(private val database: AppDatabase) {
     /**
      * Create a new user
      *
@@ -12,10 +12,7 @@ class UserServices (private val database: AppDatabase) {
      *
      * @return user's token and id
      */
-    fun createUser(name: String, email: String): CreateUserResponse {
-        val createdUser = database.createUser(name, email)
-        return CreateUserResponse(createdUser.token, createdUser.id)
-    }
+    fun createUser(name: String, email: String): User = database.createUser(name, email)
 
     /**
      * Get the details of a user
@@ -24,12 +21,12 @@ class UserServices (private val database: AppDatabase) {
      *
      * @return user object
      */
-    fun getUser(uid: Int)/*: User*/ = database.getUserDetails(uid)
+    fun getUser(uid: Int): User = database.getUserDetails(uid)
 
     /**
      * Get all users
      *
      * @return List of user objects
      */
-    //fun getAllUsers(): List<User> = database.getAllUsers()
+    fun getBoardUsers(bid: Int): List<User> = database.getUsersFromBoard(bid)
 }

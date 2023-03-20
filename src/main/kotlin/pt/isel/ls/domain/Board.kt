@@ -3,7 +3,6 @@ package pt.isel.ls.domain
 import pt.isel.ls.utils.validDescription
 import pt.isel.ls.utils.validId
 
-
 /**
  * Board representation
  *
@@ -13,9 +12,8 @@ import pt.isel.ls.utils.validId
  */
 data class Board(
     val id: Int,
-    val uid: Int,
     val name: String,
-    val description: String = "",
+    val description: String = ""
 ) {
     companion object {
         const val MAX_NAME_LENGTH = 100
@@ -35,6 +33,5 @@ data class Board(
         require(validName(name)) { "Invalid board name: $name" }
         require(validDescription(description)) { "Invalid board description: $description" }
         require(validId(id)) { "Invalid board id: $id" }
-        require(validId(uid)) { "Invalid user id: $uid" }
     }
 }

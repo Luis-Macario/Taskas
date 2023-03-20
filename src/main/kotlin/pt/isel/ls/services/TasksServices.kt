@@ -9,7 +9,7 @@ import pt.isel.ls.services.users.UserServices
 /**
  * Services aggregator
  */
-class TaskServices (db: AppDatabase){
+class TasksServices(db: AppDatabase) {
     val users: UserServices = UserServices(db)
     val boards: BoardServices = BoardServices(db)
     val lists: ListServices = ListServices(db)

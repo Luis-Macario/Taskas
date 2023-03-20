@@ -5,7 +5,6 @@ const val MIN_DESCRIPTION_LENGTH = 0
 
 const val MAX_DATE = "9999-12-31"
 
-
 /**
  * Checks whether an id is valid or not
  *

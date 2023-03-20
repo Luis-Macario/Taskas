@@ -1,23 +1,21 @@
 package pt.isel.ls.services.boards
 
 import pt.isel.ls.database.AppDatabase
-import pt.isel.ls.database.DataBoard
-import pt.isel.ls.database.DataUserBoards
+import pt.isel.ls.domain.Board
 
-class BoardServices(private val database : AppDatabase) {
+class BoardServices(private val database: AppDatabase) {
     /**
      * Creates a new board
      *
-     * @param uid unique id of the user creating the board
      * @param name project's name
      * @param description board's description, optional
      *
      * @return Board's unique identifier
      */
-    fun createBoard(uid: Int, name: String, description: String?): Int {
+    fun createBoard(uid: Int, name: String, description: String?): Board {
         val desc = description ?: ""
 
-        return database.createBoard(uid, desc, name).id
+        return database.createBoard(uid, desc, name)
     }
 
     /**
@@ -38,7 +36,7 @@ class BoardServices(private val database : AppDatabase) {
      * @return List of user's boards
      */
 
-    fun getUserBoards(uid: Int): DataUserBoards? = database.getBoardsFromUser(uid)
+    fun getUserBoards(uid: Int): List<Board> = database.getBoardsFromUser(uid)
 
     /**
      * Get the detailed information of a board
@@ -47,6 +45,5 @@ class BoardServices(private val database : AppDatabase) {
      *
      * @return board object
      */
-    fun getBoard(bid: Int): DataBoard? = database.getBoardDetails(bid)
-
+    fun getBoard(bid: Int): Board = database.getBoardDetails(bid)
 }

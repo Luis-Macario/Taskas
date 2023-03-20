@@ -14,7 +14,7 @@ data class TaskList(
     val bid: Int,
     val name: String
 ) {
-    companion object{
+    companion object {
         const val MAX_NAME_LENGTH = 100
         const val MIN_NAME_LENGTH = 4
 
@@ -27,6 +27,7 @@ data class TaskList(
          */
         fun validName(name: String): Boolean = (name.length in MIN_NAME_LENGTH..MAX_NAME_LENGTH)
     }
+
     init {
         require(validId(id)) { "Invalid task id: $id" }
         require(validId(bid)) { "Invalid board id: $bid" }

@@ -62,7 +62,7 @@ class CardTests {
         assertEquals("Invalid card name: ", ex.message)
     }
 
-    //--------------------------------
+    // --------------------------------
     @Test
     fun `validName returns true for names within MIN_NAME_LENGTH and MAX_NAME_LENGTH`() {
         assertTrue { Card.validName("a".repeat((Card.MIN_NAME_LENGTH..Card.MAX_NAME_LENGTH).random())) }

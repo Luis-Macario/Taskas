@@ -1,13 +1,12 @@
 package pt.isel.ls.utils
 
-import kotlin.test.Test
 import pt.isel.ls.database.memory.TasksDataMem
 import pt.isel.ls.domain.User
 import java.sql.Date
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class DataMemTests {
-
 
     @Test
     fun `test create user manually`() {
@@ -56,14 +55,14 @@ class DataMemTests {
     fun `test create board `() {
         val mem = TasksDataMem()
         val name = "To Do".repeat(4)
-        val descritpion = "ISEL project"
+        val description = "ISEL project"
         val user = mem.createUser("Francisco M", "francisco@isel.pt")
 
-        val sut = mem.createBoard(user.id, name, descritpion)
+        val sut = mem.createBoard(user.id, name, description)
 
         assertEquals(mem.boards[0]?.id, sut.id)
         assertEquals(mem.boards[0]?.name, name)
-        assertEquals(mem.boards[0]?.description, descritpion)
+        assertEquals(mem.boards[0]?.description, description)
     }
 
     @Test
@@ -104,15 +103,21 @@ class DataMemTests {
         val donkeyUser = mem.createUser("test", "test@gmail.com")
 
         val b = mem.dataBoardToDataSimple(
-                    mem.getBoardDetails(
-                        mem.createBoard(donkeyUser.id, "To Do".repeat(4), "ISEL project").id))
+            mem.getBoardDetails(
+                mem.createBoard(donkeyUser.id, "To Do".repeat(4), "ISEL project").id
+            )
+        )
         val b2 = mem.dataBoardToDataSimple(
-                    mem.getBoardDetails(
-                        mem.createBoard(donkeyUser.id, "To Do 2".repeat(4), "ISEL project 2").id))
+            mem.getBoardDetails(
+                mem.createBoard(donkeyUser.id, "To Do 2".repeat(4), "ISEL project 2").id
+            )
+        )
         val b3 =
             mem.dataBoardToDataSimple(
                 mem.getBoardDetails(
-                        mem.createBoard(donkeyUser.id, "To Do 3".repeat(4), "ISEL project 3").id))
+                    mem.createBoard(donkeyUser.id, "To Do 3".repeat(4), "ISEL project 3").id
+                )
+            )
 
         val sut = mem.getBoardsFromUser(donkeyUser.id)
         assertEquals(listOf(b, b2, b3), sut.boards)
@@ -153,15 +158,21 @@ class DataMemTests {
         val l1 =
             mem.dataListToDataSimple(
                 mem.getListDetails(
-                        mem.createList(board.id, "Some work 1").id))
+                    mem.createList(board.id, "Some work 1").id
+                )
+            )
         val l2 =
             mem.dataListToDataSimple(
                 mem.getListDetails(
-                        mem.createList(board.id, "Some work 2").id))
+                    mem.createList(board.id, "Some work 2").id
+                )
+            )
         val l3 =
             mem.dataListToDataSimple(
                 mem.getListDetails(
-                    mem.createList(board.id, "Some work 3").id))
+                    mem.createList(board.id, "Some work 3").id
+                )
+            )
 
         val sut = mem.getListsFromBoard(board.id)
 
@@ -198,20 +209,28 @@ class DataMemTests {
         val cardDate = Date.valueOf("2019-1-26")
         val c =
             mem.dataCardToDataSimple(
-                    mem.getCardDetails(
-                         mem.createCard(bId, lId, "Team Work ", "some work ".repeat(1), cardDate).id))
+                mem.getCardDetails(
+                    mem.createCard(bId, lId, "Team Work ", "some work ".repeat(1), cardDate).id
+                )
+            )
         val c2 =
             mem.dataCardToDataSimple(
-                    mem.getCardDetails(
-                        mem.createCard(bId, lId, "Team Work2", "some work 2".repeat(1), cardDate).id))
+                mem.getCardDetails(
+                    mem.createCard(bId, lId, "Team Work2", "some work 2".repeat(1), cardDate).id
+                )
+            )
         val c3 =
             mem.dataCardToDataSimple(
                 mem.getCardDetails(
-                    mem.createCard(bId, lId, "Team Work3", "some work 3".repeat(1), cardDate).id))
+                    mem.createCard(bId, lId, "Team Work3", "some work 3".repeat(1), cardDate).id
+                )
+            )
         val c4 =
             mem.dataCardToDataSimple(
                 mem.getCardDetails(
-                    mem.createCard(bId, lId, "Team Work4", "some work 4".repeat(1), cardDate).id))
+                    mem.createCard(bId, lId, "Team Work4", "some work 4".repeat(1), cardDate).id
+                )
+            )
 
         val sut = mem.getCardsFromList(lId)
 
@@ -219,13 +238,13 @@ class DataMemTests {
     }
 
     @Test
-    fun `test move a card to another taskList`(){
+    fun `test move a card to another taskList`() {
         val mem = TasksDataMem()
 
         val uId = mem.createUser("Tiago", "tiago@gmail.com").id
         val bId = mem.createBoard(uId, "To Do".repeat(4), "ISEL project").id
         val lId = mem.createList(bId, "Some work ").id
-        val cId =  mem.createCard( bId, lId, "Team Work ", "some work ".repeat(1), Date.valueOf("2019-1-26")).id
+        val cId = mem.createCard(bId, lId, "Team Work ", "some work ".repeat(1), Date.valueOf("2019-1-26")).id
 
         assertEquals(0, mem.cards[0]?.lid)
 
@@ -233,6 +252,4 @@ class DataMemTests {
 
         assertEquals(10, mem.cards[0]?.lid)
     }
-
-
 }

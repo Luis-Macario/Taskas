@@ -26,7 +26,7 @@ class UtilsTest {
         assertFalse { validDescription("a".repeat(MAX_DESCRIPTION_LENGTH + 1)) }
     }
 
-    //-------------
+    // -------------
     @Test
     fun `validId returns true for any id higher or equal to 0`() {
         assertTrue { validId(Random.nextInt(-0, 999999)) }

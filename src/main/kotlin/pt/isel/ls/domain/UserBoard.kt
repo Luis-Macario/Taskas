@@ -10,7 +10,7 @@ import pt.isel.ls.utils.validId
  */
 data class UserBoard(
     val uId: Int,
-    val bId: Int,
+    val bId: Int
 ) {
     init {
         require(validId(uId)) { "Invalid userid: $uId" }

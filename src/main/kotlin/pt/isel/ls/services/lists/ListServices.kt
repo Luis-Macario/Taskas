@@ -1,8 +1,7 @@
 package pt.isel.ls.services.lists
 
 import pt.isel.ls.database.AppDatabase
-import pt.isel.ls.database.DataBoardLists
-import pt.isel.ls.database.DataList
+import pt.isel.ls.domain.TaskList
 
 class ListServices(private val database: AppDatabase) {
     /**
@@ -13,7 +12,7 @@ class ListServices(private val database: AppDatabase) {
      *
      * @return list unique identifier
      */
-    fun createList(bid: Int, name: String): Int = database.createList(bid, name).id
+    fun createList(bid: Int, name: String): TaskList = database.createList(bid, name)
 
     /**
      * Get the lists of a board.
@@ -22,7 +21,7 @@ class ListServices(private val database: AppDatabase) {
      *
      * @return DataBoardLists object
      */
-    fun getBoardsLists(bid: Int): DataBoardLists = database.getListsFromBoard(bid)
+    fun getBoardsLists(bid: Int): List<TaskList> = database.getListsFromBoard(bid)
 
     /**
      * Get detailed information of a list.
@@ -31,5 +30,5 @@ class ListServices(private val database: AppDatabase) {
      *
      * @return BList object
      */
-    fun getList(lid: Int): DataList = database.getListDetails(lid)
+    fun getList(lid: Int): TaskList = database.getListDetails(lid)
 }

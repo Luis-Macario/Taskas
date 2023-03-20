@@ -19,17 +19,17 @@ class ListTests {
 
     @Test
     fun `Creating a list with an invalid id throws IllegalArgumentException`() {
-        val msg = assertFailsWith<IllegalArgumentException>{
+        val msg = assertFailsWith<IllegalArgumentException> {
             TaskList(-1, 2, "TO-DO")
         }
 
-        assertEquals( "Invalid task id: -1", msg.message )
+        assertEquals("Invalid task id: -1", msg.message)
     }
 
     @Test
     fun `Creating a list with an invalid board id throws IllegalArgumentException`() {
         val msg = assertFailsWith<IllegalArgumentException>("Invalid email: joe") {
-            TaskList(1,-2, "TO-DO")
+            TaskList(1, -2, "TO-DO")
         }
         assertEquals("Invalid board id: -2", msg.message)
     }
@@ -37,13 +37,13 @@ class ListTests {
     @Test
     fun `Creating a list with an invalid name throws IllegalArgumentException`() {
         val msg = assertFailsWith<IllegalArgumentException>("Invalid name: ") {
-            TaskList(1, 2,"")
+            TaskList(1, 2, "")
         }
 
         assertEquals("Invalid task name: ", msg.message)
     }
 
-    //--------------------------------
+    // --------------------------------
     @Test
     fun `validName returns true for names within MIN_NAME_LENGTH and MAX_NAME_LENGTH`() {
         assertTrue { TaskList.validName("a".repeat((TaskList.MIN_NAME_LENGTH..TaskList.MAX_NAME_LENGTH).random())) }

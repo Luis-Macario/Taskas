@@ -1,7 +1,11 @@
 package pt.isel.ls.domain
 
 import java.util.*
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class UserTests {
 
@@ -44,7 +48,7 @@ class UserTests {
         assertEquals("Invalid email: joe", msg.message)
     }
 
-    //--------------------------------
+    // --------------------------------
     @Test
     fun `validName returns true for names within MIN_NAME_LENGTH and MAX_NAME_LENGTH`() {
         assertTrue { User.validName("a".repeat((User.MIN_NAME_LENGTH..User.MAX_NAME_LENGTH).random())) }
@@ -70,7 +74,7 @@ class UserTests {
         assertFalse { User.validName("a".repeat(User.MAX_NAME_LENGTH + 1)) }
     }
 
-    //--------------------------------
+    // --------------------------------
     @Test
     fun `validEmail returns true with a string that matches the REGEX expression`() {
         assertTrue { User.validEmail("abc@.") }

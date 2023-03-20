@@ -24,7 +24,7 @@ data class Card(
     val initDate: Date,
     val finishDate: Date = Date.valueOf(MAX_DATE)
 ) {
-    companion object{
+    companion object {
         const val MAX_NAME_LENGTH = 100
         const val MIN_NAME_LENGTH = 10
 
@@ -47,14 +47,14 @@ data class Card(
          */
         fun validDates(initDate: Date, finishDate: Date): Boolean = finishDate > initDate
     }
+
     init {
         require(validId(id)) { "Invalid card id: $id" }
-        //require(validId(uid)) { "Invalid user id: $uid" }
+        // require(validId(uid)) { "Invalid user id: $uid" }
         require(validId(bid)) { "Invalid board id: $bid" }
         if (lid != null) require(validId(lid)) { "Invalid list id: $lid" }
         require(validName(name)) { "Invalid card name: $name" }
         require(validDescription(description)) { "Invalid description: $description" }
         require(validDates(initDate, finishDate)) { "Invalid dates: $finishDate happens before $initDate" }
-
     }
 }

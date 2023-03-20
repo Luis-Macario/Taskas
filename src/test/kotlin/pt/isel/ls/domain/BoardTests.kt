@@ -10,10 +10,10 @@ class BoardTests {
 
     @Test
     fun `Creates a valid board`() {
-        val board = Board(1, 2, "Projeto Kapa Mega Giga Tera Fixe")
+        val board = Board(1, "Projeto Kapa Mega Giga Tera Fixe", "Projeto Kapa Mega Giga Tera Fixe")
 
         assertEquals(1, board.id)
-        assertEquals(2, board.uid)
+        assertEquals("Projeto", board.name)
         assertEquals("Projeto Kapa Mega Giga Tera Fixe", board.name)
         assertEquals("", board.description)
     }
@@ -21,31 +21,22 @@ class BoardTests {
     @Test
     fun `Creating a board with an invalid id throws IllegalArgumentException`() {
         val msg = assertFailsWith<IllegalArgumentException> {
-            Board(-1, 2, "Projeto Kapa Mega Giga Tera Fixe")
+            Board(-1, "Projeto Kapa Mega Giga Tera Fixe", "Projeto Kapa Mega Giga Tera Fixe")
         }
 
         assertEquals("Invalid board id: -1", msg.message)
     }
 
     @Test
-    fun `Creating a board with an invalid uid throws IllegalArgumentException`() {
-        val msg = assertFailsWith<IllegalArgumentException> {
-            Board(1, -1, "Projeto Kapa Mega Giga Tera Fixe")
-        }
-
-        assertEquals("Invalid user id: -1", msg.message)
-    }
-
-    @Test
     fun `Creating a board with an invalid name throws IllegalArgumentException`() {
         val msg = assertFailsWith<IllegalArgumentException>("Invalid name: ") {
-            Board(1, 2, "")
+            Board(1, " ", "Projeto Kapa Mega Giga Tera Fixe")
         }
 
         assertEquals("Invalid board name: ", msg.message)
     }
 
-    //--------------------------------
+    // --------------------------------
 
     @Test
     fun `validName returns true for names within MIN_NAME_LENGTH and MAX_NAME_LENGTH`() {
