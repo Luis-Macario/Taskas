@@ -1,7 +1,6 @@
-package pt.isel.ls
+package pt.isel.ls.database.memory
 
 import pt.isel.ls.database.*
-import pt.isel.ls.database.memory.*
 import java.sql.Date
 import java.util.*
 
