@@ -1,10 +1,4 @@
-openapi: 3.0.0
-servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/RicardoPinto26/TaskManagementApp/1.0.0
-  - description: localhost
-    url: http://localhost:8080/api
+openapi: 3.0.1
 info:
   description: Simple Task Management API
   version: "0.1.0"
@@ -12,11 +6,20 @@ info:
   license:
     name: GNU Affero General Public License 3.0
     url: 'https://www.gnu.org/licenses/agpl-3.0.en.html'
+
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/RicardoPinto26/TaskManagementApp/0.1.0
+  - description: localhost
+    url: http://localhost:8080/api
+
 tags:
   - name: User Management
-    description: Operations regarding the user
   - name: Board Management
-    description: Operations regarding the board
+  - name: List Management
+  - name: Card Management
+
 paths:
   /users:
     post:
@@ -32,6 +35,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateUserRequest'
+
       responses:
         '201':
           description: User was created
@@ -54,7 +58,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
 
-  /users/{id}:
+  /users/{userID}:
     get:
       tags:
         - User Management
@@ -62,7 +66,7 @@ paths:
       description: |
         Get the name and email of a user
       parameters:
-        - name: id
+        - name: userID
           in: path
           description: The user's id
           required: true
@@ -76,13 +80,61 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
         '400':
-          description: Invalid ID provideed
+          description: Invalid ID provided
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
         '404':
           description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+  /users/{userID}/boards:
+    get:
+      tags:
+        - User Management
+      summary: get all user available boards
+      description: |
+        Get a list of all the boards availabe to the provided user
+      parameters:
+        - name: userID
+          in: path
+          description: The user's id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The user's boards
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserBoardsResponse'
+        '400':
+          description: Invalid ID provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '401':
+          description: User not logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '403':
+          description: User doesn't have access to that user's boards
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '404':
+          description: No boards found
           content:
             application/json:
               schema:
@@ -132,7 +184,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
 
-  /boards/{id}:
+  /boards/{boardID}:
     get:
       tags:
         - Board Management
@@ -140,7 +192,7 @@ paths:
       description: |
         Create a board, with the given name and description
       parameters:
-        - name: id
+        - name: boardID
           in: path
           description: The boards's id
           required: true
@@ -181,7 +233,47 @@ paths:
           $ref: '#/components/responses/InternalServerErrorResponse'
 
 
-  /boards/{boardID}/users/{userID}:
+  /boards/{boardID}/users:
+    get:
+      tags:
+        - Board Management
+      summary: get all users
+      description: |
+        Get a list of all the boards availabe to the provided user
+      parameters:
+        - name: boardID
+          in: path
+          description: The board's id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBoardUsersResponse'
+        '400':
+          description: Invalid ID provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '401':
+          description: User not logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '403':
+          description: User doesn't have access to that board
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
     post:
       tags:
         - Board Management
@@ -195,14 +287,15 @@ paths:
           required: true
           schema:
             type: integer
-        - name: userID
-          in: path
-          description: The user's id
-          required: true
-          schema:
-            type: integer
+      requestBody:
+        description: User ID
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUserRequest'
       responses:
-        '200':
+        '204':
           description: User was added
         '400':
           description: Invalid Board ID or Invalid Request Body
@@ -231,27 +324,27 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
 
-  /users/{id}/boards:
+  /boards/{boardID}/lists:
     get:
       tags:
         - Board Management
-      summary: get all user available boards
+      summary: get all lists
       description: |
-        Get a list of all the boards availabe to the provided user
+        Get a list of all the lists available in the provided group
       parameters:
-        - name: id
+        - name: boardID
           in: path
-          description: The user's id
+          description: The board's id
           required: true
           schema:
             type: integer
       responses:
         '200':
-          description: The user's boards
+          description: The board's lists
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetUsersBoardsResponse'
+                $ref: '#/components/schemas/GetBoardsListsResponse'
         '400':
           description: Invalid ID provided
           content:
@@ -265,13 +358,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/AppError'
         '403':
-          description: User doesn't have access to that user's boards
+          description: User doesn't have access to that board
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
         '404':
-          description: No boards found
+          description: No Lists found
           content:
             application/json:
               schema:
@@ -279,20 +372,14 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
 
-  /boards/{id}/lists:
+
+  /lists:
     post:
       tags:
-        - Board Management
+        - List Management
       summary: create a new list
       description: |
         Create a list with the given name in the given board
-      parameters:
-        - name: id
-          in: path
-          description: The board's id
-          required: true
-          schema:
-            type: integer
       requestBody:
         description: List object
         required: true
@@ -333,67 +420,16 @@ paths:
                 $ref: '#/components/schemas/AppError'
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
-    get:
-      tags:
-        - Board Management
-      summary: get all lists
-      description: |
-        Get a list of all the lists available in the provided group
-      parameters:
-        - name: id
-          in: path
-          description: The board's id
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: The board's lists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetBoardsListsResponse'
-        '400':
-          description: Invalid ID provided
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-        '401':
-          description: User not logged in
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-        '403':
-          description: User doesn't have access to that board
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-        '404':
-          description: No Lists found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-        '500':
-          $ref: '#/components/responses/InternalServerErrorResponse'
 
-  /boards/{boardID}/lists/{listID}:
+
+  /lists/{listID}:
     get:
       tags:
-        - Board Management
+        - List Management
       summary: get the details of a list
       description: |
         Get the details of the provided list
       parameters:
-        - name: boardID
-          in: path
-          description: The board's id
-          required: true
-          schema:
-            type: integer
         - name: listID
           in: path
           description: The list's id
@@ -434,26 +470,62 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
 
-  /boards/{boardID}/lists/{listID}/cards:
-    post:
+  /lists/{listID}/cards:
+    get:
       tags:
-        - Board Management
-      summary: create a new card
+        - List Management
+      summary: get all cards
       description: |
-        Create a card in the given list
+        Get a list of all the cards available in the provided list
       parameters:
-        - name: boardID
-          in: path
-          description: The board's id
-          required: true
-          schema:
-            type: integer
         - name: listID
           in: path
           description: The list's id
           required: true
           schema:
             type: integer
+      responses:
+        '200':
+          description: The list's cards
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetListsCardsResponse'
+        '400':
+          description: Invalid ID provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '401':
+          description: User not logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '403':
+          description: User doesn't have access to that board
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '404':
+          description: No Cards found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+
+  /cards:
+    post:
+      tags:
+        - Card Management
+      summary: create a new card
+      description: |
+        Create a card in the given list
       requestBody:
         description: Card object
         required: true
@@ -495,79 +567,14 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
 
+  /cards/{cardID}:
     get:
       tags:
-        - Board Management
-      summary: get all cards
-      description: |
-        Get a list of all the cards available in the provided list
-      parameters:
-        - name: boardID
-          in: path
-          description: The board's id
-          required: true
-          schema:
-            type: integer
-        - name: listID
-          in: path
-          description: The list's id
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: The list's cards
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetListsCardsResponse'
-        '400':
-          description: Invalid ID provided
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-        '401':
-          description: User not logged in
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-        '403':
-          description: User doesn't have access to that board
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-        '404':
-          description: No Cards found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-        '500':
-          $ref: '#/components/responses/InternalServerErrorResponse'
-
-  /boards/{boardID}/lists/{listID}/cards/{cardID}:
-    get:
-      tags:
-        - Board Management
+        - Card Management
       summary: get the details of a card
       description: |
         Get the details of the provided card
       parameters:
-        - name: boardID
-          in: path
-          description: The board's id
-          required: true
-          schema:
-            type: integer
-        - name: listID
-          in: path
-          description: The list's id
-          required: true
-          schema:
-            type: integer
         - name: cardID
           in: path
           description: The card's id
@@ -608,26 +615,14 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
 
-  /boards/{boardID}/lists/{listID}/cards/{cardID}/move:
+  /cards/{cardID}/move:
     post:
       tags:
-        - Board Management
+        - Card Management
       summary: move a card
       description: |
         Moves a card from the current list to the given list
       parameters:
-        - name: boardID
-          in: path
-          description: The board's id
-          required: true
-          schema:
-            type: integer
-        - name: listID
-          in: path
-          description: The list's id
-          required: true
-          schema:
-            type: integer
         - name: cardID
           in: path
           description: The card's id
@@ -642,12 +637,8 @@ paths:
             schema:
               $ref: '#/components/schemas/MoveCardRequest'
       responses:
-        '200':
+        '204':
           description: the card's details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Card'
         '400':
           description: Invalid ID provided
           content:
@@ -661,7 +652,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AppError'
         '403':
-          description: User doesn't have access to that board
+          description: User doesn't have access to that card
           content:
             application/json:
               schema:
@@ -678,33 +669,12 @@ components:
           schema:
             $ref: '#/components/schemas/AppError'
   schemas:
-    SimpleUser:
-      type: object
-      required:
-        - id
-        - name
-        - email
-      properties:
-        id:
-          type: integer
-          description: User's Unique Identifier
-          example: 1
-        name:
-          type: string
-          description: User's Name
-          example: "Ricardo Pinto"
-        email:
-          type: string
-          description: User's Unique Email
-          example: "a47673@alunos.isel.pt"
-
     User:
       type: object
       required:
         - id
         - name
         - email
-        - boards
       properties:
         id:
           type: integer
@@ -718,30 +688,6 @@ components:
           type: string
           description: User's Unique Email
           example: "a47673@alunos.isel.pt"
-        boards:
-          type: array
-          items:
-            $ref: '#/components/schemas/SimpleBoard'
-
-    SimpleBoard:
-      type: object
-      required:
-        - id
-        - name
-        - description
-      properties:
-        id:
-          type: integer
-          description: Board's Unique Identifier
-          example: 1
-        name:
-          type: string
-          description: Board's Unique Name
-          example: "aBoard"
-        description:
-          type: string
-          description: Board's Description
-          example: "aBoard's Description"
 
     Board:
       type: object
@@ -749,7 +695,6 @@ components:
         - id
         - name
         - description
-        - users
       properties:
         id:
           type: integer
@@ -763,36 +708,13 @@ components:
           type: string
           description: Board's Description
           example: "aBoard's Description"
-        users:
-          type: array
-          items:
-            $ref: '#/components/schemas/SimpleUser'
-        lists:
-          type: array
-          items:
-            $ref: '#/components/schemas/SimpleList'
-
-    SimpleList:
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-          description: List's Unique Identifier
-          example: 1
-        name:
-          type: string
-          description: List's Name
-          example: "aList"
 
     List:
       type: object
       required:
         - id
         - name
-        - cards
+        - boardID
       properties:
         id:
           type: integer
@@ -802,35 +724,10 @@ components:
           type: string
           description: List's Name
           example: "aList"
-        cards:
-          type: array
-          items:
-            $ref: '#/components/schemas/SimpleCard'
-
-    SimpleCard:
-      type: object
-      required:
-        - id
-        - name
-        - description
-      properties:
-        id:
+        boardID:
           type: integer
-          description: Card's Unique Identifier
+          description: Board's Unique Identifier
           example: 1
-        name:
-          type: string
-          description: Card's Name
-          example: "aCard"
-        description:
-          type: string
-          description: Card's Description
-          example: "aCard's Description"
-        dueDate:
-          type: string
-          format: date
-          description: Card's Conclusion Date
-          example: "2017-07-21"
 
     Card:
       type: object
@@ -838,7 +735,8 @@ components:
         - id
         - name
         - description
-        - board
+        - dueDate
+        - boardID
       properties:
         id:
           type: integer
@@ -857,20 +755,21 @@ components:
           format: date
           description: Card's Conclusion Date
           example: "2017-07-21"
-        board:
-          $ref: '#/components/schemas/SimpleBoard'
+        listID:
+          type: integer
+          description: List's Unique Identifier
+          example: 1
+        boardID:
+          type: integer
+          description: List's Unique Identifier
+          example: 1
 
     CreateUserRequest:
       type: object
       required:
-        - id
         - name
         - email
       properties:
-        id:
-          type: integer
-          description: User's Unique Identifier
-          example: 1
         name:
           type: string
           description: User's Name
@@ -889,7 +788,7 @@ components:
           type: string
           format: uuid
           description: User's Token
-          example: "06a3e08d-b893-451c-bfa4-3e3641d1b9b5"
+          example: "7d444840-9dc0-11d1-b245-5ffdce74fad2"
         id:
           type: integer
           description: User's Unique Identifier
@@ -920,7 +819,7 @@ components:
           description: Board's Unique Identifier
           example: 1
 
-    GetUsersBoardsResponse:
+    GetUserBoardsResponse:
       type: object
       required:
         - boards
@@ -928,13 +827,38 @@ components:
         lists:
           type: array
           items:
-            $ref: '#/components/schemas/SimpleBoard'
+            $ref: '#/components/schemas/Board'
+
+    GetBoardUsersResponse:
+      type: object
+      required:
+        - users
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+
+    AddUserRequest:
+      type: object
+      required:
+        - userID
+      properties:
+        userID:
+          type: integer
+          description: The user's id
+          example: 1
 
     CreateListRequest:
       type: object
       required:
+        - boardID
         - name
       properties:
+        boardID:
+          type: integer
+          description: Board's Unique Identifier
+          example: 1
         name:
           type: string
           description: List's Unique Name
@@ -957,14 +881,19 @@ components:
         lists:
           type: array
           items:
-            $ref: '#/components/schemas/SimpleList'
+            $ref: '#/components/schemas/List'
 
     CreateCardRequest:
       type: object
       required:
+        - listID
         - name
         - description
       properties:
+        listID:
+          type: integer
+          description: List's ID
+          example: 1
         name:
           type: string
           description: Card's Unique Name
@@ -981,9 +910,9 @@ components:
     CreateCardResponse:
       type: object
       required:
-        - id
+        - cardID
       properties:
-        id:
+        cardID:
           type: integer
           description: Card's Unique Identifier
           example: 1
@@ -996,14 +925,14 @@ components:
         lists:
           type: array
           items:
-            $ref: '#/components/schemas/SimpleCard'
+            $ref: '#/components/schemas/Card'
 
     MoveCardRequest:
       type: object
       required:
-        - lid
+        - listID
       properties:
-        lid:
+        listID:
           type: integer
           description: The List's ID where the card is to be moved into
           example: 1
@@ -1011,13 +940,13 @@ components:
     AppError:
       type: object
       required:
-        - internalErrorNumber
+        - internalErrorCode
         - internalErrorName
         - description
       properties:
-        internalErrorNumber:
+        internalErrorCode:
           type: integer
-          description: The internal error's number
+          description: The internal error's Code
           example: 1000
         internalErrorName:
           type: string
