@@ -1,6 +1,7 @@
 package pt.isel.ls.database.memory
 
 import pt.isel.ls.database.*
+import pt.isel.ls.domain.*
 import java.sql.Date
 import java.util.*
 

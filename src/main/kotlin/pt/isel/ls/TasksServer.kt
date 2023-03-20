@@ -7,13 +7,13 @@ import org.http4k.server.Jetty
 import org.http4k.server.asServer
 import pt.isel.ls.api.TasksWebApi
 import pt.isel.ls.database.AppDatabase
-import pt.isel.ls.services.TasksServices
+import pt.isel.ls.services.AppServices
 
 class TasksServer(port: Int, database: AppDatabase) {
     private val server: Http4kServer
 
     init {
-        val services = TasksServices(database)
+        val services = AppServices(database)
         val webAPI = TasksWebApi(services)
 
         val app = routes(
