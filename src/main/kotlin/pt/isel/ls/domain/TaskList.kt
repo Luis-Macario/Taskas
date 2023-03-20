@@ -5,18 +5,18 @@ import pt.isel.ls.utils.validId
 /**
  * List representation
  *
- * @property bid id of the Board that created the list
  * @property id List's unique identifier
+ * @property bid id of the Board that created the list
  * @property name List's unique identifier
  */
 data class TaskList(
-    val bid: Int,
     val id: Int,
+    val bid: Int,
     val name: String
 ) {
     companion object{
-        private const val MAX_NAME_LENGTH = 100
-        private const val MIN_NAME_LENGTH = 10
+        const val MAX_NAME_LENGTH = 100
+        const val MIN_NAME_LENGTH = 4
 
         /**
          * Checks whether a task name is valid or not
@@ -29,7 +29,7 @@ data class TaskList(
     }
     init {
         require(validId(id)) { "Invalid task id: $id" }
-        //require(validId(bid)) { "Invalid board id: $bid" }
+        require(validId(bid)) { "Invalid board id: $bid" }
         require(validName(name)) { "Invalid task name: $name" }
     }
 }

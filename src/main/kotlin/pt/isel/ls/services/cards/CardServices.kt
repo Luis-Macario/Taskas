@@ -3,11 +3,11 @@ package pt.isel.ls.services.cards
 import pt.isel.ls.database.AppDatabase
 import pt.isel.ls.database.DataCard
 import pt.isel.ls.database.DataListCards
+import pt.isel.ls.utils.MAX_DATE
 import java.sql.Date
 
 class CardServices(private val database: AppDatabase) {
 
-    private val MAX_DATE = "+999999999-12-31"
     /**
      * Creates a new card in a list.
      *
@@ -19,8 +19,8 @@ class CardServices(private val database: AppDatabase) {
      *
      * @return Card's unique identifier
      */
-    fun createCard(bid:Int, lid:Int, name: String, description: String, dueDate: Date = Date.valueOf(MAX_DATE)): Int =
-        database.createCard(bid,lid,name,description,dueDate).id
+    fun createCard(bid: Int, lid: Int, name: String, description: String, dueDate: Date = Date.valueOf(MAX_DATE)): Int =
+        database.createCard(bid, lid, name, description, dueDate).id
 
     /**
      * Get the set of cards in a list.
@@ -44,9 +44,10 @@ class CardServices(private val database: AppDatabase) {
     /**
      * Moves a card, given the following parameter
      *
+     * @param cid the id of the card we want to move
      * @param lid the destination list identifier
      *
      * @return ?
      */
-    fun moveCard(lid: Int) = database
+    fun moveCard(cid: Int, lid: Int) = database.moveCard(cid, lid)
 }
