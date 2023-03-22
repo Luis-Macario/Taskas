@@ -20,9 +20,11 @@ class ListsRoutes(private val services: ListServices) {
     )
 
     private fun createList(request: Request): Response {
-        val listRequest = Json.decodeFromString<CreateListRequest>(request.bodyString())
         return try {
-            val list = services.createList(listRequest.boardID, listRequest.name)
+            val listRequest = Json.decodeFromString<CreateListRequest>(request.bodyString())
+            val bearerToken = request.header("Authentication") ?: return Response(Status.UNAUTHORIZED)
+
+            val list = services.createList(/*bearerToken,*/listRequest.boardID, listRequest.name)
             val listResponse = CreateListResponse(list.id)
             Response(Status.CREATED)
                 .header("Content-Type", "application/json")

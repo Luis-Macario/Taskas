@@ -1,36 +1,38 @@
 package pt.isel.ls.database.memory
 
-object UserNotFound : Exception() {
-    const val code = 4000
-    const val description = "A user with that email already exists"
+import pt.isel.ls.domain.TaskError
+
+object UserNotFound : TaskError() {
+    override val code = 4000
+    override val description = "A user with that id does not exist"
 }
 
-object EmailAreadyExists : Exception() {
-    const val code = 4001
-    const val description = "The user with the id provided doesn't exist"
+object EmailAreadyExists : TaskError() {
+    override val code = 4001
+    override val description = "A user with that email already exists"
 }
 
-object BoardNotFound : Exception() {
-    const val code = 4002
-    const val description = "The board with the id provided doesn't exist"
+object BoardNotFound : TaskError() {
+    override val code = 4002
+    override val description = "The board with the id provided doesn't exist"
 }
 
-object ListNotFound : Exception() {
-    const val code = 4003
-    const val description = "The list with the id provided doesn't exist"
+object ListNotFound : TaskError() {
+    override val code = 4003
+    override val description = "The list with the id provided doesn't exist"
 }
 
-object CardNotFound : Exception() {
-    const val code = 4004
-    const val description = "The card with the id provided doesn't exist"
+object CardNotFound : TaskError() {
+    override val code = 4004
+    override val description = "The card with the id provided doesn't exist"
 }
 
-object UsersBoardDoesNotExist : Exception() {
-    const val code = 5001
-    const val description = "A user has a board that doesn't exist."
+object UsersBoardDoesNotExist : TaskError() {
+    override val code = 5001
+    override val description = "A user has a board that doesn't exist."
 }
 
-object BoardsUserDoesNotExist : Exception() {
-    const val code = 5002
-    const val description = "A board has a user that doesn't exist."
+object BoardsUserDoesNotExist : TaskError() {
+    override val code = 5002
+    override val description = "A board has a user that doesn't exist."
 }

@@ -10,12 +10,12 @@ import pt.isel.ls.services.TasksServices
 
 class TasksWebApi(services: TasksServices) {
     private val usersRoutes = UsersRoutes(services.users).routes
-    //private val boardsRoutes = BoardsRoutes(services.boards).routes
+    private val boardsRoutes = BoardsRoutes(services.boards).routes
     private val listsRoutes = ListsRoutes(services.lists).routes
     private val cardsRoutes = CardsRoutes(services.cards).routes
     val routes = routes(
         "/users" bind usersRoutes,
-        //"/board" bind boardsRoutes,
+        "/boards" bind boardsRoutes,
         "/lists" bind listsRoutes,
         "/cards" bind cardsRoutes
     )

@@ -20,10 +20,12 @@ class CardsRoutes(private val services: CardServices) {
     )
 
     private fun createCard(request: Request): Response {
-        val cardRequest = Json.decodeFromString<CreateCardRequest>(request.bodyString())
         return try {
+            val cardRequest = Json.decodeFromString<CreateCardRequest>(request.bodyString())
+            val bearerToken = request.header("Authentication") ?: return Response(Status.UNAUTHORIZED)
+
             val card =
-                services.createCard(cardRequest.listID, cardRequest.name, cardRequest.description, cardRequest.dueDate)
+                services.createCard(/*bearerToken,*/cardRequest.listID, cardRequest.name, cardRequest.description, cardRequest.dueDate)
             val cardResponse = CreateCardResponse(card.id)
             Response(Status.CREATED)
                 .header("Content-Type", "application/json")
