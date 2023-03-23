@@ -1,37 +1,79 @@
 package pt.isel.ls.api.routers.boards
 
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import org.http4k.core.HttpHandler
 import org.http4k.core.Method
-import org.http4k.core.Request
-import org.http4k.core.Response
-import org.http4k.core.Status.Companion.CREATED
-import org.http4k.core.Status.Companion.UNAUTHORIZED
-import org.http4k.routing.bind
+import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.routes
-import pt.isel.ls.api.dto.board.CreateBoardRequest
-import pt.isel.ls.api.dto.board.CreateBoardResponse
-import pt.isel.ls.api.routers.errorHandler
 import pt.isel.ls.services.boards.BoardServices
 
+/**
+ * Represents the Boards portion of the routes available in the Web API
+ *
+ * @param services the board services
+ * @property routes the board endpoints
+ */
 class BoardsRoutes(private val services: BoardServices) {
-    val routes = routes(
-        "/" bind Method.POST to ::createBoard
+
+    val routes: RoutingHttpHandler = routes(TODO() as Pair<Method, HttpHandler>)
+    /*
+        "/" bind POST to ::createBoard
+        "/{boardID}" bind GET to ::getBoardDetails,
+        "/{boardID}/users" bind GET to ::getUsersFromBoard,
+        "/{boardID}/users" bind POST to ::addUserToBoard,
+        "/{boardID}/lists" bind GET to ::getListsFromBoard,
     )
 
     private fun createBoard(request: Request): Response {
-        return try {
-            val boardRequest = Json.decodeFromString<CreateBoardRequest>(request.bodyString())
-            val bearerToken = request.header("Authentication") ?: return Response(UNAUTHORIZED)
+        return runAndHandleExceptions {
+            val boardRequest = request.getJsonBodyTo<CreateBoardRequest>()
+            val bearerToken = request.getBearerToken()
 
-            val board = services.createBoard(bearerToken as Int /*TODO: INVALID CAST*/, boardRequest.name, boardRequest.description)
+            val board = services.createBoard(
+                bearerToken,
+                boardRequest.name,
+                boardRequest.description
+            )
             val boardResponse = CreateBoardResponse(board.id)
             Response(CREATED)
-                .header("Content-Type", "application/json")
-                .body(Json.encodeToString(boardResponse))
-        } catch (e: Exception) {
-            errorHandler(e)
+                .header("Location", "/boards/${board.id}")
+                .json(boardResponse)
         }
     }
+
+    private fun getUsersFromBoard(request: Request): Response {
+        return runAndHandleExceptions {
+            val boardID = request.getBoardID()
+            val bearerToken = request.getBearerToken()
+
+            val users = services.getUsersFromBoard(bearerToken, boardID)
+            val getUsersResponse = GetUsersFromBoardResponse(users.map { it.toDTO() })
+
+            Response(OK).json(getUsersResponse)
+        }
+    }
+
+    private fun addUserToBoard(request: Request): Response {
+        return runAndHandleExceptions {
+            val boardID = request.getBoardID()
+            val bearerToken = request.getBearerToken()
+            val addUserRequest = request.getJsonBodyTo<AddUserRequest>()
+
+            services.addUserToBoard(bearerToken, boardID, addUserRequest.userID)
+
+            Response(NO_CONTENT)
+        }
+    }
+
+    private fun getListsFromBoard(request: Request): Response {
+        return runAndHandleExceptions {
+            val boardID = request.getBoardID()
+            val bearerToken = request.getBearerToken()
+
+            val lists = services.getListsFromBoard(bearerToken, boardID)
+            val getListsResponse = GetListsFromBoardResponse(lists.map { it.toDTO() })
+
+            Response(OK).json(getListsResponse)
+        }
+    }
+    */
 }

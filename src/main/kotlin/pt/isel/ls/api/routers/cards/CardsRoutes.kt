@@ -1,9 +1,6 @@
 package pt.isel.ls.api.routers.cards
 
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import org.http4k.core.Method
+import org.http4k.core.Method.POST
 import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status
@@ -11,27 +8,42 @@ import org.http4k.routing.bind
 import org.http4k.routing.routes
 import pt.isel.ls.api.dto.card.CreateCardRequest
 import pt.isel.ls.api.dto.card.CreateCardResponse
-import pt.isel.ls.api.routers.errorHandler
+import pt.isel.ls.api.routers.exceptions.runAndHandleExceptions
+import pt.isel.ls.api.routers.utils.getBearerToken
+import pt.isel.ls.api.routers.utils.getJsonBodyTo
+import pt.isel.ls.api.routers.utils.json
 import pt.isel.ls.services.cards.CardServices
 
+/**
+ * Represents the Cards portion of the routes available in the Web API
+ *
+ * @param services the card services
+ * @property routes the card endpoints
+ */
 class CardsRoutes(private val services: CardServices) {
     val routes = routes(
-        "/" bind Method.POST to ::createCard
+        "/" bind POST to ::createCard
+        // "/{cardID}" bind GET to ::getCardDetails,
+        // "/{cardID}/move" bind POST to ::moveCard,
     )
 
     private fun createCard(request: Request): Response {
-        return try {
-            val cardRequest = Json.decodeFromString<CreateCardRequest>(request.bodyString())
-            val bearerToken = request.header("Authentication") ?: return Response(Status.UNAUTHORIZED)
+        return runAndHandleExceptions {
+            val cardRequest = request.getJsonBodyTo<CreateCardRequest>()
+            val bearerToken = request.getBearerToken()
 
             val card =
-                services.createCard(/*bearerToken,*/cardRequest.listID, cardRequest.name, cardRequest.description, cardRequest.dueDate)
+                services.createCard(
+                    // bearerToken,
+                    cardRequest.listID,
+                    cardRequest.name,
+                    cardRequest.description,
+                    cardRequest.dueDate
+                )
             val cardResponse = CreateCardResponse(card.id)
             Response(Status.CREATED)
-                .header("Content-Type", "application/json")
-                .body(Json.encodeToString(cardResponse))
-        } catch (e: Exception) {
-            errorHandler(e)
+                .header("Location", "/cards/${card.id}")
+                .json(cardResponse)
         }
     }
 }

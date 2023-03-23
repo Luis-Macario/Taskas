@@ -8,6 +8,12 @@ import pt.isel.ls.api.routers.lists.ListsRoutes
 import pt.isel.ls.api.routers.users.UsersRoutes
 import pt.isel.ls.services.TasksServices
 
+/**
+ * Represents the Web API
+ *
+ * @param services the services
+ * @property routes the endpoints
+ */
 class TasksWebApi(services: TasksServices) {
     private val usersRoutes = UsersRoutes(services.users).routes
     private val boardsRoutes = BoardsRoutes(services.boards).routes
