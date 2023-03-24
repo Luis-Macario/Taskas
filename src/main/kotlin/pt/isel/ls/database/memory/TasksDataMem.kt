@@ -27,6 +27,8 @@ class TasksDataMem : AppDatabase {
         val token = UUID.randomUUID().toString()
         val id = userId.also { userId += 1 }
 
+        if (users.values.any { it.email == email }) throw EmailAreadyExists
+
         val newUser = User(id, name, email, token)
         users[id] = newUser
         return newUser
@@ -39,8 +41,11 @@ class TasksDataMem : AppDatabase {
             .filter { it.bId == bid }
             .map { getUserDetails(it.uId) }
 
+
     override fun createBoard(uid: Int, name: String, description: String): Board {
         val id = boardId.also { boardId += 1 }
+        if (boards.values.any { it.name == name }) throw BoardNameAlreadyExists
+
         val newBoard = Board(id, name, description)
         boards[id] = newBoard
         addUserToBoard(uid, id)
@@ -52,9 +57,12 @@ class TasksDataMem : AppDatabase {
 
     override fun addUserToBoard(uid: Int, bid: Int) {
         val id = userBoardId.also { userBoardId += 1 }
+        if(userBoard.values.any { it.uId == uid && it.bId == bid }) throw UserAlreadyExistsInBoard
+
         userBoard[id] = UserBoard(uid, bid)
     }
 
+    //TODO("Should we throw the UsersBoardDoesNotExist ??")
     override fun getBoardsFromUser(uid: Int): List<Board> =
         userBoard.values
             .filter { it.uId == uid }
@@ -64,7 +72,7 @@ class TasksDataMem : AppDatabase {
 
     override fun createList(bid: Int, name: String): TaskList {
         val id = listId.also { listId += 1 }
-        val newList = TaskList(bid, id, name)
+        val newList = TaskList(id, bid, name)
         taskLists[id] = newList
 
         return newList
@@ -81,7 +89,8 @@ class TasksDataMem : AppDatabase {
 
     override fun createCard(lid: Int, name: String, description: String, dueDate: Date): Card {
         val id = cardId.also { cardId += 1 }
-        val newCard = Card(getListDetails(lid).bid, lid, id, name, description, dueDate)
+        val newCard = Card(id, getListDetails(lid).bid, lid, name, description, dueDate)
+
         cards[id] = newCard
         return newCard
     }
@@ -97,6 +106,7 @@ class TasksDataMem : AppDatabase {
 
     override fun moveCard(cid: Int, lid: Int) {
         val c = getCardDetails(cid)
-        cards[cid] = Card(c.id, lid, cid, c.name, c.description, c.finishDate)
+        if(!taskLists.values.any{it.id == lid}) throw ListNotFound
+        cards[cid] = Card(c.id, c.bid,  lid, c.name, c.description, c.initDate, c.finishDate)
     }
 }
