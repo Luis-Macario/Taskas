@@ -27,7 +27,7 @@ class TasksDataMem : AppDatabase {
         val token = UUID.randomUUID().toString()
         val id = userId.also { userId += 1 }
 
-        if (users.values.any { it.email == email }) throw EmailAreadyExists
+        if (users.values.any { it.email == email }) throw EmailAlreadyExists
 
         val newUser = User(id, name, email, token)
         users[id] = newUser

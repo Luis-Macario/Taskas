@@ -7,7 +7,7 @@ object UserNotFound : TaskException() {
     override val description = "A user with that id does not exist"
 }
 
-object EmailAreadyExists : TaskException() {
+object EmailAlreadyExists : TaskException() {
     override val code = 4001
     override val description = "A user with that email already exists"
 }
