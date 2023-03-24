@@ -11,7 +11,7 @@ import org.http4k.routing.routes
 import pt.isel.ls.api.dto.user.CreateUserRequest
 import pt.isel.ls.api.dto.user.CreateUserResponse
 import pt.isel.ls.api.dto.user.toDTO
-import pt.isel.ls.api.routers.exceptions.runAndHandleExceptions
+import pt.isel.ls.api.routers.utils.exceptions.runAndHandleExceptions
 import pt.isel.ls.api.routers.utils.getJsonBodyTo
 import pt.isel.ls.api.routers.utils.getUserID
 import pt.isel.ls.api.routers.utils.json
@@ -30,8 +30,8 @@ class UsersRoutes(private val services: UserServices) {
         // "/{userID}/boards" bind GET to ::getBoardsFromUser
     )
 
-    private fun createUser(request: Request): Response {
-        return runAndHandleExceptions {
+    private fun createUser(request: Request): Response =
+        runAndHandleExceptions {
             val userRequest = request.getJsonBodyTo<CreateUserRequest>()
 
             val user = services.createUser(userRequest.name, userRequest.email)
@@ -41,10 +41,9 @@ class UsersRoutes(private val services: UserServices) {
                 .header("Location", "/users/${user.id}")
                 .json(userResponse)
         }
-    }
 
-    private fun getUserDetails(request: Request): Response {
-        return runAndHandleExceptions {
+    private fun getUserDetails(request: Request): Response =
+        runAndHandleExceptions {
             val uid = request.getUserID()
 
             val user = services.getUser(uid)
@@ -52,10 +51,9 @@ class UsersRoutes(private val services: UserServices) {
 
             Response(OK).json(userResponse)
         }
-    }
     /*
-    private fun getBoardsFromUser(request: Request): Response {
-        return runAndHandleExceptions {
+    private fun getBoardsFromUser(request: Request): Response =
+        runAndHandleExceptions {
             val uid = request.getUserID()
             val bearerToken = request.getBearerToken()
 
@@ -64,6 +62,5 @@ class UsersRoutes(private val services: UserServices) {
 
             Response(OK).json(userResponse)
         }
-    }
     */
 }

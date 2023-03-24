@@ -7,12 +7,12 @@ import kotlinx.serialization.json.Json
 import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.routing.path
-import pt.isel.ls.api.routers.exceptions.InvalidBoardIDException
-import pt.isel.ls.api.routers.exceptions.InvalidBodyException
-import pt.isel.ls.api.routers.exceptions.InvalidCardIDException
-import pt.isel.ls.api.routers.exceptions.InvalidListIDException
-import pt.isel.ls.api.routers.exceptions.InvalidUserIDException
-import pt.isel.ls.api.routers.exceptions.NoAuthenticationException
+import pt.isel.ls.api.routers.utils.exceptions.InvalidBoardIDException
+import pt.isel.ls.api.routers.utils.exceptions.InvalidBodyException
+import pt.isel.ls.api.routers.utils.exceptions.InvalidCardIDException
+import pt.isel.ls.api.routers.utils.exceptions.InvalidListIDException
+import pt.isel.ls.api.routers.utils.exceptions.InvalidUserIDException
+import pt.isel.ls.api.routers.utils.exceptions.NoAuthenticationException
 
 /**
  * Attempts to get the string located in the Authentication Header of the [Request]

@@ -1,4 +1,4 @@
-package pt.isel.ls.api.routers.exceptions
+package pt.isel.ls.api.routers.utils.exceptions
 
 import org.http4k.core.Response
 import org.http4k.core.Status
@@ -30,29 +30,24 @@ fun runAndHandleExceptions(block: () -> Response): Response =
  * @param exception the [Exception]
  * @return the [Response] correspondent to the exception thrown
  */
-fun exceptionHandler(exception: Exception): Response {
-    val (status, errorResponse) =
-        if (exception is TaskException) {
-            Pair(
-                exception.toStatus(),
-                ErrorResponse(
-                    code = exception.code,
-                    name = exception.javaClass.simpleName,
-                    description = exception.description
-                )
+fun exceptionHandler(exception: Exception): Response =
+    if (exception is TaskException) {
+        Response(exception.toStatus()).json(
+            ErrorResponse(
+                code = exception.code,
+                name = exception.javaClass.simpleName,
+                description = exception.description
             )
-        } else {
-            Pair(
-                Status.INTERNAL_SERVER_ERROR,
-                ErrorResponse(
-                    code = 9000, // TODO: Figure out what codes to use
-                    name = "Unknown Error: " + exception.javaClass.simpleName,
-                    description = "An unknown error has occurred: " + exception.message
-                )
+        )
+    } else {
+        Response(Status.INTERNAL_SERVER_ERROR).json(
+            ErrorResponse(
+                code = 9000, // TODO: Figure out what codes to use
+                name = "Unknown Error: " + exception.javaClass.simpleName,
+                description = "An unknown error has occurred: " + exception.message
             )
-        }
-    return Response(status).json(errorResponse)
-}
+        )
+    }
 
 /**
  * Converts a [TaskException] to a [Status]

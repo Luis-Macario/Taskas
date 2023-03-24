@@ -23,8 +23,8 @@ class BoardsRoutes(private val services: BoardServices) {
         "/{boardID}/lists" bind GET to ::getListsFromBoard,
     )
 
-    private fun createBoard(request: Request): Response {
-        return runAndHandleExceptions {
+    private fun createBoard(request: Request): Response =
+        runAndHandleExceptions {
             val boardRequest = request.getJsonBodyTo<CreateBoardRequest>()
             val bearerToken = request.getBearerToken()
 
@@ -38,10 +38,9 @@ class BoardsRoutes(private val services: BoardServices) {
                 .header("Location", "/boards/${board.id}")
                 .json(boardResponse)
         }
-    }
 
-    private fun getUsersFromBoard(request: Request): Response {
-        return runAndHandleExceptions {
+    private fun getUsersFromBoard(request: Request): Response =
+        runAndHandleExceptions {
             val boardID = request.getBoardID()
             val bearerToken = request.getBearerToken()
 
@@ -50,10 +49,9 @@ class BoardsRoutes(private val services: BoardServices) {
 
             Response(OK).json(getUsersResponse)
         }
-    }
 
-    private fun addUserToBoard(request: Request): Response {
-        return runAndHandleExceptions {
+    private fun addUserToBoard(request: Request): Response =
+        runAndHandleExceptions {
             val boardID = request.getBoardID()
             val bearerToken = request.getBearerToken()
             val addUserRequest = request.getJsonBodyTo<AddUserRequest>()
@@ -62,10 +60,9 @@ class BoardsRoutes(private val services: BoardServices) {
 
             Response(NO_CONTENT)
         }
-    }
 
-    private fun getListsFromBoard(request: Request): Response {
-        return runAndHandleExceptions {
+    private fun getListsFromBoard(request: Request): Response =
+        runAndHandleExceptions {
             val boardID = request.getBoardID()
             val bearerToken = request.getBearerToken()
 
@@ -74,6 +71,5 @@ class BoardsRoutes(private val services: BoardServices) {
 
             Response(OK).json(getListsResponse)
         }
-    }
     */
 }

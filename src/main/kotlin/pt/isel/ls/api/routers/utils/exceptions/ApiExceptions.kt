@@ -1,4 +1,4 @@
-package pt.isel.ls.api.routers.exceptions
+package pt.isel.ls.api.routers.utils.exceptions
 
 import pt.isel.ls.domain.TaskException
 
