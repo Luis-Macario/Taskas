@@ -24,4 +24,5 @@ interface AppDatabase {
     fun getCardsFromList(lid: Int): List<Card>
     fun getCardDetails(cid: Int): Card
     fun moveCard(cid: Int, lid: Int)
+    fun tokenToId(bToken: String): Int
 }

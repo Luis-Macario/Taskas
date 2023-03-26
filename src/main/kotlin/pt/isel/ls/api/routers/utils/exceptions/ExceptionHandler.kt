@@ -60,7 +60,7 @@ fun TaskException.toStatus() =
         NoAuthenticationException -> Status.UNAUTHORIZED
         // -> Status.FORBIDDEN
         UserNotFoundException, BoardNotFoundException, ListNotFoundException, CardNotFoundException -> Status.NOT_FOUND
-        EmailAlreadyExistsException -> Status.CONFLICT
+       // EmailAlreadyExistsException -> Status.CONFLICT
         // -> Status.BAD_GATEWAY
         else -> Status.INTERNAL_SERVER_ERROR
     }

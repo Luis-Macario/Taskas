@@ -12,11 +12,11 @@ class BoardServices(private val database: AppDatabase) {
      *
      * @return Board's unique identifier
      */
-    fun createBoard(uid: Int, name: String, description: String?): Board {
+    /*fun createBoard(uid: Int, name: String, description: String?): Board {
         val desc = description ?: ""
 
-        return database.createBoard(uid, desc, name)
-    }
+        //return database.createBoard(uid, desc, name)
+    }*/
 
     /**
      * Add a user to the board

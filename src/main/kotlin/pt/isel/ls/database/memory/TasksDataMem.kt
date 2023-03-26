@@ -27,14 +27,14 @@ class TasksDataMem : AppDatabase {
         val token = UUID.randomUUID().toString()
         val id = userId.also { userId += 1 }
 
-        if (users.values.any { it.email == email }) throw EmailAlreadyExists
+        if (users.values.any { it.email == email }) throw EmailAlreadyExistsException
 
         val newUser = User(id, name, email, token)
         users[id] = newUser
         return newUser
     }
 
-    override fun getUserDetails(uid: Int): User = users[uid] ?: throw UserNotFound
+    override fun getUserDetails(uid: Int): User = users[uid] ?: throw UserNotFoundException
 
     override fun getUsersFromBoard(bid: Int): List<User> =
         userBoard.values
@@ -44,7 +44,9 @@ class TasksDataMem : AppDatabase {
 
     override fun createBoard(uid: Int, name: String, description: String): Board {
         val id = boardId.also { boardId += 1 }
-        if (boards.values.any { it.name == name }) throw BoardNameAlreadyExists
+        //val userId = tokenToId(uid)
+        if (!users.values.any { it.id == uid }) throw UserNotFoundException
+        if (boards.values.any { it.name == name }) throw BoardNameAlreadyExistsException
 
         val newBoard = Board(id, name, description)
         boards[id] = newBoard
@@ -53,11 +55,13 @@ class TasksDataMem : AppDatabase {
         return newBoard
     }
 
-    override fun getBoardDetails(bid: Int): Board = boards[bid] ?: throw BoardNotFound
+    override fun getBoardDetails(bid: Int): Board = boards[bid] ?: throw BoardNotFoundException
 
     override fun addUserToBoard(uid: Int, bid: Int) {
         val id = userBoardId.also { userBoardId += 1 }
-        if(userBoard.values.any { it.uId == uid && it.bId == bid }) throw UserAlreadyExistsInBoard
+        if (!users.values.any { it.id == uid }) throw UserNotFoundException
+        if (!boards.values.any { it.id == bid }) throw BoardNotFoundException
+        if (userBoard.values.any { it.uId == uid && it.bId == bid }) throw UserAlreadyExistsInBoardException
 
         userBoard[id] = UserBoard(uid, bid)
     }
@@ -72,20 +76,24 @@ class TasksDataMem : AppDatabase {
 
     override fun createList(bid: Int, name: String): TaskList {
         val id = listId.also { listId += 1 }
+        if (!boards.values.any { it.id == bid }) throw BoardNotFoundException
+
         val newList = TaskList(id, bid, name)
         taskLists[id] = newList
 
         return newList
     }
 
-    override fun getListsFromBoard(bid: Int): List<TaskList> =
-        taskLists.values
+    override fun getListsFromBoard(bid: Int): List<TaskList> {
+        if (!boards.values.any { it.id == bid }) throw BoardNotFoundException
+        return taskLists.values
             .filter { it.bid == bid }
             .map {
                 getListDetails(it.id)
             }
+    }
 
-    override fun getListDetails(lid: Int): TaskList = taskLists[lid] ?: throw ListNotFound
+    override fun getListDetails(lid: Int): TaskList = taskLists[lid] ?: throw ListNotFoundException
 
     override fun createCard(lid: Int, name: String, description: String, dueDate: Date): Card {
         val id = cardId.also { cardId += 1 }
@@ -95,18 +103,24 @@ class TasksDataMem : AppDatabase {
         return newCard
     }
 
-    override fun getCardsFromList(lid: Int): List<Card> =
-        cards.values
+    override fun getCardsFromList(lid: Int): List<Card> {
+        if (!taskLists.values.any { it.id == lid }) throw ListNotFoundException
+        return cards.values
             .filter { it.lid == lid }
             .map {
                 getCardDetails(it.id)
             }
+    }
 
-    override fun getCardDetails(cid: Int): Card = cards[cid] ?: throw CardNotFound
+    override fun getCardDetails(cid: Int): Card = cards[cid] ?: throw CardNotFoundException
 
     override fun moveCard(cid: Int, lid: Int) {
         val c = getCardDetails(cid)
-        if(!taskLists.values.any{it.id == lid}) throw ListNotFound
-        cards[cid] = Card(c.id, c.bid,  lid, c.name, c.description, c.initDate, c.finishDate)
+        if (!taskLists.values.any { it.id == lid }) throw ListNotFoundException
+        cards[cid] = Card(c.id, c.bid, lid, c.name, c.description, c.initDate, c.finishDate)
+    }
+
+    override fun tokenToId(bToken: String): Int {
+        TODO("Not yet implemented")
     }
 }
