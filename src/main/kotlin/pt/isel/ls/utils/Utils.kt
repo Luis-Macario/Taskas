@@ -28,7 +28,7 @@ fun validId(id: Int): Boolean = id >= 0
 fun validDescription(description: String): Boolean =
     description.length in MIN_DESCRIPTION_LENGTH..MAX_DESCRIPTION_LENGTH
 
-fun parseBearerToken(token: String) : String {
+fun parseBearerToken(token: String): String {
     if (token.matches(BEARER_REGEX.toRegex())) throw InvalidBearerToken
     return token.substring(7)
 }

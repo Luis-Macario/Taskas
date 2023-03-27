@@ -7,7 +7,6 @@ import pt.isel.ls.domain.TaskList
 import pt.isel.ls.domain.User
 import pt.isel.ls.domain.UserBoard
 import java.sql.Date
-import java.util.*
 
 class TasksDataMem : AppDatabase {
 
@@ -78,7 +77,7 @@ class TasksDataMem : AppDatabase {
      */
     override fun createBoard(uid: Int, name: String, description: String): Board {
         val id = boardId.also { boardId += 1 }
-        //val userId = tokenToId(uid)
+        // val userId = tokenToId(uid)
         if (!users.values.any { it.id == uid }) throw UserNotFoundException
         if (boards.values.any { it.name == name }) throw BoardNameAlreadyExistsException
 
@@ -124,7 +123,7 @@ class TasksDataMem : AppDatabase {
      *
      * @return list of boards from that User
      */
-    //TODO("Should we throw the UsersBoardDoesNotExist ??")
+    // TODO("Should we throw the UsersBoardDoesNotExist ??")
     override fun getBoardsFromUser(uid: Int): List<Board> =
         userBoard.values
             .filter { it.uId == uid }
@@ -231,7 +230,7 @@ class TasksDataMem : AppDatabase {
     override fun moveCard(cid: Int, lid: Int) {
         val c = getCardDetails(cid)
         if (!taskLists.values.any { it.id == lid }) throw ListNotFoundException
-        cards[cid] = c.copy(lid = lid) //Card(c.id, c.bid, lid, c.name, c.description, c.initDate, c.finishDate)
+        cards[cid] = c.copy(lid = lid) // Card(c.id, c.bid, lid, c.name, c.description, c.initDate, c.finishDate)
     }
 
     /**
@@ -243,6 +242,6 @@ class TasksDataMem : AppDatabase {
      * @return user unique identifier
      */
     override fun tokenToId(bToken: String): Int {
-       return  users.values.firstOrNull { it.token == bToken }?.id ?: throw UserNotFoundException
+        return users.values.firstOrNull { it.token == bToken }?.id ?: throw UserNotFoundException
     }
 }

@@ -1,10 +1,10 @@
 package pt.isel.ls.database.memory
 
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 import org.junit.Test
 import pt.isel.ls.domain.UserBoard
 import java.util.*
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class BoardTests {
 
@@ -103,9 +103,7 @@ class BoardTests {
             mem.addUserToBoard(donkeyUser.id, board.id)
         }
         assertEquals("A user already exists in that board", msg.description)
-
     }
-
 
     @Test
     fun `test get board details`() {
@@ -119,7 +117,7 @@ class BoardTests {
         assertEquals(mem.boards[0]?.name, sut.name)
         assertEquals(mem.boards[0]?.description, sut.description)
 
-        //Test UserBoard Ids
+        // Test UserBoard Ids
         assertEquals(mem.userBoard[0]?.uId, donkeyUser.id)
         assertEquals(mem.userBoard[0]?.bId, board.id)
     }
@@ -160,9 +158,8 @@ class BoardTests {
         val mem = TasksDataMem()
         val donkeyUser = mem.createUser(UUID.randomUUID().toString(), "test", "test@gmail.com")
 
-
         mem.createBoard(donkeyUser.id, "To Do".repeat(4), "ISEL project").id
-        //Hammer boards
+        // Hammer boards
         mem.userBoard[1] = UserBoard(donkeyUser.id, 10)
 
         val msg = assertFailsWith<BoardNotFoundException> {
@@ -170,5 +167,4 @@ class BoardTests {
         }
         assertEquals("The board with the id provided doesn't exist", msg.description)
     }
-
 }

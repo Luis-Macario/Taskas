@@ -64,7 +64,7 @@ class CardServices(private val database: AppDatabase) {
      *
      * @throws IllegalCardAccessException if user doesn't have access to that card
      */
-    fun moveCard(token:String, cid: Int, request: MoveCardRequest){
+    fun moveCard(token: String, cid: Int, request: MoveCardRequest) {
         val parsedToken = parseBearerToken(token)
         val bid = database.getCardDetails(cid).bid
         val users = database.getUsersFromBoard(bid)

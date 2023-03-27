@@ -31,7 +31,7 @@ class CardsRoutes(private val services: CardServices) {
     val routes: RoutingHttpHandler = routes(
         "/" bind POST to ::createCard,
         "/{cardID}" bind GET to ::getCardDetails,
-        "/{cardID}/move" bind POST to ::moveCard,
+        "/{cardID}/move" bind POST to ::moveCard
     )
 
     private fun createCard(request: Request): Response =

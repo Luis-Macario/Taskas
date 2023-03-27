@@ -66,7 +66,7 @@ class ListTests {
 
         val sut = mem.getListsFromBoard(board.id)
 
-        //assertEquals(3, sut.size)
+        // assertEquals(3, sut.size)
         assertEquals(listOf(l1, l2, l3), sut)
     }
 

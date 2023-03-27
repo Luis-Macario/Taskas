@@ -1,7 +1,7 @@
 package pt.isel.ls.api.routers.boards
 
-import org.http4k.core.HttpHandler
-import org.http4k.core.Method.*
+import org.http4k.core.Method.GET
+import org.http4k.core.Method.POST
 import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status.Companion.CREATED
@@ -10,11 +10,16 @@ import org.http4k.core.Status.Companion.OK
 import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
 import org.http4k.routing.routes
-import pt.isel.ls.api.dto.board.*
+import pt.isel.ls.api.dto.board.AddUserRequest
+import pt.isel.ls.api.dto.board.CreateBoardRequest
+import pt.isel.ls.api.dto.board.CreateBoardResponse
+import pt.isel.ls.api.dto.board.GetListsFromBoardResponse
+import pt.isel.ls.api.dto.board.GetUsersFromBoardResponse
+import pt.isel.ls.api.dto.board.toDTO
 import pt.isel.ls.api.dto.list.toDTO
 import pt.isel.ls.api.dto.user.toDTO
-import pt.isel.ls.api.routers.utils.getBearerToken
 import pt.isel.ls.api.routers.utils.exceptions.runAndHandleExceptions
+import pt.isel.ls.api.routers.utils.getBearerToken
 import pt.isel.ls.api.routers.utils.getBoardID
 import pt.isel.ls.api.routers.utils.getJsonBodyTo
 import pt.isel.ls.api.routers.utils.json
@@ -34,7 +39,7 @@ class BoardsRoutes(private val services: BoardServices) {
         "/{boardID}" bind GET to ::getBoardDetails,
         "/{boardID}/users" bind GET to ::getUsersFromBoard,
         "/{boardID}/users" bind POST to ::addUserToBoard,
-        "/{boardID}/lists" bind GET to ::getListsFromBoard,
+        "/{boardID}/lists" bind GET to ::getListsFromBoard
     )
 
     private fun createBoard(request: Request): Response =

@@ -39,7 +39,7 @@ class CardTests {
     }
 
     @Test
-    fun `test getCardDetails given incorrect card id throws CardNotFoundException`(): Unit {
+    fun `test getCardDetails given incorrect card id throws CardNotFoundException`() {
         val mem = TasksDataMem()
 
         val uId = mem.createUser(UUID.randomUUID().toString(), "Pedro", "pedro@gmail.com").id
@@ -55,7 +55,6 @@ class CardTests {
             mem.getCardDetails(2)
         }
         assertEquals("The card with the id provided doesn't exist", msg.description)
-
     }
 
     @Test
@@ -156,5 +155,4 @@ class CardTests {
         }
         assertEquals("The card with the id provided doesn't exist", msg.description)
     }
-
 }

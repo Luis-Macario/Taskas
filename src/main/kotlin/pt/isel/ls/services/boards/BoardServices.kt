@@ -1,8 +1,6 @@
 package pt.isel.ls.services.boards
 
-import pt.isel.ls.api.dto.user.UserDTO
 import pt.isel.ls.database.AppDatabase
-import pt.isel.ls.database.memory.TasksDataMem
 import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.TaskList
 import pt.isel.ls.domain.User

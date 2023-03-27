@@ -61,7 +61,7 @@ class UsersRoutes(private val services: UserServices) {
             val bearerToken = request.getBearerToken()
 
             val boards = services.getBoardsFromUser(bearerToken, uid)
-            val boardsResponse =GetBoardsFromUserResponse(boards.map{it.toDTO()})
+            val boardsResponse = GetBoardsFromUserResponse(boards.map { it.toDTO() })
 
             Response(OK).json(boardsResponse)
         }

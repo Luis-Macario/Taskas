@@ -1,6 +1,6 @@
 package pt.isel.ls.domain
 
-//import pt.isel.ls.utils.MAX_DATE
+// import pt.isel.ls.utils.MAX_DATE
 import pt.isel.ls.utils.validDescription
 import pt.isel.ls.utils.validId
 import java.sql.Date
@@ -22,7 +22,7 @@ data class Card(
     val name: String,
     val description: String = "",
     val initDate: Date,
-    val finishDate: Date = Date.valueOf("9999-12-31")//Date.valueOf(MAX_DATE)
+    val finishDate: Date = Date.valueOf("9999-12-31") // Date.valueOf(MAX_DATE)
 ) {
     companion object {
         const val MAX_NAME_LENGTH = 100

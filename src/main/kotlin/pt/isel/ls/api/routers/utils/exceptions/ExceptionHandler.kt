@@ -4,9 +4,17 @@ import org.http4k.core.Response
 import org.http4k.core.Status
 import pt.isel.ls.api.dto.ErrorResponse
 import pt.isel.ls.api.routers.utils.json
-import pt.isel.ls.database.memory.*
+import pt.isel.ls.database.memory.BoardNotFoundException
+import pt.isel.ls.database.memory.CardNotFoundException
+import pt.isel.ls.database.memory.EmailAlreadyExistsException
+import pt.isel.ls.database.memory.ListNotFoundException
+import pt.isel.ls.database.memory.UserNotFoundException
 import pt.isel.ls.domain.TaskException
-import pt.isel.ls.utils.exceptions.*
+import pt.isel.ls.utils.exceptions.IllegalBoardAccessException
+import pt.isel.ls.utils.exceptions.IllegalCardAccessException
+import pt.isel.ls.utils.exceptions.IllegalListAccessException
+import pt.isel.ls.utils.exceptions.IllegalUserAccessException
+import pt.isel.ls.utils.exceptions.InvalidBearerToken
 
 /**
  * Runs the given block, and if an exception is thrown, runs [exceptionHandler]
