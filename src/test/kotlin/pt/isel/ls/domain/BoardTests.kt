@@ -14,7 +14,7 @@ class BoardTests {
 
         assertEquals(1, board.id)
         assertEquals("Projeto Kapa Mega Giga Tera Fixe", board.name)
-        assertEquals("", board.description)
+        assertEquals("Projeto Kapa Mega Giga Tera Fixe", board.description)
     }
 
     @Test

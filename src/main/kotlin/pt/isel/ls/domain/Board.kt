@@ -13,7 +13,7 @@ import pt.isel.ls.utils.validId
 data class Board(
     val id: Int,
     val name: String,
-    val description: String?
+    val description: String
 ) {
     companion object {
         const val MAX_NAME_LENGTH = 100
