@@ -1,7 +1,9 @@
 package pt.isel.ls.services.users
 
-import pt.isel.ls.database.AppDatabase
+import pt.isel.ls.database.AppDatabase import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.User
+import pt.isel.ls.utils.exceptions.IllegalUserAccessException
+import java.util.UUID
 
 class UserServices(private val database: AppDatabase) {
     /**
@@ -12,7 +14,10 @@ class UserServices(private val database: AppDatabase) {
      *
      * @return user's token and id
      */
-    fun createUser(name: String, email: String): User = database.createUser(name, email)
+    fun createUser(name: String, email: String): User {
+        val token = UUID.randomUUID().toString()
+        return database.createUser(token, name, email)
+    }
 
     /**
      * Get the details of a user
@@ -24,9 +29,16 @@ class UserServices(private val database: AppDatabase) {
     fun getUser(uid: Int): User = database.getUserDetails(uid)
 
     /**
-     * Get all users
+     * Get all boards from a given user
+     *
+     * @param token user's token
+     * @param uid the unique user identifier
      *
      * @return List of user objects
      */
-    fun getBoardUsers(bid: Int): List<User> = database.getUsersFromBoard(bid)
+    fun getBoardsFromUser(token: String, uid: Int): List<Board>{
+        val user = database.getUserDetails(uid)
+        if(user.token != (token)) throw IllegalUserAccessException
+        return database.getBoardsFromUser(uid)
+    }
 }

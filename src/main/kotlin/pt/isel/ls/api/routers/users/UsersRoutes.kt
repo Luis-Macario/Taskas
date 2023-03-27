@@ -8,10 +8,13 @@ import org.http4k.core.Status.Companion.CREATED
 import org.http4k.core.Status.Companion.OK
 import org.http4k.routing.bind
 import org.http4k.routing.routes
+import pt.isel.ls.api.dto.board.toDTO
 import pt.isel.ls.api.dto.user.CreateUserRequest
 import pt.isel.ls.api.dto.user.CreateUserResponse
+import pt.isel.ls.api.dto.user.GetBoardsFromUserResponse
 import pt.isel.ls.api.dto.user.toDTO
 import pt.isel.ls.api.routers.utils.exceptions.runAndHandleExceptions
+import pt.isel.ls.api.routers.utils.getBearerToken
 import pt.isel.ls.api.routers.utils.getJsonBodyTo
 import pt.isel.ls.api.routers.utils.getUserID
 import pt.isel.ls.api.routers.utils.json
@@ -26,8 +29,8 @@ import pt.isel.ls.services.users.UserServices
 class UsersRoutes(private val services: UserServices) {
     val routes = routes(
         "/" bind POST to ::createUser,
-        "/{userID}" bind GET to ::getUserDetails
-        // "/{userID}/boards" bind GET to ::getBoardsFromUser
+        "/{userID}" bind GET to ::getUserDetails,
+        "/{userID}/boards" bind GET to ::getBoardsFromUser
     )
 
     private fun createUser(request: Request): Response =
@@ -51,16 +54,15 @@ class UsersRoutes(private val services: UserServices) {
 
             Response(OK).json(userResponse)
         }
-    /*
+
     private fun getBoardsFromUser(request: Request): Response =
         runAndHandleExceptions {
             val uid = request.getUserID()
             val bearerToken = request.getBearerToken()
 
-            val user = services.getBoardsFromUser(bearerToken, uid)
-            val userResponse = user.toDTO()
+            val boards = services.getBoardsFromUser(bearerToken, uid)
+            val boardsResponse =GetBoardsFromUserResponse(boards.map{it.toDTO()})
 
-            Response(OK).json(userResponse)
+            Response(OK).json(boardsResponse)
         }
-    */
 }
