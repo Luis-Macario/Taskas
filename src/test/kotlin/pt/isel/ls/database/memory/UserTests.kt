@@ -1,6 +1,7 @@
 package pt.isel.ls.database.memory
 
 import pt.isel.ls.domain.User
+import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -27,8 +28,9 @@ class UserTests {
 
         val name = "Luigi"
         val email = "honorStudent@gmail.com"
+        val token = UUID.randomUUID().toString()
 
-        val sut = mem.createUser(name, email)
+        val sut = mem.createUser(token, name, email)
 
         assertEquals(mem.users[0]?.name, name)
         assertEquals(mem.users[0]?.email, email)
@@ -41,11 +43,12 @@ class UserTests {
         val mem = TasksDataMem()
         val name = "Luigi"
         val email = "honorStudent@gmail.com"
+        val token = UUID.randomUUID().toString()
 
-        mem.createUser(name, email)
+        mem.createUser(token, name, email)
 
         val msg = assertFailsWith<EmailAlreadyExistsException> {
-            mem.createUser("Ricky", email)
+            mem.createUser(UUID.randomUUID().toString(), "Ricky", email)
         }
 
         assertEquals("A user with that email already exists", msg.description)
@@ -57,8 +60,9 @@ class UserTests {
 
         val name = "Tweeny"
         val email = "honorStudent@gmail.com"
+        val token = UUID.randomUUID().toString()
 
-        val user = mem.createUser(name, email)
+        val user = mem.createUser(token, name, email)
         val sut = mem.getUserDetails(user.id)
 
         assertEquals(name, sut.name)

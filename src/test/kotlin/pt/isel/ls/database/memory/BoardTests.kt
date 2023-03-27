@@ -4,6 +4,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import org.junit.Test
 import pt.isel.ls.domain.UserBoard
+import java.util.*
 
 class BoardTests {
 
@@ -12,7 +13,8 @@ class BoardTests {
         val mem = TasksDataMem()
         val name = "To Do".repeat(4)
         val description = "ISEL project"
-        val user = mem.createUser("Francisco M", "francisco@isel.pt")
+        val token = UUID.randomUUID().toString()
+        val user = mem.createUser(token, "Francisco M", "francisco@isel.pt")
 
         val sut = mem.createBoard(user.id, name, description)
 
@@ -24,7 +26,8 @@ class BoardTests {
     @Test
     fun `test create board throws BoardNameAlreadyExistsException when creating a board with a repeated name`() {
         val mem = TasksDataMem()
-        val user = mem.createUser("Francisco M", "francisco@isel.pt")
+
+        val user = mem.createUser(UUID.randomUUID().toString(), "Francisco M", "francisco@isel.pt")
         val boardName = "To Do".repeat(4)
 
         mem.createBoard(user.id, boardName, "ISEL project")
@@ -39,7 +42,7 @@ class BoardTests {
     @Test
     fun `test create board throws UserNotFoundException when creating a board with a invalid user`() {
         val mem = TasksDataMem()
-        val user = mem.createUser("Francisco M", "francisco@isel.pt")
+        val user = mem.createUser(UUID.randomUUID().toString(), "Francisco M", "francisco@isel.pt")
         val boardName = "To Do".repeat(4)
 
         val msg = assertFailsWith<UserNotFoundException> {
@@ -52,8 +55,8 @@ class BoardTests {
     @Test
     fun `test add User to a board`() {
         val mem = TasksDataMem()
-        val donkeyUser = mem.createUser("test", "test@gmail.com")
-        val newDonkeyUser = mem.createUser("test2", "test2@gmail.com")
+        val donkeyUser = mem.createUser(UUID.randomUUID().toString(), "test", "test@gmail.com")
+        val newDonkeyUser = mem.createUser(UUID.randomUUID().toString(), "test2", "test2@gmail.com")
 
         val board = mem.createBoard(donkeyUser.id, "To Do".repeat(4), "ISEL project")
         mem.addUserToBoard(newDonkeyUser.id, board.id)
@@ -70,7 +73,7 @@ class BoardTests {
     @Test
     fun `test add User to a board throws UserNotFoundException`() {
         val mem = TasksDataMem()
-        val donkeyUser = mem.createUser("test", "test@gmail.com")
+        val donkeyUser = mem.createUser(UUID.randomUUID().toString(), "test", "test@gmail.com")
         val board = mem.createBoard(donkeyUser.id, "To Do".repeat(4), "ISEL project")
 
         val msg = assertFailsWith<UserNotFoundException> {
@@ -82,7 +85,7 @@ class BoardTests {
     @Test
     fun `test add User to a board throws BoardNotFoundException`() {
         val mem = TasksDataMem()
-        val donkeyUser = mem.createUser("test", "test@gmail.com")
+        val donkeyUser = mem.createUser(UUID.randomUUID().toString(), "test", "test@gmail.com")
 
         val msg = assertFailsWith<BoardNotFoundException> {
             mem.addUserToBoard(donkeyUser.id, 100)
@@ -93,7 +96,7 @@ class BoardTests {
     @Test
     fun `test add User to a board throws UserAlreadyExistsInBoardException`() {
         val mem = TasksDataMem()
-        val donkeyUser = mem.createUser("test", "test@gmail.com")
+        val donkeyUser = mem.createUser(UUID.randomUUID().toString(), "test", "test@gmail.com")
         val board = mem.createBoard(donkeyUser.id, "To Do".repeat(4), "ISEL project")
 
         val msg = assertFailsWith<UserAlreadyExistsInBoardException> {
@@ -107,7 +110,7 @@ class BoardTests {
     @Test
     fun `test get board details`() {
         val mem = TasksDataMem()
-        val donkeyUser = mem.createUser("test", "test@gmail.com")
+        val donkeyUser = mem.createUser(UUID.randomUUID().toString(), "test", "test@gmail.com")
         val board = mem.createBoard(donkeyUser.id, "To Do".repeat(4), "ISEL project")
 
         val sut = mem.getBoardDetails(board.id)
@@ -134,7 +137,7 @@ class BoardTests {
     @Test
     fun `test get user available boards`() {
         val mem = TasksDataMem()
-        val donkeyUser = mem.createUser("test", "test@gmail.com")
+        val donkeyUser = mem.createUser(UUID.randomUUID().toString(), "test", "test@gmail.com")
 
         val b = mem.getBoardDetails(
             mem.createBoard(donkeyUser.id, "To Do".repeat(4), "ISEL project").id
@@ -155,7 +158,7 @@ class BoardTests {
     @Test
     fun `test get user available boards throws BoardNotFoundException`() {
         val mem = TasksDataMem()
-        val donkeyUser = mem.createUser("test", "test@gmail.com")
+        val donkeyUser = mem.createUser(UUID.randomUUID().toString(), "test", "test@gmail.com")
 
 
         mem.createBoard(donkeyUser.id, "To Do".repeat(4), "ISEL project").id

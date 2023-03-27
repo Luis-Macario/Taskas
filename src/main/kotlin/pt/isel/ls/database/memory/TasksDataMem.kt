@@ -23,8 +23,17 @@ class TasksDataMem : AppDatabase {
     val taskLists: MutableMap<Int, TaskList> = mutableMapOf()
     val cards: MutableMap<Int, Card> = mutableMapOf()
 
-    override fun createUser(name: String, email: String): User {
-        val token = UUID.randomUUID().toString()
+    /**
+     * Creates a new user
+     *
+     * @param name user's name
+     * @param email user's email, must be unique
+     *
+     * @throws EmailAlreadyExistsException if the email already exists
+     * @return the created User()
+     */
+
+    override fun createUser(token: String, name: String, email: String): User {
         val id = userId.also { userId += 1 }
 
         if (users.values.any { it.email == email }) throw EmailAlreadyExistsException
@@ -34,14 +43,39 @@ class TasksDataMem : AppDatabase {
         return newUser
     }
 
+    /**
+     * Get user details
+     *
+     * @param uid user's unique identifier
+     *
+     * @throws UserNotFoundException if the User was not found
+     * @return the User() details
+     */
     override fun getUserDetails(uid: Int): User = users[uid] ?: throw UserNotFoundException
 
+    /**
+     * Get the user boards
+     *
+     * @param bid board's unique identifier
+     *
+     * @return the list of users from that specific board
+     */
     override fun getUsersFromBoard(bid: Int): List<User> =
         userBoard.values
             .filter { it.bId == bid }
             .map { getUserDetails(it.uId) }
 
-
+    /**
+     * Creates a new board
+     *
+     * @param uid user's unique identifier
+     * @param name board's unique name
+     * @param description board's descritpion
+     *
+     * @throws UserNotFoundException if the user was not found
+     * @throws BoardNameAlreadyExistsException if the board  name already exists
+     * @return the created Board()
+     */
     override fun createBoard(uid: Int, name: String, description: String): Board {
         val id = boardId.also { boardId += 1 }
         //val userId = tokenToId(uid)
@@ -55,8 +89,25 @@ class TasksDataMem : AppDatabase {
         return newBoard
     }
 
+    /**
+     * Get user details
+     *
+     * @param bid board's unique identifier
+     * @throws BoardNotFoundException if the board was not found
+     * @return the Board() details
+     */
     override fun getBoardDetails(bid: Int): Board = boards[bid] ?: throw BoardNotFoundException
 
+    /**
+     * Add a User to a Board
+     *
+     * @param uid user's unique identifier
+     * @param bid board's unique identifier
+     *
+     * @throws UserNotFoundException if the user was not found
+     * @throws BoardNotFoundException if the board was not found
+     * @throws UserAlreadyExistsInBoardException if a board already contains a User with that id
+     */
     override fun addUserToBoard(uid: Int, bid: Int) {
         val id = userBoardId.also { userBoardId += 1 }
         if (!users.values.any { it.id == uid }) throw UserNotFoundException
@@ -66,6 +117,13 @@ class TasksDataMem : AppDatabase {
         userBoard[id] = UserBoard(uid, bid)
     }
 
+    /**
+     * Get the boards from a User
+     *
+     * @param uid user's unique identifier
+     *
+     * @return list of boards from that User
+     */
     //TODO("Should we throw the UsersBoardDoesNotExist ??")
     override fun getBoardsFromUser(uid: Int): List<Board> =
         userBoard.values
@@ -74,6 +132,15 @@ class TasksDataMem : AppDatabase {
                 getBoardDetails(board.bId)
             }
 
+    /**
+     * Creates a new List
+     *
+     * @param bid board's unique identifier
+     * @param name list's name
+     *
+     *  @throws BoardNotFoundException if the board was not found
+     * @return the created TaskList()
+     */
     override fun createList(bid: Int, name: String): TaskList {
         val id = listId.also { listId += 1 }
         if (!boards.values.any { it.id == bid }) throw BoardNotFoundException
@@ -84,6 +151,14 @@ class TasksDataMem : AppDatabase {
         return newList
     }
 
+    /**
+     * Get the lists from a Board
+     *
+     * @param bid board's unique identifier
+     *
+     * @throws BoardNotFoundException if the board was not found
+     * @return the list of TaskList from that Board
+     */
     override fun getListsFromBoard(bid: Int): List<TaskList> {
         if (!boards.values.any { it.id == bid }) throw BoardNotFoundException
         return taskLists.values
@@ -93,8 +168,23 @@ class TasksDataMem : AppDatabase {
             }
     }
 
+    /**
+     * Get a TaskList details
+     *
+     * @param lid taskList's unique identifier
+     *
+     * @throws ListNotFoundException if the list was not found
+     * @return the TaskList() details
+     */
     override fun getListDetails(lid: Int): TaskList = taskLists[lid] ?: throw ListNotFoundException
 
+    /**
+     * Creates a new Card
+     *
+     * @param lid taskList's unique identifier
+     *
+     * @return the created Card()
+     */
     override fun createCard(lid: Int, name: String, description: String, dueDate: Date): Card {
         val id = cardId.also { cardId += 1 }
         val newCard = Card(id, getListDetails(lid).bid, lid, name, description, dueDate)
@@ -103,6 +193,14 @@ class TasksDataMem : AppDatabase {
         return newCard
     }
 
+    /**
+     * Get the cards from a TaskList
+     *
+     * @param lid taskList's unique identifier
+     *
+     * @throws ListNotFoundException if the list was not found
+     * @return list of cards from a TaskList
+     */
     override fun getCardsFromList(lid: Int): List<Card> {
         if (!taskLists.values.any { it.id == lid }) throw ListNotFoundException
         return cards.values
@@ -112,15 +210,39 @@ class TasksDataMem : AppDatabase {
             }
     }
 
+    /**
+     * Get card details
+     *
+     * @param cid card's unique identifier
+     *
+     * @throws CardNotFoundException if the card was not found
+     * @return the Card() details
+     */
     override fun getCardDetails(cid: Int): Card = cards[cid] ?: throw CardNotFoundException
 
+    /**
+     * Move a card to another TaskList
+     *
+     * @param cid card's unique identifier
+     * @param lid taskList's unique identifier
+     *
+     * @throws ListNotFoundException if the list was not found
+     */
     override fun moveCard(cid: Int, lid: Int) {
         val c = getCardDetails(cid)
         if (!taskLists.values.any { it.id == lid }) throw ListNotFoundException
-        cards[cid] = Card(c.id, c.bid, lid, c.name, c.description, c.initDate, c.finishDate)
+        cards[cid] = c.copy(lid = lid) //Card(c.id, c.bid, lid, c.name, c.description, c.initDate, c.finishDate)
     }
 
+    /**
+     * Get the User id given the bearer token
+     *
+     * @param bToken user's bearer token
+     *
+     * @throws UserNotFoundException if the user was not found
+     * @return user unique identifier
+     */
     override fun tokenToId(bToken: String): Int {
-        TODO("Not yet implemented")
+       return  users.values.firstOrNull { it.token == bToken }?.id ?: throw UserNotFoundException
     }
 }

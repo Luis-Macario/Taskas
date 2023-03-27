@@ -2,12 +2,10 @@ package pt.isel.ls.database.memory
 
 import org.junit.Test
 import pt.isel.ls.domain.Card
-import pt.isel.ls.utils.MAX_DATE
 import java.sql.Date
+import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 class CardTests {
 
@@ -15,7 +13,7 @@ class CardTests {
     fun `test create card and get details`() {
         val mem = TasksDataMem()
 
-        val uId = mem.createUser("Pedro", "pedro@gmail.com").id
+        val uId = mem.createUser(UUID.randomUUID().toString(), "Pedro", "pedro@gmail.com").id
         val bId = mem.createBoard(uId, "To Do".repeat(4), "ISEL project").id
         val lId = mem.createList(bId, "Some work 1").id
 
@@ -44,7 +42,7 @@ class CardTests {
     fun `test getCardDetails given incorrect card id throws CardNotFoundException`(): Unit {
         val mem = TasksDataMem()
 
-        val uId = mem.createUser("Pedro", "pedro@gmail.com").id
+        val uId = mem.createUser(UUID.randomUUID().toString(), "Pedro", "pedro@gmail.com").id
         val bId = mem.createBoard(uId, "To Do".repeat(4), "ISEL project").id
         val lId = mem.createList(bId, "Some work 1").id
 
@@ -64,7 +62,7 @@ class CardTests {
     fun `test get set of cards`() {
         val mem = TasksDataMem()
 
-        val uId = mem.createUser("Miguel", "miguel@gmail.com").id
+        val uId = mem.createUser(UUID.randomUUID().toString(), "Miguel", "miguel@gmail.com").id
         val bId = mem.createBoard(uId, "To Do".repeat(4), "ISEL project").id
         val lId = mem.createList(bId, "Some work ").id
 
@@ -93,7 +91,7 @@ class CardTests {
     fun `test get set of cards with invalid cards throws CardNotFoundException `() {
         val mem = TasksDataMem()
 
-        val uId = mem.createUser("Miguel", "miguel@gmail.com").id
+        val uId = mem.createUser(UUID.randomUUID().toString(), "Miguel", "miguel@gmail.com").id
         val bId = mem.createBoard(uId, "To Do".repeat(4), "ISEL project").id
         val lId = mem.createList(bId, "Some work ").id
 
@@ -117,7 +115,7 @@ class CardTests {
     fun `test move a card to another taskList`() {
         val mem = TasksDataMem()
 
-        val uId = mem.createUser("Tiago", "tiago@gmail.com").id
+        val uId = mem.createUser(UUID.randomUUID().toString(), "Tiago", "tiago@gmail.com").id
         val bId = mem.createBoard(uId, "To Do".repeat(4), "ISEL project").id
         val lId = mem.createList(bId, "Some work ").id
         val cId = mem.createCard(lId, "Team Work ", "some work ".repeat(1), Date.valueOf("2019-1-26")).id
@@ -133,7 +131,7 @@ class CardTests {
     fun `test move a card to another invalid list thorws ListNotFoundException`() {
         val mem = TasksDataMem()
 
-        val uId = mem.createUser("Tiago", "tiago@gmail.com").id
+        val uId = mem.createUser(UUID.randomUUID().toString(), "Tiago", "tiago@gmail.com").id
         val bId = mem.createBoard(uId, "To Do".repeat(4), "ISEL project").id
         val lId = mem.createList(bId, "Some work ").id
         val cId = mem.createCard(lId, "Team Work ", "some work ".repeat(1), Date.valueOf("2019-1-26")).id
@@ -148,7 +146,7 @@ class CardTests {
     fun `test move a card given invalid card throws CardNotFoundException`() {
         val mem = TasksDataMem()
 
-        val uId = mem.createUser("Tiago", "tiago@gmail.com").id
+        val uId = mem.createUser(UUID.randomUUID().toString(), "Tiago", "tiago@gmail.com").id
         val bId = mem.createBoard(uId, "To Do".repeat(4), "ISEL project").id
         val lId = mem.createList(bId, "Some work ").id
         val invalidCardId = 10

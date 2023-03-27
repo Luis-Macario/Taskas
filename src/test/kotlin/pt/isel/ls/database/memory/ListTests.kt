@@ -1,10 +1,9 @@
 package pt.isel.ls.database.memory
 
 import org.junit.Test
+import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 class ListTests {
 
@@ -12,7 +11,7 @@ class ListTests {
     fun `test create taskList successfully`() {
         val mem = TasksDataMem()
         val name = "Backend Work"
-        val donkeyUser = mem.createUser("test", "test@gmail.com")
+        val donkeyUser = mem.createUser(UUID.randomUUID().toString(), "test", "test@gmail.com")
         val board = mem.createBoard(donkeyUser.id, "To Do".repeat(4), "ISEL project")
 
         val sut = mem.createList(board.id, name)
@@ -34,7 +33,7 @@ class ListTests {
     @Test
     fun `test get tasklist details`() {
         val mem = TasksDataMem()
-        val donkeyUser = mem.createUser("test", "test@gmail.com")
+        val donkeyUser = mem.createUser(UUID.randomUUID().toString(), "test", "test@gmail.com")
         val board = mem.createBoard(donkeyUser.id, "To Do".repeat(4), "ISEL project")
         val taskList = mem.createList(board.id, "some work..")
 
@@ -58,7 +57,7 @@ class ListTests {
     @Test
     fun `test getListsFromBoard giving the correct id`() {
         val mem = TasksDataMem()
-        val donkeyUser = mem.createUser("test", "test@gmail.com")
+        val donkeyUser = mem.createUser(UUID.randomUUID().toString(), "test", "test@gmail.com")
         val board = mem.createBoard(donkeyUser.id, "To Do".repeat(4), "ISEL project")
 
         val l1 = mem.getListDetails(mem.createList(board.id, "Some work 1").id)

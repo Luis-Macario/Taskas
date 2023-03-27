@@ -13,7 +13,6 @@ class BoardTests {
         val board = Board(1, "Projeto Kapa Mega Giga Tera Fixe", "Projeto Kapa Mega Giga Tera Fixe")
 
         assertEquals(1, board.id)
-        assertEquals("Projeto", board.name)
         assertEquals("Projeto Kapa Mega Giga Tera Fixe", board.name)
         assertEquals("", board.description)
     }
@@ -33,7 +32,7 @@ class BoardTests {
             Board(1, " ", "Projeto Kapa Mega Giga Tera Fixe")
         }
 
-        assertEquals("Invalid board name: ", msg.message)
+        assertEquals("Invalid board name:  ", msg.message)
     }
 
     // --------------------------------
