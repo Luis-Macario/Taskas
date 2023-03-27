@@ -1,34 +1,59 @@
 package pt.isel.ls.services.lists
 
 import pt.isel.ls.database.AppDatabase
+import pt.isel.ls.domain.Card
 import pt.isel.ls.domain.TaskList
+import pt.isel.ls.utils.exceptions.IllegalBoardAccessException
+import pt.isel.ls.utils.exceptions.IllegalListAccessException
 
 class ListServices(private val database: AppDatabase) {
     /**
      * Creates a new list on a board
      *
+     * @param token token of the user creating the list
      * @param bid id of the board containing this list
      * @param name list's name
      *
+     * @throws IllegalBoardAccessException if user doesn't have access to the board specified by bid
+     *
      * @return list unique identifier
      */
-    fun createList(bid: Int, name: String): TaskList = database.createList(bid, name)
+    fun createList(token: String, bid: Int, name: String): TaskList {
+        val users = database.getUsersFromBoard(bid)
+        if (!users.any { it.token == token }) throw IllegalBoardAccessException
 
-    /**
-     * Get the lists of a board.
-     *
-     * @param bid board's unique identifier
-     *
-     * @return DataBoardLists object
-     */
-    fun getBoardsLists(bid: Int): List<TaskList> = database.getListsFromBoard(bid)
+        return database.createList(bid, name)
+    }
 
     /**
      * Get detailed information of a list.
      *
      * @param lid list's unique identifier
      *
-     * @return BList object
+     * @throws IllegalListAccessException if user doesn't have access to the list
+     *
+     * @return TaskList object
      */
-    fun getList(lid: Int): TaskList = database.getListDetails(lid)
+    fun getList(token: String, lid: Int): TaskList {
+        val list = database.getListDetails(lid)
+        val users = database.getUsersFromBoard(list.bid)
+        if (!users.any { it.token == token }) throw IllegalListAccessException
+        return database.getListDetails(lid)
+    }
+
+    /**
+     * Get list of cards in the list.
+     *
+     * @param lid list's unique identifier
+     *
+     * @throws IllegalListAccessException if user doesn't have access to the list
+     *
+     * @return List of Card object
+     */
+    fun getCardsFromList(token: String, lid: Int): List<Card> {
+        val list = database.getListDetails(lid)
+        val users = database.getUsersFromBoard(list.bid)
+        if (!users.any { it.token == token }) throw IllegalListAccessException
+        return database.getCardsFromList(lid)
+    }
 }

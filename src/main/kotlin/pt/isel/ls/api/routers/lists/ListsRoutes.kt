@@ -9,6 +9,7 @@ import org.http4k.core.Status.Companion.OK
 import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
 import org.http4k.routing.routes
+import pt.isel.ls.api.dto.card.toDTO
 import pt.isel.ls.api.dto.list.CreateListRequest
 import pt.isel.ls.api.dto.list.CreateListResponse
 import pt.isel.ls.api.dto.list.GetCardFromListResponse
@@ -38,12 +39,18 @@ class ListsRoutes(private val services: ListServices) {
             val listRequest = request.getJsonBodyTo<CreateListRequest>()
             val bearerToken = request.getBearerToken()
 
-            val list = services.createList(/*bearerToken,*/listRequest.boardID, listRequest.name)
+            val list = services.createList(
+                bearerToken,
+                listRequest.boardID,
+                listRequest.name
+            )
+
             val listResponse = CreateListResponse(list.id)
             Response(CREATED)
                 .header("Location", "/lists/${list.id}")
                 .json(listResponse)
         }
+
     private fun getCardsFromList(request: Request): Response =
         runAndHandleExceptions {
             val listID = request.getListID()

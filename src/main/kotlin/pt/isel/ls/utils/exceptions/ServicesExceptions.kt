@@ -18,7 +18,12 @@ object IllegalListAccessException : TaskException() {
     override val description = "User doesn't have access to this list"
 }
 
-object IllegalCarddAccessException : TaskException() {
+object IllegalCardAccessException : TaskException() {
     override val code = 9000 //TODO: Figure out what code to use
     override val description = "User doesn't have access to this card"
+}
+
+object InvalidBearerToken : TaskException() {
+    override val code = 9000 //TODO: Figure out what code to use
+    override val description = "Authorization header is no valid"
 }

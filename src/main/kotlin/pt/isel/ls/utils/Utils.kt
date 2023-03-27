@@ -1,9 +1,13 @@
 package pt.isel.ls.utils
 
+import pt.isel.ls.utils.exceptions.InvalidBearerToken
+
 const val MAX_DESCRIPTION_LENGTH = 1000
 const val MIN_DESCRIPTION_LENGTH = 0
 
 const val MAX_DATE = "9999-12-31"
+
+const val BEARER_REGEX = "^Bearer [A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_.+\\/=]*\$"
 
 /**
  * Checks whether an id is valid or not
@@ -23,3 +27,8 @@ fun validId(id: Int): Boolean = id >= 0
  */
 fun validDescription(description: String): Boolean =
     description.length in MIN_DESCRIPTION_LENGTH..MAX_DESCRIPTION_LENGTH
+
+fun parseBearerToken(token: String) : String {
+    if (token.matches(BEARER_REGEX.toRegex())) throw InvalidBearerToken
+    return token.substring(7)
+}

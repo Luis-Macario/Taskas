@@ -13,7 +13,7 @@ import pt.isel.ls.utils.validId
 data class Board(
     val id: Int,
     val name: String,
-    val description: String = ""
+    val description: String?
 ) {
     companion object {
         const val MAX_NAME_LENGTH = 100
@@ -31,7 +31,7 @@ data class Board(
 
     init {
         require(validName(name)) { "Invalid board name: $name" }
-        require(validDescription(description)) { "Invalid board description: $description" }
+        if (description != null) require(validDescription(description)) { "Invalid board description: $description" }
         require(validId(id)) { "Invalid board id: $id" }
     }
 }

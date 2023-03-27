@@ -42,7 +42,7 @@ class CardsRoutes(private val services: CardServices) {
 
             val card =
                 services.createCard(
-                    // bearerToken,
+                    bearerToken,
                     cardRequest.listID,
                     cardRequest.name,
                     cardRequest.description,

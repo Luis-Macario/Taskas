@@ -3,6 +3,7 @@ package pt.isel.ls.services.users
 import pt.isel.ls.database.AppDatabase import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.User
 import pt.isel.ls.utils.exceptions.IllegalUserAccessException
+import pt.isel.ls.utils.parseBearerToken
 import java.util.UUID
 
 class UserServices(private val database: AppDatabase) {
@@ -37,8 +38,10 @@ class UserServices(private val database: AppDatabase) {
      * @return List of user objects
      */
     fun getBoardsFromUser(token: String, uid: Int): List<Board>{
+        val parsedToken = parseBearerToken(token)
         val user = database.getUserDetails(uid)
-        if(user.token != (token)) throw IllegalUserAccessException
+        if(user.token != parsedToken) throw IllegalUserAccessException
+
         return database.getBoardsFromUser(uid)
     }
 }
