@@ -4,11 +4,9 @@ import org.http4k.core.Response
 import org.http4k.core.Status
 import pt.isel.ls.api.dto.ErrorResponse
 import pt.isel.ls.api.routers.utils.json
-import pt.isel.ls.database.memory.BoardNotFoundException
-import pt.isel.ls.database.memory.CardNotFoundException
-import pt.isel.ls.database.memory.ListNotFoundException
-import pt.isel.ls.database.memory.UserNotFoundException
+import pt.isel.ls.database.memory.*
 import pt.isel.ls.domain.TaskException
+import pt.isel.ls.utils.exceptions.*
 
 /**
  * Runs the given block, and if an exception is thrown, runs [exceptionHandler]
@@ -56,11 +54,11 @@ fun exceptionHandler(exception: Exception): Response =
  */
 fun TaskException.toStatus() =
     when (this) {
-        InvalidUserIDException, InvalidBoardIDException, InvalidListIDException, InvalidCardIDException -> Status.BAD_REQUEST
-        NoAuthenticationException -> Status.UNAUTHORIZED
-        // -> Status.FORBIDDEN
+        InvalidUserIDException, InvalidBoardIDException, InvalidListIDException, InvalidCardIDException, InvalidBodyException -> Status.BAD_REQUEST
+        NoAuthenticationException, InvalidBearerToken -> Status.UNAUTHORIZED
+        IllegalUserAccessException, IllegalBoardAccessException, IllegalListAccessException, IllegalCardAccessException -> Status.FORBIDDEN
         UserNotFoundException, BoardNotFoundException, ListNotFoundException, CardNotFoundException -> Status.NOT_FOUND
-       // EmailAlreadyExistsException -> Status.CONFLICT
+        EmailAlreadyExistsException -> Status.CONFLICT
         // -> Status.BAD_GATEWAY
         else -> Status.INTERNAL_SERVER_ERROR
     }

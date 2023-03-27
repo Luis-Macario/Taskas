@@ -20,7 +20,7 @@ import pt.isel.ls.api.routers.utils.exceptions.NoAuthenticationException
  * @return the string located in the Authentication Header
  * @throws NoAuthenticationException if no Authentication Header is present
  */
-fun Request.getBearerToken(): String = header("Authentication") ?: throw NoAuthenticationException
+fun Request.getBearerToken(): String = header("Authorization") ?: throw NoAuthenticationException
 
 /**
  * gets the userID from the [Request]
@@ -68,6 +68,12 @@ inline fun <reified T> Request.getJsonBodyTo(): T =
  * @param data the data to put in the [Response] body
  * @return the updated [Response]
  */
-inline fun <reified T> Response.json(data: T): Response = this
-    .header("Content-Type", "application/json")
-    .body(Json.encodeToString(data))
+inline fun <reified T> Response.json(data: T): Response =
+    try {
+        this.header("Content-Type", "application/json")
+            .body(Json.encodeToString(data))
+    } catch (e: SerializationException) {
+        throw InvalidBodyException
+    } catch (e: IllegalArgumentException) {
+        throw InvalidBodyException
+    }

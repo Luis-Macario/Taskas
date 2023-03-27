@@ -19,6 +19,7 @@ class TasksWebApi(services: TasksServices) {
     private val boardsRoutes = BoardsRoutes(services.boards).routes
     private val listsRoutes = ListsRoutes(services.lists).routes
     private val cardsRoutes = CardsRoutes(services.cards).routes
+
     val routes = routes(
         "/users" bind usersRoutes,
         "/boards" bind boardsRoutes,
