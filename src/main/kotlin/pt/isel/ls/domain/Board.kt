@@ -17,7 +17,7 @@ data class Board(
 ) {
     companion object {
         const val MAX_NAME_LENGTH = 100
-        const val MIN_NAME_LENGTH = 20
+        const val MIN_NAME_LENGTH = 1
 
         /**
          * Checks whether a board name is valid or not
@@ -31,7 +31,7 @@ data class Board(
 
     init {
         require(validName(name)) { "Invalid board name: $name" }
-        if (description != null) require(validDescription(description)) { "Invalid board description: $description" }
+        require(validDescription(description)) { "Invalid board description: $description" }
         require(validId(id)) { "Invalid board id: $id" }
     }
 }

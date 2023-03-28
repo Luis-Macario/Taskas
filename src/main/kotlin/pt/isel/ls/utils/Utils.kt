@@ -3,7 +3,7 @@ package pt.isel.ls.utils
 import pt.isel.ls.utils.exceptions.InvalidBearerToken
 
 const val MAX_DESCRIPTION_LENGTH = 1000
-const val MIN_DESCRIPTION_LENGTH = 0
+const val MIN_DESCRIPTION_LENGTH = 1
 
 const val MAX_DATE = "9999-12-31"
 
