@@ -10,40 +10,29 @@ import pt.isel.ls.api.TasksWebApi
 import pt.isel.ls.api.dto.ErrorResponse
 import pt.isel.ls.api.dto.board.CreateBoardRequest
 import pt.isel.ls.api.dto.board.CreateBoardResponse
-import pt.isel.ls.api.dto.user.CreateUserRequest
-import pt.isel.ls.api.dto.user.CreateUserResponse
 import pt.isel.ls.api.routers.utils.exceptions.InvalidBodyException
 import pt.isel.ls.api.routers.utils.exceptions.NoAuthenticationException
 import pt.isel.ls.database.memory.BoardNameAlreadyExistsException
 import pt.isel.ls.database.memory.TasksDataMem
+import pt.isel.ls.domain.User
 import pt.isel.ls.services.TasksServices
 import pt.isel.ls.utils.exceptions.InvalidBearerToken
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class BoardTests {
+    private val database = TasksDataMem()
+    private val services = TasksServices(database)
+    private val app = TasksWebApi(services).routes
+    private val token = "7d444840-9dc0-11d1-b245-5ffdce74fad2"
+    private val authHeader = "Bearer $token"
 
-    private val app = TasksWebApi(TasksServices(TasksDataMem())).routes
-    private var authHeader: String = ""
-
-    @BeforeTest
-    fun `create user to authenticate on the boards`() {
-        val name = "Ricardo"
-        val email = "a47673@alunos.isel.pt"
-        val requestBody = Json.encodeToString(CreateUserRequest(name, email))
-        authHeader = "Bearer ${
-            Json.decodeFromString<CreateUserResponse>(
-                app(
-                    Request(Method.POST, "http://localhost:8080/users").body(requestBody)
-                ).bodyString()
-            ).token
-        }"
-    }
+    private val user: User = database.createUser(token, "Ricardo", "47673@alunos.isel.pt")
+    private val board = database.createBoard(user.id, "aName", "aDescription")
 
     @Test
     fun `POST to boards returns a 201 response with the correct response`() {
-        val name = "aName"
+        val name = "anotherName"
         val description = "aDescription"
         val requestBody = Json.encodeToString(CreateBoardRequest(name, description))
         val response = app(
@@ -53,9 +42,9 @@ class BoardTests {
         println(response)
         assertEquals(Status.CREATED, response.status)
         assertEquals("application/json", response.header("content-type"))
-        assertEquals("/boards/0", response.header("Location"))
+        assertEquals("/boards/1", response.header("Location"))
         val boardResponse = Json.decodeFromString<CreateBoardResponse>(response.bodyString())
-        assertEquals(0, boardResponse.id)
+        assertEquals(1, boardResponse.id)
     }
 
     @Test
@@ -95,8 +84,31 @@ class BoardTests {
     }
 
     @Test
+    fun `POST to boards returns a 400 response if an invalid Authentication header is present`() {
+        val name = "anotherName"
+        val description = "aDescription"
+        val requestBody = Json.encodeToString(CreateBoardRequest(name, description))
+        val response = app(
+            Request(Method.POST, "http://localhost:8080/boards").body(requestBody)
+                .header("Authorization", "ola")
+        )
+        println(response.bodyString())
+        assertEquals(Status.BAD_REQUEST, response.status)
+        assertEquals("application/json", response.header("content-type"))
+        val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
+        assertEquals(
+            ErrorResponse(
+                code = InvalidBearerToken.code,
+                name = InvalidBearerToken.javaClass.simpleName,
+                description = InvalidBearerToken.description
+            ),
+            errorResponse
+        )
+    }
+
+    @Test
     fun `POST to boards returns a 401 response if no Authentication header is present`() {
-        val name = "aName"
+        val name = "anotherName"
         val description = "aDescription"
         val requestBody = Json.encodeToString(CreateBoardRequest(name, description))
         val response = app(
@@ -116,36 +128,8 @@ class BoardTests {
     }
 
     @Test
-    fun `POST to boards returns a 401 response if an invalid Authentication header is present`() {
-        val name = "aName"
-        val description = "aDescription"
-        val requestBody = Json.encodeToString(CreateBoardRequest(name, description))
-        val response = app(
-            Request(Method.POST, "http://localhost:8080/boards").body(requestBody)
-                .header("Authorization", "ola")
-        )
-        println(response.bodyString())
-        assertEquals(Status.UNAUTHORIZED, response.status)
-        assertEquals("application/json", response.header("content-type"))
-        val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
-        assertEquals(
-            ErrorResponse(
-                code = InvalidBearerToken.code,
-                name = InvalidBearerToken.javaClass.simpleName,
-                description = InvalidBearerToken.description
-            ),
-            errorResponse
-        )
-    }
-
-    @Test
     fun `POST to boards returns a 409 response if a board with that name already exists`() {
-        val name = "aName"
-        val description = "aDescription"
-        val requestBody = Json.encodeToString(CreateBoardRequest(name, description))
-
-        app(Request(Method.POST, "http://localhost:8080/boards").body(requestBody).header("Authorization", authHeader))
-
+        val requestBody = Json.encodeToString(CreateBoardRequest(board.name, "aDescription"))
         val response = app(
             Request(Method.POST, "http://localhost:8080/boards").body(requestBody)
                 .header("Authorization", authHeader)
@@ -161,5 +145,33 @@ class BoardTests {
             ),
             errorResponse
         )
+    }
+
+    @Test
+    fun `GET to boards(slash)boardID returns a 200 response with the correct response`() {
+        val response = app(
+            Request(Method.GET, "http://localhost:8080/boards/0")
+                .header("Authorization", authHeader)
+        )
+    }
+
+    @Test
+    fun `GET to boards(slash)boardID returns a 400 response if an invalid boardID is provided`() {
+    }
+
+    @Test
+    fun `GET to boards(slash)boardID returns a 400 response if an invalid bearer token is provided`() {
+    }
+
+    @Test
+    fun `GET to boards(slash)boardID returns a 401 response if no authentication header is provided`() {
+    }
+
+    @Test
+    fun `GET to boards(slash)boardID returns a 403 response if the user doesn't have access to that board`() {
+    }
+
+    @Test
+    fun `GET to boards(slash)boardID returns a 404 response if a board with that boardID doesn't exist`() {
     }
 }

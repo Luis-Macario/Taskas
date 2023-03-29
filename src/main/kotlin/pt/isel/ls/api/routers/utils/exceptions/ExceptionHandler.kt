@@ -4,9 +4,23 @@ import org.http4k.core.Response
 import org.http4k.core.Status
 import pt.isel.ls.api.dto.ErrorResponse
 import pt.isel.ls.api.routers.utils.json
-import pt.isel.ls.database.memory.*
+import pt.isel.ls.database.memory.BoardNameAlreadyExistsException
+import pt.isel.ls.database.memory.BoardNotFoundException
+import pt.isel.ls.database.memory.BoardsUserDoesNotExistException
+import pt.isel.ls.database.memory.CardNotFoundException
+import pt.isel.ls.database.memory.EmailAlreadyExistsException
+import pt.isel.ls.database.memory.ListNotFoundException
+import pt.isel.ls.database.memory.MemoryException
+import pt.isel.ls.database.memory.UserAlreadyExistsInBoardException
+import pt.isel.ls.database.memory.UserNotFoundException
+import pt.isel.ls.database.memory.UsersBoardDoesNotExistException
 import pt.isel.ls.domain.TaskException
-import pt.isel.ls.utils.exceptions.*
+import pt.isel.ls.utils.exceptions.IllegalBoardAccessException
+import pt.isel.ls.utils.exceptions.IllegalCardAccessException
+import pt.isel.ls.utils.exceptions.IllegalListAccessException
+import pt.isel.ls.utils.exceptions.IllegalUserAccessException
+import pt.isel.ls.utils.exceptions.InvalidBearerToken
+import pt.isel.ls.utils.exceptions.ServicesException
 
 /**
  * Runs the given block, and if an exception is thrown, runs [exceptionHandler]
@@ -53,7 +67,7 @@ fun exceptionHandler(exception: Exception): Response =
  * @return the correspondent [Status]
  */
 fun TaskException.toStatus() =
-    when(this) {
+    when (this) {
         is MemoryException ->
             when (this) {
                 UserNotFoundException -> Status.NOT_FOUND
@@ -66,14 +80,16 @@ fun TaskException.toStatus() =
                 BoardsUserDoesNotExistException -> Status.INTERNAL_SERVER_ERROR
                 UsersBoardDoesNotExistException -> Status.INTERNAL_SERVER_ERROR
             }
+
         is ServicesException ->
             when (this) {
+                InvalidBearerToken -> Status.BAD_REQUEST
                 IllegalBoardAccessException -> Status.FORBIDDEN
                 IllegalCardAccessException -> Status.FORBIDDEN
                 IllegalListAccessException -> Status.FORBIDDEN
                 IllegalUserAccessException -> Status.FORBIDDEN
-                InvalidBearerToken -> Status.UNAUTHORIZED
             }
+
         is ApiException ->
             when (this) {
                 InvalidBoardIDException -> Status.BAD_REQUEST
@@ -83,5 +99,6 @@ fun TaskException.toStatus() =
                 InvalidBodyException -> Status.BAD_REQUEST
                 NoAuthenticationException -> Status.UNAUTHORIZED
             }
+
         else -> Status.INTERNAL_SERVER_ERROR
     }

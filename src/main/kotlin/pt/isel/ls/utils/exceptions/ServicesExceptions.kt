@@ -26,5 +26,5 @@ object IllegalCardAccessException : ServicesException() {
 
 object InvalidBearerToken : ServicesException() {
     override val code = 9000 // TODO: Figure out what code to use
-    override val description = "Authorization header is no valid"
+    override val description = "Authorization header is not valid"
 }

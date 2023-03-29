@@ -106,7 +106,7 @@ class UserTests {
     }
 
     @Test
-    fun `GET to users(slash)id returns a 200 response with the correct response`() {
+    fun `GET to users(slash)userID returns a 200 response with the correct response`() {
         val name = "Ricardo"
         val email = "a47673@alunos.isel.pt"
         val requestBody = Json.encodeToString(CreateUserRequest(name, email))
@@ -123,7 +123,7 @@ class UserTests {
     }
 
     @Test
-    fun `GET to users(slash)id returns a 400 response for an invalid id`() {
+    fun `GET to users(slash)userID returns a 400 response for an invalid id`() {
         val response = app(Request(Method.GET, "http://localhost:8080/users/invalidID"))
         assertEquals(Status.BAD_REQUEST, response.status)
         assertEquals("application/json", response.header("content-type"))
@@ -139,7 +139,7 @@ class UserTests {
     }
 
     @Test
-    fun `GET to users(slash)id returns a 404 response for an invalid id`() {
+    fun `GET to users(slash)userID returns a 404 response for an invalid id`() {
         val response = app(Request(Method.GET, "http://localhost:8080/users/75"))
 
         assertEquals(Status.NOT_FOUND, response.status)
@@ -156,7 +156,7 @@ class UserTests {
     }
 
     @Test
-    fun `GET to users(slash)id(slash)boards returns a 200 response with the correct response`() {
+    fun `GET to users(slash)userID(slash)boards returns a 200 response with the correct response`() {
         val name = "Ricardo"
         val email = "a47673@alunos.isel.pt"
         val requestBody = Json.encodeToString(CreateUserRequest(name, email))
@@ -176,7 +176,7 @@ class UserTests {
     }
 
     @Test
-    fun `GET to users(slash)id(slash)boards returns a 400 response for an invalid id`() {
+    fun `GET to users(slash)userID(slash)boards returns a 400 response for an invalid id`() {
         val response = app(Request(Method.GET, "http://localhost:8080/users/invalidID/boards"))
         assertEquals(Status.BAD_REQUEST, response.status)
         assertEquals("application/json", response.header("content-type"))
@@ -192,7 +192,7 @@ class UserTests {
     }
 
     @Test
-    fun `GET to users(slash)id(slash)boards returns a 401 response if no Authentication header is present`() {
+    fun `GET to users(slash)userID(slash)boards returns a 401 response if no Authentication header is present`() {
         val response = app(Request(Method.GET, "http://localhost:8080/users/0/boards"))
         assertEquals(Status.UNAUTHORIZED, response.status)
         assertEquals("application/json", response.header("content-type"))
@@ -208,13 +208,13 @@ class UserTests {
     }
 
     @Test
-    fun `GET to users(slash)id(slash)boards returns a 401 response if an invalid Authentication header is present`() {
+    fun `GET to users(slash)userID(slash)boards returns a 400 response if an invalid Authentication header is present`() {
         val response = app(
             Request(Method.GET, "http://localhost:8080/users/0/boards")
                 .header("Authorization", "ola")
         )
         println(response.bodyString())
-        assertEquals(Status.UNAUTHORIZED, response.status)
+        assertEquals(Status.BAD_REQUEST, response.status)
         assertEquals("application/json", response.header("content-type"))
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
         assertEquals(
@@ -228,7 +228,7 @@ class UserTests {
     }
 
     @Test
-    fun `GET to users(slash)id(slash)boards returns a 403 response if the user doesn't have access to that user`() {
+    fun `GET to users(slash)userID(slash)boards returns a 403 response if the user doesn't have access to that user`() {
         app(
             Request(Method.POST, "http://localhost:8080/users")
                 .body(Json.encodeToString(CreateUserRequest("Ricardo", "a47673@alunos.isel.pt")))
