@@ -26,7 +26,7 @@ data class Card(
 ) {
     companion object {
         const val MAX_NAME_LENGTH = 100
-        const val MIN_NAME_LENGTH = 10
+        const val MIN_NAME_LENGTH = 5
 
         /**
          * Checks whether a card name is valid or not
@@ -50,7 +50,6 @@ data class Card(
 
     init {
         require(validId(id)) { "Invalid card id: $id" }
-        // require(validId(uid)) { "Invalid user id: $uid" }
         require(validId(bid)) { "Invalid board id: $bid" }
         if (lid != null) require(validId(lid)) { "Invalid list id: $lid" }
         require(validName(name)) { "Invalid card name: $name" }

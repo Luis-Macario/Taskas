@@ -7,6 +7,7 @@ import pt.isel.ls.utils.MAX_DATE
 import pt.isel.ls.utils.exceptions.IllegalCardAccessException
 import pt.isel.ls.utils.exceptions.IllegalListAccessException
 import pt.isel.ls.utils.parseBearerToken
+import pt.isel.ls.utils.checkToken
 import java.sql.Date
 
 class CardServices(private val database: AppDatabase) {
@@ -24,7 +25,13 @@ class CardServices(private val database: AppDatabase) {
      *
      * @return Card's unique identifier
      */
-    fun createCard(token: String, lid: Int, name: String, description: String, dueDate: String?): Card {
+    fun createCard(
+        token: String,
+        lid: Int,
+        name: String,
+        description: String,
+        dueDate: String? = null
+    ): Card {
         val parsedToken = parseBearerToken(token)
         val list = database.getListDetails(lid)
         val users = database.getUsersFromBoard(list.bid)
@@ -47,12 +54,12 @@ class CardServices(private val database: AppDatabase) {
      */
     fun getCardDetails(token: String, cid: Int): Card {
         val parsedToken = parseBearerToken(token)
-        val bid = database.getCardDetails(cid).bid
-        val users = database.getUsersFromBoard(bid)
+        val card = database.getCardDetails(cid)
+        val users = database.getUsersFromBoard(card.bid)
 
         if (users.any { it.token == parsedToken }) throw IllegalCardAccessException
 
-        return database.getCardDetails(cid)
+        return card
     }
 
     /**
@@ -65,12 +72,12 @@ class CardServices(private val database: AppDatabase) {
      * @throws IllegalCardAccessException if user doesn't have access to that card
      */
     fun moveCard(token: String, cid: Int, request: MoveCardRequest) {
-        val parsedToken = parseBearerToken(token)
+        checkToken(token)
         val bid = database.getCardDetails(cid).bid
         val users = database.getUsersFromBoard(bid)
         //TODO("Checkar se estamos a trocar cards que as listas sejam do msm board")
-        if (!users.any { it.token == parsedToken }) throw IllegalCardAccessException
+        if (!users.any { it.token == token }) throw IllegalCardAccessException
 
-        return database.moveCard(cid, request.listID)
+        database.moveCard(cid, request.listID)
     }
 }

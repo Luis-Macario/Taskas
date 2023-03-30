@@ -17,7 +17,8 @@ data class Board(
 ) {
     companion object {
         const val MAX_NAME_LENGTH = 100
-        const val MIN_NAME_LENGTH = 1
+        const val MIN_NAME_LENGTH = 5
+        private const val NAME_REGEX = "^[a-zA-Z]+(?: [a-zA-Z]+)*\$"
 
         /**
          * Checks whether a board name is valid or not
@@ -26,7 +27,8 @@ data class Board(
          *
          * @return true if the name is valid, false if not
          */
-        fun validName(name: String): Boolean = (name.length in MIN_NAME_LENGTH..MAX_NAME_LENGTH)
+        fun validName(name: String): Boolean =
+            ((name.length in MIN_NAME_LENGTH..MAX_NAME_LENGTH) && name.matches(NAME_REGEX.toRegex()))
     }
 
     init {
