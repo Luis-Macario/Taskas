@@ -33,3 +33,8 @@ object InvalidBodyException : ApiException() {
     override val code = 9000 // TODO: Figure out what codes to use
     override val description = "Invalid Request Body"
 }
+
+object InvalidAuthHeader : ApiException() {
+    override val code = 9000 // TODO: Figure out what code to use
+    override val description = "Authorization header is not valid"
+}

@@ -15,7 +15,7 @@ import pt.isel.ls.api.dto.list.CreateListResponse
 import pt.isel.ls.api.dto.list.GetCardFromListResponse
 import pt.isel.ls.api.dto.list.toDTO
 import pt.isel.ls.api.routers.utils.exceptions.runAndHandleExceptions
-import pt.isel.ls.api.routers.utils.getBearerToken
+import pt.isel.ls.api.routers.utils.getAuthorizationHeader
 import pt.isel.ls.api.routers.utils.getJsonBodyTo
 import pt.isel.ls.api.routers.utils.getListID
 import pt.isel.ls.api.routers.utils.json
@@ -37,7 +37,7 @@ class ListsRoutes(private val services: ListServices) {
     private fun createList(request: Request): Response =
         runAndHandleExceptions {
             val listRequest = request.getJsonBodyTo<CreateListRequest>()
-            val bearerToken = request.getBearerToken()
+            val bearerToken = request.getAuthorizationHeader()
 
             val list = services.createList(
                 bearerToken,
@@ -54,7 +54,7 @@ class ListsRoutes(private val services: ListServices) {
     private fun getCardsFromList(request: Request): Response =
         runAndHandleExceptions {
             val listID = request.getListID()
-            val bearerToken = request.getBearerToken()
+            val bearerToken = request.getAuthorizationHeader()
 
             val cards = services.getCardsFromList(bearerToken, listID)
             val cardsResponse = GetCardFromListResponse(cards.map { it.toDTO() })
@@ -64,7 +64,7 @@ class ListsRoutes(private val services: ListServices) {
     private fun getListDetails(request: Request): Response =
         runAndHandleExceptions {
             val listID = request.getListID()
-            val bearerToken = request.getBearerToken()
+            val bearerToken = request.getAuthorizationHeader()
 
             val list = services.getList(bearerToken, listID)
             val listResponse = list.toDTO()

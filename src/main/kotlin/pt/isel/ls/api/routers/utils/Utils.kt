@@ -7,6 +7,7 @@ import kotlinx.serialization.json.Json
 import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.routing.path
+import pt.isel.ls.api.routers.utils.exceptions.InvalidAuthHeader
 import pt.isel.ls.api.routers.utils.exceptions.InvalidBoardIDException
 import pt.isel.ls.api.routers.utils.exceptions.InvalidBodyException
 import pt.isel.ls.api.routers.utils.exceptions.InvalidCardIDException
@@ -14,13 +15,29 @@ import pt.isel.ls.api.routers.utils.exceptions.InvalidListIDException
 import pt.isel.ls.api.routers.utils.exceptions.InvalidUserIDException
 import pt.isel.ls.api.routers.utils.exceptions.NoAuthenticationException
 
+private const val BEARER_REGEX: String = "^Bearer .+\$"
+
+/**
+ * Parses Bearer Token
+ *
+ *
+ * @return String without the "Bearer " part
+ *
+ * @throws InvalidAuthHeader if the token parameter isn't a valid Bearer Token
+ */
+fun String.parseBearerToken(): String {
+    if (!this.matches(BEARER_REGEX.toRegex())) throw InvalidAuthHeader
+    return this.substring(7)
+}
+
 /**
  * Attempts to get the string located in the Authentication Header of the [Request]
  *
  * @return the string located in the Authentication Header
  * @throws NoAuthenticationException if no Authentication Header is present
  */
-fun Request.getBearerToken(): String = header("Authorization") ?: throw NoAuthenticationException
+fun Request.getAuthorizationHeader(): String =
+    (header("Authorization") ?: throw NoAuthenticationException).parseBearerToken()
 
 /**
  * gets the userID from the [Request]

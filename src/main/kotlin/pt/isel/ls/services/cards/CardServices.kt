@@ -7,8 +7,8 @@ import pt.isel.ls.services.utils.MAX_DATE
 import pt.isel.ls.services.utils.checkToken
 import pt.isel.ls.services.utils.exceptions.IllegalCardAccessException
 import pt.isel.ls.services.utils.exceptions.IllegalListAccessException
-import java.sql.Date
 import pt.isel.ls.services.utils.exceptions.IllegalMoveCardRequestException
+import java.sql.Date
 
 class CardServices(private val database: AppDatabase) {
 

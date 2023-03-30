@@ -15,7 +15,7 @@ import pt.isel.ls.api.dto.card.CreateCardResponse
 import pt.isel.ls.api.dto.card.MoveCardRequest
 import pt.isel.ls.api.dto.card.toDTO
 import pt.isel.ls.api.routers.utils.exceptions.runAndHandleExceptions
-import pt.isel.ls.api.routers.utils.getBearerToken
+import pt.isel.ls.api.routers.utils.getAuthorizationHeader
 import pt.isel.ls.api.routers.utils.getCardID
 import pt.isel.ls.api.routers.utils.getJsonBodyTo
 import pt.isel.ls.api.routers.utils.json
@@ -37,7 +37,7 @@ class CardsRoutes(private val services: CardServices) {
     private fun createCard(request: Request): Response =
         runAndHandleExceptions {
             val cardRequest = request.getJsonBodyTo<CreateCardRequest>()
-            val bearerToken = request.getBearerToken()
+            val bearerToken = request.getAuthorizationHeader()
 
             val card =
                 services.createCard(
@@ -56,7 +56,7 @@ class CardsRoutes(private val services: CardServices) {
     private fun getCardDetails(request: Request): Response =
         runAndHandleExceptions {
             val cardID = request.getCardID()
-            val bearerToken = request.getBearerToken()
+            val bearerToken = request.getAuthorizationHeader()
 
             val card = services.getCardDetails(bearerToken, cardID)
             val cardResponse = card.toDTO()
@@ -66,7 +66,7 @@ class CardsRoutes(private val services: CardServices) {
     private fun moveCard(request: Request): Response =
         runAndHandleExceptions {
             val cardID = request.getCardID()
-            val bearerToken = request.getBearerToken()
+            val bearerToken = request.getAuthorizationHeader()
             val moveCardRequest = request.getJsonBodyTo<MoveCardRequest>()
 
             services.moveCard(bearerToken, cardID, moveCardRequest)

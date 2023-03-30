@@ -19,7 +19,7 @@ import pt.isel.ls.api.dto.board.toDTO
 import pt.isel.ls.api.dto.list.toDTO
 import pt.isel.ls.api.dto.user.toDTO
 import pt.isel.ls.api.routers.utils.exceptions.runAndHandleExceptions
-import pt.isel.ls.api.routers.utils.getBearerToken
+import pt.isel.ls.api.routers.utils.getAuthorizationHeader
 import pt.isel.ls.api.routers.utils.getBoardID
 import pt.isel.ls.api.routers.utils.getJsonBodyTo
 import pt.isel.ls.api.routers.utils.json
@@ -45,7 +45,7 @@ class BoardsRoutes(private val services: BoardServices) {
     private fun createBoard(request: Request): Response =
         runAndHandleExceptions {
             val boardRequest = request.getJsonBodyTo<CreateBoardRequest>()
-            val bearerToken = request.getBearerToken()
+            val bearerToken = request.getAuthorizationHeader()
 
             val board = services.createBoard(
                 bearerToken,
@@ -62,7 +62,7 @@ class BoardsRoutes(private val services: BoardServices) {
     fun getBoardDetails(request: Request): Response =
         runAndHandleExceptions {
             val boardID = request.getBoardID()
-            val bearerToken = request.getBearerToken()
+            val bearerToken = request.getAuthorizationHeader()
 
             val board = services.getBoardDetails(bearerToken, boardID)
             val getBoardsDetails = board.toDTO()
@@ -73,7 +73,7 @@ class BoardsRoutes(private val services: BoardServices) {
     private fun getUsersFromBoard(request: Request): Response =
         runAndHandleExceptions {
             val boardID = request.getBoardID()
-            val bearerToken = request.getBearerToken()
+            val bearerToken = request.getAuthorizationHeader()
 
             val users = services.getUsersFromBoard(bearerToken, boardID)
             val getUsersResponse = GetUsersFromBoardResponse(users.map { it.toDTO() })
@@ -84,7 +84,7 @@ class BoardsRoutes(private val services: BoardServices) {
     private fun addUserToBoard(request: Request): Response =
         runAndHandleExceptions {
             val boardID = request.getBoardID()
-            val bearerToken = request.getBearerToken()
+            val bearerToken = request.getAuthorizationHeader()
             val addUserRequest = request.getJsonBodyTo<AddUserRequest>()
 
             services.addUserToBoard(bearerToken, addUserRequest.userID, boardID)
@@ -95,7 +95,7 @@ class BoardsRoutes(private val services: BoardServices) {
     private fun getListsFromBoard(request: Request): Response =
         runAndHandleExceptions {
             val boardID = request.getBoardID()
-            val bearerToken = request.getBearerToken()
+            val bearerToken = request.getAuthorizationHeader()
 
             val lists = services.getListsFromBoard(bearerToken, boardID)
             val getListsResponse = GetListsFromBoardResponse(lists.map { it.toDTO() })

@@ -1,9 +1,11 @@
 package pt.isel.ls.database.postgres
 
 import org.postgresql.ds.PGSimpleDataSource
-import pt.isel.ls.database.*
 import pt.isel.ls.database.sql.TasksDataPostgres
-import kotlin.test.*
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class UserTests {
     private val dataSource = PGSimpleDataSource().apply {

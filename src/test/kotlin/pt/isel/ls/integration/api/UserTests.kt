@@ -12,6 +12,7 @@ import pt.isel.ls.api.dto.user.CreateUserRequest
 import pt.isel.ls.api.dto.user.CreateUserResponse
 import pt.isel.ls.api.dto.user.GetBoardsFromUserResponse
 import pt.isel.ls.api.dto.user.UserDTO
+import pt.isel.ls.api.routers.utils.exceptions.InvalidAuthHeader
 import pt.isel.ls.api.routers.utils.exceptions.InvalidBodyException
 import pt.isel.ls.api.routers.utils.exceptions.InvalidUserIDException
 import pt.isel.ls.api.routers.utils.exceptions.NoAuthenticationException
@@ -212,6 +213,26 @@ class UserTests {
         val response = app(
             Request(Method.GET, "http://localhost:8080/users/0/boards")
                 .header("Authorization", "ola")
+        )
+        println(response.bodyString())
+        assertEquals(Status.BAD_REQUEST, response.status)
+        assertEquals("application/json", response.header("content-type"))
+        val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
+        assertEquals(
+            ErrorResponse(
+                code = InvalidAuthHeader.code,
+                name = InvalidAuthHeader.javaClass.simpleName,
+                description = InvalidAuthHeader.description
+            ),
+            errorResponse
+        )
+    }
+
+    @Test
+    fun `GET to users(slash)userID(slash)boards returns a 400 response if an invalid token is present`() {
+        val response = app(
+            Request(Method.GET, "http://localhost:8080/users/0/boards")
+                .header("Authorization", "Bearer ola")
         )
         println(response.bodyString())
         assertEquals(Status.BAD_REQUEST, response.status)
