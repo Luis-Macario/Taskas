@@ -64,6 +64,9 @@ class TasksDataMem : AppDatabase {
             .filter { it.bId == bid }
             .map { getUserDetails(it.uId) }
 
+
+    override fun checkEmailAlreadyExists(email: String) = users.values.any { it.email == email }
+
     /**
      * Creates a new board
      *
@@ -143,6 +146,7 @@ class TasksDataMem : AppDatabase {
     override fun createList(bid: Int, name: String): TaskList {
         val id = listId.also { listId += 1 }
         if (!boards.values.any { it.id == bid }) throw BoardNotFoundException
+        if (taskLists.values.any { it.bid == bid && it.name == name }) throw TaskListAlreadyExistsInBoardException
 
         val newList = TaskList(id, bid, name)
         taskLists[id] = newList
@@ -176,6 +180,10 @@ class TasksDataMem : AppDatabase {
      * @return the TaskList() details
      */
     override fun getListDetails(lid: Int): TaskList = taskLists[lid] ?: throw ListNotFoundException
+
+    override fun checkListsFromSameBoard(l1: Int, l2: Int): Boolean {
+        TODO("Not yet implemented")
+    }
 
     /**
      * Creates a new Card
@@ -230,7 +238,7 @@ class TasksDataMem : AppDatabase {
     override fun moveCard(cid: Int, lid: Int) {
         val c = getCardDetails(cid)
         if (!taskLists.values.any { it.id == lid }) throw ListNotFoundException
-        cards[cid] = c.copy(lid = lid) // Card(c.id, c.bid, lid, c.name, c.description, c.initDate, c.finishDate)
+        cards[cid] = c.copy(lid = lid)
     }
 
     /**

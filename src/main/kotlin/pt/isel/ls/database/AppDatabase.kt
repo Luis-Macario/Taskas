@@ -10,6 +10,7 @@ interface AppDatabase {
     fun createUser(token: String, name: String, email: String): User
     fun getUserDetails(uid: Int): User
     fun getUsersFromBoard(bid: Int): List<User>
+    fun checkEmailAlreadyExists(email: String): Boolean
 
     fun createBoard(uid: Int, name: String, description: String): Board
     fun getBoardDetails(bid: Int): Board
@@ -19,6 +20,7 @@ interface AppDatabase {
     fun createList(bid: Int, name: String): TaskList
     fun getListsFromBoard(bid: Int): List<TaskList>
     fun getListDetails(lid: Int): TaskList
+    fun checkListsFromSameBoard(l1: Int, l2: Int): Boolean
 
     fun createCard(lid: Int, name: String, description: String, dueDate: Date): Card
     fun getCardsFromList(lid: Int): List<Card>

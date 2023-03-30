@@ -12,7 +12,8 @@ import pt.isel.ls.utils.validId
 data class TaskList(
     val id: Int,
     val bid: Int,
-    val name: String
+    val name: String,
+    val archived: Boolean = true
 ) {
     companion object {
         const val MAX_NAME_LENGTH = 100

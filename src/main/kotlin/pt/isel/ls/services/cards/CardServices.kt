@@ -68,7 +68,7 @@ class CardServices(private val database: AppDatabase) {
         val parsedToken = parseBearerToken(token)
         val bid = database.getCardDetails(cid).bid
         val users = database.getUsersFromBoard(bid)
-
+        //TODO("Checkar se estamos a trocar cards que as listas sejam do msm board")
         if (!users.any { it.token == parsedToken }) throw IllegalCardAccessException
 
         return database.moveCard(cid, request.listID)

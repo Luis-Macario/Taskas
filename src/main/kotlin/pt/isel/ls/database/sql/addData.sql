@@ -3,9 +3,9 @@
 INSERT INTO users(name, email, token)
 VALUES ('Francisco Medeiros', 'a46631@alunos.isel.pt', '160ee838-150b-4ca1-a2ff-2e964383c315');
 INSERT INTO users(name, email, token)
-VALUES ('Ricardo Pinto', 'a4771@alunos.isel.pt', '12971dc2-6816-4851-b110-e19065747785');
+VALUES ('Ricardo Pinto', 'a47673@alunos.isel.pt', '12971dc2-6816-4851-b110-e19065747785');
 INSERT INTO users(name, email, token)
-VALUES ('Luis Macario', 'a4773@alunos.isel.pt', '658baaa9-4035-415e-9674-6957704600ba');
+VALUES ('Luis Macario', 'a47671@alunos.isel.pt', '658baaa9-4035-415e-9674-6957704600ba');
 
 INSERT INTO boards(name, description)
 VALUES ('Start backend work #123', 'Backend work for the Compose Desktop project');
@@ -37,5 +37,13 @@ VALUES (2, 2, 'Creating Z', 'Creating Z using Y', Date('2023-03-27'));
 INSERT INTO userboards
 VALUES (1, 1);
 INSERT INTO userboards
+VALUES (1, 2);
+INSERT INTO userboards
+VALUES (2, 1);
+INSERT INTO userboards
 VALUES (2, 2);
+INSERT INTO userboards
+VALUES (3, 1);
+INSERT INTO userboards
+VALUES (3, 2);
 --COMMIT TRANSACTION;

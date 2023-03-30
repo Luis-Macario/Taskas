@@ -39,6 +39,11 @@ object UserAlreadyExistsInBoardException : MemoryException() {
     override val description = "A user already exists in that board"
 }
 
+object TaskListAlreadyExistsInBoardException : MemoryException() {
+    override val code = 4007
+    override val description = "A list with that name already exists in that board"
+}
+
 object UsersBoardDoesNotExistException : MemoryException() {
     override val code = 5001
     override val description = "A user has a board that doesn't exist."

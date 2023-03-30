@@ -23,7 +23,8 @@ CREATE TABLE taskLists
 (
     id SERIAL PRIMARY KEY ,
     bid INT references boards(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    name VARCHAR(100) NOT NULL CHECK ( char_length(name) > 3 )
+    name VARCHAR(100) NOT NULL CHECK ( char_length(name) > 3 ),
+    archived BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 CREATE TABLE cards
