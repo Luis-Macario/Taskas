@@ -6,7 +6,7 @@ import pt.isel.ls.domain.TaskList
 import pt.isel.ls.domain.User
 import pt.isel.ls.utils.exceptions.IllegalBoardAccessException
 import pt.isel.ls.utils.exceptions.IllegalListAccessException
-import pt.isel.ls.utils.parseBearerToken
+import pt.isel.ls.utils.checkToken
 
 class BoardServices(private val database: AppDatabase) {
     /**
@@ -18,11 +18,10 @@ class BoardServices(private val database: AppDatabase) {
      *
      * @return Board's unique identifier
      */
-    fun createBoard(token: String, name: String, description: String?): Board {
-        val parsedToken = parseBearerToken(token)
-        val uid = database.tokenToId(parsedToken)
-        val desc = description ?: "No description was provided"
-        return database.createBoard(uid, name, desc)
+    fun createBoard(token: String, name: String, description: String): Board {
+        checkToken(token)
+        val uid = database.tokenToId(token)
+        return database.createBoard(uid, name, description)
     }
 
     /**
@@ -35,9 +34,9 @@ class BoardServices(private val database: AppDatabase) {
      *@throws IllegalBoardAccessException if the user doesn't have access to the board
      */
     fun addUserToBoard(token: String, uid: Int, bid: Int) {
-        val parsedToken = parseBearerToken(token)
-        val users = getUsersFromBoard(parsedToken, bid)
-        if (!users.any { it.token == parsedToken }) throw IllegalBoardAccessException
+        checkToken(token)
+        val users = getUsersFromBoard(token, bid)
+        if (!users.any { it.token == token }) throw IllegalBoardAccessException
 
         database.addUserToBoard(uid, bid)
     }
@@ -53,9 +52,9 @@ class BoardServices(private val database: AppDatabase) {
      * @return Board object
      */
     fun getBoardDetails(token: String, bid: Int): Board {
-        val parsedToken = parseBearerToken(token)
-        val users = getUsersFromBoard(parsedToken, bid)
-        if (!users.any { it.token == parsedToken }) throw IllegalBoardAccessException
+        checkToken(token)
+        val users = getUsersFromBoard(token, bid)
+        if (!users.any { it.token == token }) throw IllegalBoardAccessException
 
         return database.getBoardDetails(bid)
     }
@@ -71,11 +70,12 @@ class BoardServices(private val database: AppDatabase) {
      * @return List of User objects
      */
     fun getUsersFromBoard(token: String, bid: Int): List<User> {
-        val parsedToken = parseBearerToken(token)
-        val users = getUsersFromBoard(parsedToken, bid)
-        if (!users.any { it.token == parsedToken }) throw IllegalBoardAccessException
+        checkToken(token)
+        database.getBoardDetails(bid) //check if board exists
+        val users = database.getUsersFromBoard(bid)
+        if (!users.any { it.token == token }) throw IllegalBoardAccessException
 
-        return database.getUsersFromBoard(bid)
+        return users
     }
 
     /**
@@ -89,9 +89,9 @@ class BoardServices(private val database: AppDatabase) {
      * @return List of TaskList objects
      */
     fun getListsFromBoard(token: String, bid: Int): List<TaskList> {
-        val parsedToken = parseBearerToken(token)
-        val users = getUsersFromBoard(parsedToken, bid)
-        if (!users.any { it.token == parsedToken }) throw IllegalListAccessException
+        checkToken(token)
+        val users = getUsersFromBoard(token, bid)
+        if (!users.any { it.token == token }) throw IllegalListAccessException
         return database.getListsFromBoard(bid)
     }
 }

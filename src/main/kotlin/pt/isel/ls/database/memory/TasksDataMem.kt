@@ -186,7 +186,8 @@ class TasksDataMem : AppDatabase {
      */
     override fun createCard(lid: Int, name: String, description: String, dueDate: Date): Card {
         val id = cardId.also { cardId += 1 }
-        val newCard = Card(id, getListDetails(lid).bid, lid, name, description, dueDate)
+        val initDate = Date(System.currentTimeMillis())
+        val newCard = Card(id, getListDetails(lid).bid, lid, name, description, initDate, dueDate)
 
         cards[id] = newCard
         return newCard

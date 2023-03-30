@@ -12,7 +12,7 @@ class CardTests {
 
     @Test
     fun `Creates a valid card`() {
-        val card = Card(1, 2, name = "Finish Domain Tests", initDate = Date.valueOf("1111-1-1"))
+        val card = Card(1, 2, name = "Finish Domain Tests", description = "CardTest", initDate = Date.valueOf("1111-1-1"))
 
         assertEquals(1, card.id)
         assertEquals(2, card.bid)

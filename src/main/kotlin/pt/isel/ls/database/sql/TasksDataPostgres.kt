@@ -8,7 +8,7 @@ import pt.isel.ls.domain.TaskList
 import pt.isel.ls.domain.User
 import java.sql.Date
 
-class TasksDataPostgres: AppDatabase {
+class TasksDataPostgres : AppDatabase {
     private val dataSource = PGSimpleDataSource().apply {
         this.setUrl(System.getenv("JDBC_DATABASE_URL"))
     }

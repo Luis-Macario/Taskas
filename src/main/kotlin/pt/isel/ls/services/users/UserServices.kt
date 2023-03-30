@@ -4,7 +4,7 @@ import pt.isel.ls.database.AppDatabase
 import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.User
 import pt.isel.ls.utils.exceptions.IllegalUserAccessException
-import pt.isel.ls.utils.parseBearerToken
+import pt.isel.ls.utils.checkToken
 import java.util.UUID
 
 class UserServices(private val database: AppDatabase) {
@@ -14,7 +14,7 @@ class UserServices(private val database: AppDatabase) {
      * @param name user's name
      * @param email user's email
      *
-     * @return user's token and id
+     * @return user object
      */
     fun createUser(name: String, email: String): User {
         val token = UUID.randomUUID().toString()
@@ -36,12 +36,12 @@ class UserServices(private val database: AppDatabase) {
      * @param token user's token
      * @param uid the unique user identifier
      *
-     * @return List of user objects
+     * @return List of board objects
      */
     fun getBoardsFromUser(token: String, uid: Int): List<Board> {
-        val parsedToken = parseBearerToken(token)
+        checkToken(token)
         val user = database.getUserDetails(uid)
-        if (user.token != parsedToken) throw IllegalUserAccessException
+        if (user.token != token) throw IllegalUserAccessException
 
         return database.getBoardsFromUser(uid)
     }

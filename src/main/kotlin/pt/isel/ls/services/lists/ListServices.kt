@@ -28,6 +28,7 @@ class ListServices(private val database: AppDatabase) {
     /**
      * Get detailed information of a list.
      *
+     * @param token token of the user requesting the list
      * @param lid list's unique identifier
      *
      * @throws IllegalListAccessException if user doesn't have access to the list
