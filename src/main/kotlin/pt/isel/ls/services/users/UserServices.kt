@@ -3,8 +3,8 @@ package pt.isel.ls.services.users
 import pt.isel.ls.database.AppDatabase
 import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.User
-import pt.isel.ls.utils.exceptions.IllegalUserAccessException
-import pt.isel.ls.utils.checkToken
+import pt.isel.ls.services.utils.checkToken
+import pt.isel.ls.services.utils.exceptions.IllegalUserAccessException
 import java.util.UUID
 
 class UserServices(private val database: AppDatabase) {

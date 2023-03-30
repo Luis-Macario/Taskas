@@ -1,6 +1,10 @@
 package pt.isel.ls.utils
 
 import org.junit.Test
+import pt.isel.ls.services.utils.MAX_DESCRIPTION_LENGTH
+import pt.isel.ls.services.utils.MIN_DESCRIPTION_LENGTH
+import pt.isel.ls.services.utils.validDescription
+import pt.isel.ls.services.utils.validId
 import kotlin.random.Random
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue

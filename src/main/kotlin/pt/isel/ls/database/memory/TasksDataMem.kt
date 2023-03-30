@@ -64,7 +64,6 @@ class TasksDataMem : AppDatabase {
             .filter { it.bId == bid }
             .map { getUserDetails(it.uId) }
 
-
     override fun checkEmailAlreadyExists(email: String) = users.values.any { it.email == email }
 
     /**

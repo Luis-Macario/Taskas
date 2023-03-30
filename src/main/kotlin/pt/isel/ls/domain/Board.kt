@@ -1,7 +1,7 @@
 package pt.isel.ls.domain
 
-import pt.isel.ls.utils.validDescription
-import pt.isel.ls.utils.validId
+import pt.isel.ls.services.utils.validDescription
+import pt.isel.ls.services.utils.validId
 
 /**
  * Board representation

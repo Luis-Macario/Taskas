@@ -1,7 +1,7 @@
 package pt.isel.ls.domain
 
 import org.junit.Test
-import pt.isel.ls.utils.MAX_DATE
+import pt.isel.ls.services.utils.MAX_DATE
 import java.sql.Date
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

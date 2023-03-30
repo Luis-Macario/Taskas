@@ -19,8 +19,8 @@ import pt.isel.ls.database.memory.EmailAlreadyExistsException
 import pt.isel.ls.database.memory.TasksDataMem
 import pt.isel.ls.database.memory.UserNotFoundException
 import pt.isel.ls.services.TasksServices
-import pt.isel.ls.utils.exceptions.IllegalUserAccessException
-import pt.isel.ls.utils.exceptions.InvalidBearerToken
+import pt.isel.ls.services.utils.exceptions.IllegalUserAccessException
+import pt.isel.ls.services.utils.exceptions.InvalidBearerToken
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

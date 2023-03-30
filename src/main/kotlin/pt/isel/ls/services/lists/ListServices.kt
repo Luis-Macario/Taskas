@@ -3,8 +3,8 @@ package pt.isel.ls.services.lists
 import pt.isel.ls.database.AppDatabase
 import pt.isel.ls.domain.Card
 import pt.isel.ls.domain.TaskList
-import pt.isel.ls.utils.exceptions.IllegalBoardAccessException
-import pt.isel.ls.utils.exceptions.IllegalListAccessException
+import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
+import pt.isel.ls.services.utils.exceptions.IllegalListAccessException
 
 class ListServices(private val database: AppDatabase) {
     /**

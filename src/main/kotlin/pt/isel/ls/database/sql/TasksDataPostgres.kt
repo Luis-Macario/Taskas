@@ -14,7 +14,6 @@ import java.sql.Date
 import java.sql.SQLException
 import java.sql.Statement
 
-
 class TasksDataPostgres : AppDatabase {
     private val dataSource = PGSimpleDataSource().apply {
         this.setUrl(System.getenv("JDBC_DATABASE_URL"))
@@ -24,7 +23,8 @@ class TasksDataPostgres : AppDatabase {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 " INSERT INTO  users(name, email, token) " +
-                        "VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS
+                    "VALUES (?,?,?)",
+                Statement.RETURN_GENERATED_KEYS
             )
             stm.setString(1, name)
             stm.setString(2, email)
@@ -51,7 +51,7 @@ class TasksDataPostgres : AppDatabase {
             val stm = it.prepareStatement(
                 """
                 SELECT * FROM users where id = ?
-            """.trimIndent()
+                """.trimIndent()
             )
             stm.setInt(1, uid)
 
@@ -64,8 +64,9 @@ class TasksDataPostgres : AppDatabase {
                     email = rs.getString("email"),
                     token = rs.getString("token")
                 )
-            } else
+            } else {
                 throw UserNotFoundException
+            }
         }
     }
 
@@ -77,7 +78,7 @@ class TasksDataPostgres : AppDatabase {
                 FROM userboards
                 JOIN users u on u.id = userboards.uid
                 where bid = ?
-            """.trimIndent()
+                """.trimIndent()
             )
             stm.setInt(1, bid)
 
@@ -103,7 +104,7 @@ class TasksDataPostgres : AppDatabase {
             val stm = it.prepareStatement(
                 """
                 SELECT EXISTS(SELECT 1 FROM users WHERE email = ?)
-            """.trimIndent()
+                """.trimIndent()
             )
             stm.setString(1, email)
 
@@ -118,7 +119,7 @@ class TasksDataPostgres : AppDatabase {
                 """
                 INSERT INTO boards (name, description) 
                 VALUES (?,?) 
-            """.trimIndent()
+                """.trimIndent()
             )
 
             stm.setString(1, name)
@@ -147,7 +148,7 @@ class TasksDataPostgres : AppDatabase {
             val stm = it.prepareStatement(
                 """
                 SELECT * FROM boards where id = ?
-            """.trimIndent()
+                """.trimIndent()
             )
             stm.setInt(1, bid)
 
@@ -158,19 +159,21 @@ class TasksDataPostgres : AppDatabase {
                     name = rs.getString("name"),
                     description = rs.getString("descritpion")
                 )
-            } else throw BoardNotFoundException
+            } else {
+                throw BoardNotFoundException
+            }
         }
     }
 
     override fun addUserToBoard(uid: Int, bid: Int) {
-        //TODO("Check for UserNotFound for services")
-        //TODO("Check for BoardNotFound for services")
+        // TODO("Check for UserNotFound for services")
+        // TODO("Check for BoardNotFound for services")
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
                 INSERT INTO userboards 
                 values (?,?)
-            """.trimIndent()
+                """.trimIndent()
             )
             stm.setInt(1, uid)
             stm.setInt(2, bid)
@@ -197,7 +200,7 @@ class TasksDataPostgres : AppDatabase {
                 FROM userboards
                 JOIN boards b on b.id = userboards.bid
                 where uid = ?
-            """.trimIndent()
+                """.trimIndent()
             )
             stm.setInt(1, uid)
 
@@ -218,14 +221,13 @@ class TasksDataPostgres : AppDatabase {
     }
 
     override fun createList(bid: Int, name: String): TaskList {
-
-        //TODO("Check for boardNotFound - services")
+        // TODO("Check for boardNotFound - services")
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
                 INSERT INTO tasklists (bid, name)
                 VALUES (?,?) 
-            """.trimIndent()
+                """.trimIndent()
             )
 
             stm.setInt(1, bid)
@@ -248,7 +250,7 @@ class TasksDataPostgres : AppDatabase {
     }
 
     override fun getListsFromBoard(bid: Int): List<TaskList> {
-        //TODO("check for BoardNotFound - sevices")
+        // TODO("check for BoardNotFound - sevices")
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
@@ -256,7 +258,7 @@ class TasksDataPostgres : AppDatabase {
                 FROM tasklists as tk
                 JOIN boards b on b.id = tk.bid
                 where tk.id = ?
-            """.trimIndent()
+                """.trimIndent()
             )
             stm.setInt(1, bid)
 
@@ -281,7 +283,7 @@ class TasksDataPostgres : AppDatabase {
             val stm = it.prepareStatement(
                 """
                 SELECT * FROM tasklists WHERE id = ?
-            """.trimIndent()
+                """.trimIndent()
             )
 
             stm.setInt(1, lid)
@@ -291,9 +293,11 @@ class TasksDataPostgres : AppDatabase {
                 return TaskList(
                     id = rs.getInt("id"),
                     bid = rs.getInt("bid"),
-                    name = rs.getString("name"),
+                    name = rs.getString("name")
                 )
-            } else throw ListNotFoundException
+            } else {
+                throw ListNotFoundException
+            }
         }
     }
 
@@ -302,13 +306,13 @@ class TasksDataPostgres : AppDatabase {
     }
 
     override fun createCard(lid: Int, name: String, description: String, dueDate: Date): Card {
-        //TODO("Check for boardNotFound - services")
+        // TODO("Check for boardNotFound - services")
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
                 INSERT INTO cards (bid, lid, name, description, initdate)
                 VALUES (?,?,?,?,?) 
-            """.trimIndent()
+                """.trimIndent()
             )
 
             val bid = getListDetails(lid).bid
@@ -343,7 +347,7 @@ class TasksDataPostgres : AppDatabase {
                 FROM cards as c
                 JOIN tasklists t on t.id = c.lid
                 WHERE t.id = ?
-            """.trimIndent()
+                """.trimIndent()
             )
             stm.setInt(1, lid)
 
@@ -370,7 +374,7 @@ class TasksDataPostgres : AppDatabase {
             val stm = it.prepareStatement(
                 """
                 SELECT * FROM cards WHERE id = ?
-            """.trimIndent()
+                """.trimIndent()
             )
 
             stm.setInt(1, cid)
@@ -383,22 +387,26 @@ class TasksDataPostgres : AppDatabase {
                     lid = rs.getInt("lid"),
                     name = rs.getString("name"),
                     description = rs.getString("description"),
-                    initDate = rs.getDate("initDate"),
+                    initDate = rs.getDate("initDate")
                 )
-            } else throw CardNotFoundException
+            } else {
+                throw CardNotFoundException
+            }
         }
     }
 
     override fun moveCard(cid: Int, lid: Int) {
         dataSource.connection.use {
-            val stm = it.prepareStatement("""
+            val stm = it.prepareStatement(
+                """
                 UPDATE cards
                 SET lid = ?
                 WHERE id = ?
-            """.trimIndent())
+                """.trimIndent()
+            )
 
             stm.setInt(1, lid)
-            stm.setInt(2,cid)
+            stm.setInt(2, cid)
 
             val affectedRows: Int = stm.executeUpdate()
             if (affectedRows == 0) {
@@ -415,13 +423,16 @@ class TasksDataPostgres : AppDatabase {
                 FROM users
                 WHERE token = ?
                 LIMIT  1
-            """.trimIndent()
+                """.trimIndent()
             )
 
             stm.setString(1, bToken)
             val rs = stm.executeQuery()
-            if(rs.next()) return rs.getInt(1)
-            else throw UserNotFoundException
+            if (rs.next()) {
+                return rs.getInt(1)
+            } else {
+                throw UserNotFoundException
+            }
         }
     }
 }

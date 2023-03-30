@@ -1,12 +1,14 @@
 package pt.isel.ls.services.boards
 
 import pt.isel.ls.database.AppDatabase
+import pt.isel.ls.database.memory.BoardNotFoundException
 import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.TaskList
 import pt.isel.ls.domain.User
-import pt.isel.ls.utils.exceptions.IllegalBoardAccessException
-import pt.isel.ls.utils.exceptions.IllegalListAccessException
-import pt.isel.ls.utils.checkToken
+import pt.isel.ls.services.utils.checkToken
+import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
+import pt.isel.ls.services.utils.exceptions.IllegalListAccessException
+import pt.isel.ls.services.utils.exceptions.NoSuchBoardException
 
 class BoardServices(private val database: AppDatabase) {
     /**
@@ -32,13 +34,18 @@ class BoardServices(private val database: AppDatabase) {
      * @param bid board's unique id
      *
      *@throws IllegalBoardAccessException if the user doesn't have access to the board
+     *@throws NoSuchBoardException if board id is never found
      */
     fun addUserToBoard(token: String, uid: Int, bid: Int) {
         checkToken(token)
-        val users = getUsersFromBoard(token, bid)
-        if (!users.any { it.token == token }) throw IllegalBoardAccessException
+        try {
+            val users = getUsersFromBoard(token, bid)
+            if (!users.any { it.token == token }) throw IllegalBoardAccessException
 
-        database.addUserToBoard(uid, bid)
+            database.addUserToBoard(uid, bid)
+        } catch (e: BoardNotFoundException) {
+            throw NoSuchBoardException
+        }
     }
 
     /**
@@ -66,16 +73,21 @@ class BoardServices(private val database: AppDatabase) {
      * @param bid board's unique id
      *
      * @throws IllegalBoardAccessException if user doesn't have permission to get board details
+     * @throws NoSuchBoardException if board id is never found
      *
      * @return List of User objects
      */
     fun getUsersFromBoard(token: String, bid: Int): List<User> {
         checkToken(token)
-        database.getBoardDetails(bid) //check if board exists
-        val users = database.getUsersFromBoard(bid)
-        if (!users.any { it.token == token }) throw IllegalBoardAccessException
+        database.getBoardDetails(bid) // check if board exists
+        try {
+            val users = database.getUsersFromBoard(bid)
+            if (!users.any { it.token == token }) throw IllegalBoardAccessException
 
-        return users
+            return users
+        } catch (e: BoardNotFoundException) {
+            throw NoSuchBoardException
+        }
     }
 
     /**

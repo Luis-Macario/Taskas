@@ -5,7 +5,7 @@ import pt.isel.ls.database.memory.TasksDataMem
 import pt.isel.ls.domain.Board
 import pt.isel.ls.services.boards.BoardServices
 import pt.isel.ls.services.users.UserServices
-import pt.isel.ls.utils.exceptions.IllegalUserAccessException
+import pt.isel.ls.services.utils.exceptions.IllegalUserAccessException
 import java.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

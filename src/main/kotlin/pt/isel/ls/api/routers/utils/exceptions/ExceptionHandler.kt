@@ -11,16 +11,19 @@ import pt.isel.ls.database.memory.CardNotFoundException
 import pt.isel.ls.database.memory.EmailAlreadyExistsException
 import pt.isel.ls.database.memory.ListNotFoundException
 import pt.isel.ls.database.memory.MemoryException
+import pt.isel.ls.database.memory.TaskListAlreadyExistsInBoardException
 import pt.isel.ls.database.memory.UserAlreadyExistsInBoardException
 import pt.isel.ls.database.memory.UserNotFoundException
 import pt.isel.ls.database.memory.UsersBoardDoesNotExistException
 import pt.isel.ls.domain.TaskException
-import pt.isel.ls.utils.exceptions.IllegalBoardAccessException
-import pt.isel.ls.utils.exceptions.IllegalCardAccessException
-import pt.isel.ls.utils.exceptions.IllegalListAccessException
-import pt.isel.ls.utils.exceptions.IllegalUserAccessException
-import pt.isel.ls.utils.exceptions.InvalidBearerToken
-import pt.isel.ls.utils.exceptions.ServicesException
+import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
+import pt.isel.ls.services.utils.exceptions.IllegalCardAccessException
+import pt.isel.ls.services.utils.exceptions.IllegalListAccessException
+import pt.isel.ls.services.utils.exceptions.IllegalMoveCardRequestException
+import pt.isel.ls.services.utils.exceptions.IllegalUserAccessException
+import pt.isel.ls.services.utils.exceptions.InvalidBearerToken
+import pt.isel.ls.services.utils.exceptions.NoSuchBoardException
+import pt.isel.ls.services.utils.exceptions.ServicesException
 
 /**
  * Runs the given block, and if an exception is thrown, runs [exceptionHandler]
@@ -79,6 +82,7 @@ fun TaskException.toStatus() =
                 UserAlreadyExistsInBoardException -> Status.CONFLICT
                 BoardsUserDoesNotExistException -> Status.INTERNAL_SERVER_ERROR
                 UsersBoardDoesNotExistException -> Status.INTERNAL_SERVER_ERROR
+                TaskListAlreadyExistsInBoardException -> Status.CONFLICT
             }
 
         is ServicesException ->
@@ -88,6 +92,8 @@ fun TaskException.toStatus() =
                 IllegalCardAccessException -> Status.FORBIDDEN
                 IllegalListAccessException -> Status.FORBIDDEN
                 IllegalUserAccessException -> Status.FORBIDDEN
+                IllegalMoveCardRequestException -> Status.UNPROCESSABLE_ENTITY
+                NoSuchBoardException -> Status.UNPROCESSABLE_ENTITY
             }
 
         is ApiException ->

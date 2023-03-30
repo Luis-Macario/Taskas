@@ -3,12 +3,12 @@ package pt.isel.ls.services.cards
 import pt.isel.ls.api.dto.card.MoveCardRequest
 import pt.isel.ls.database.AppDatabase
 import pt.isel.ls.domain.Card
-import pt.isel.ls.utils.MAX_DATE
-import pt.isel.ls.utils.exceptions.IllegalCardAccessException
-import pt.isel.ls.utils.exceptions.IllegalListAccessException
-import pt.isel.ls.utils.parseBearerToken
-import pt.isel.ls.utils.checkToken
+import pt.isel.ls.services.utils.MAX_DATE
+import pt.isel.ls.services.utils.checkToken
+import pt.isel.ls.services.utils.exceptions.IllegalCardAccessException
+import pt.isel.ls.services.utils.exceptions.IllegalListAccessException
 import java.sql.Date
+import pt.isel.ls.services.utils.exceptions.IllegalMoveCardRequestException
 
 class CardServices(private val database: AppDatabase) {
 
@@ -32,10 +32,10 @@ class CardServices(private val database: AppDatabase) {
         description: String,
         dueDate: String? = null
     ): Card {
-        val parsedToken = parseBearerToken(token)
+        checkToken(token)
         val list = database.getListDetails(lid)
         val users = database.getUsersFromBoard(list.bid)
-        if (users.any { it.token == parsedToken }) throw IllegalListAccessException
+        if (!users.any { it.token == token }) throw IllegalListAccessException
 
         val date = if (dueDate != null) Date.valueOf(dueDate) else Date.valueOf(MAX_DATE)
 
@@ -53,11 +53,11 @@ class CardServices(private val database: AppDatabase) {
      * @return Card Object
      */
     fun getCardDetails(token: String, cid: Int): Card {
-        val parsedToken = parseBearerToken(token)
+        checkToken(token)
         val card = database.getCardDetails(cid)
         val users = database.getUsersFromBoard(card.bid)
 
-        if (users.any { it.token == parsedToken }) throw IllegalCardAccessException
+        if (!users.any { it.token == token }) throw IllegalCardAccessException
 
         return card
     }
@@ -73,9 +73,13 @@ class CardServices(private val database: AppDatabase) {
      */
     fun moveCard(token: String, cid: Int, request: MoveCardRequest) {
         checkToken(token)
-        val bid = database.getCardDetails(cid).bid
+
+        val card = database.getCardDetails(cid)
+        val bid = card.bid
         val users = database.getUsersFromBoard(bid)
-        //TODO("Checkar se estamos a trocar cards que as listas sejam do msm board")
+        val destList = database.getListDetails(request.listID)
+
+        if (card.bid != destList.bid) throw IllegalMoveCardRequestException
         if (!users.any { it.token == token }) throw IllegalCardAccessException
 
         database.moveCard(cid, request.listID)

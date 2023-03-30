@@ -1,4 +1,4 @@
-package pt.isel.ls.utils.exceptions
+package pt.isel.ls.services.utils.exceptions
 
 import pt.isel.ls.domain.TaskException
 
@@ -27,4 +27,14 @@ object IllegalCardAccessException : ServicesException() {
 object InvalidBearerToken : ServicesException() {
     override val code = 9000 // TODO: Figure out what code to use
     override val description = "Authorization header is not valid"
+}
+
+object IllegalMoveCardRequestException : ServicesException() {
+    override val code = 9000 // TODO: Figure out what code to use
+    override val description = "Original list and destination list aren't in the same board"
+}
+
+object NoSuchBoardException : ServicesException() {
+    override val code = 9000 // TODO: Figure out what code to use
+    override val description = "There's no board with that id"
 }

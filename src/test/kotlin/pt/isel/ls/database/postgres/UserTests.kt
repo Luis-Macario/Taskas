@@ -30,7 +30,7 @@ class UserTests {
             val stm = connection.prepareStatement(
                 """
                 SELECT * FROM users where id = ?
-            """.trimIndent()
+                """.trimIndent()
             )
             stm.setInt(1, newUser.id)
 
@@ -59,10 +59,8 @@ class UserTests {
 
             assertEquals(newUser.id, getUser.id)
             assertEquals(newUser.name, getUser.name)
-            assertEquals(newUser.email,getUser.email)
+            assertEquals(newUser.email, getUser.email)
             assertEquals(newUser.token, getUser.token)
         }
     }
-
 }
-
