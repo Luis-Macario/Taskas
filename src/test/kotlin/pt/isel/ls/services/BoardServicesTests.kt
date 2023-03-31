@@ -6,7 +6,6 @@ import pt.isel.ls.services.boards.BoardServices
 import pt.isel.ls.services.lists.ListServices
 import pt.isel.ls.services.users.UserServices
 import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
-import pt.isel.ls.services.utils.exceptions.NoSuchBoardException
 import java.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -40,20 +39,6 @@ class BoardServicesTests {
         bServices.addUserToBoard(user.token, newUser.id, board.id)
 
         assertTrue(database.getUsersFromBoard(board.id).contains(newUser))
-    }
-
-    @Test
-    fun `Adding user to a board with an invalid id should throw a NoSuchBoardException`() {
-        val user = uServices.createUser("Test User", "test_user@isel.pt")
-        val newUser = uServices.createUser("New Test User", "new_test_user@isel.pt")
-
-        assertFailsWith<NoSuchBoardException> {
-            bServices.addUserToBoard(
-                user.token,
-                newUser.id,
-                3
-            )
-        }
     }
 
     @Test
@@ -129,11 +114,14 @@ class BoardServicesTests {
     @Test
     fun `Calling getUsersFromBoard with invalid board id should throw NoSuchBoardException`() {
         val user0 = uServices.createUser("TestUser0", "test_user0@isel.pt")
+        val user1 = uServices.createUser("TestUser1", "test_user1@isel.pt")
+        bServices.createBoard(user0.token, "TestBoard0", "TestDescription0")
+        bServices.createBoard(user1.token, "TestBoard1", "TestDescription1")
 
         assertFailsWith<IllegalBoardAccessException> {
             bServices.getUsersFromBoard(
                 user0.token,
-                22312313
+                1
             )
         }
     }

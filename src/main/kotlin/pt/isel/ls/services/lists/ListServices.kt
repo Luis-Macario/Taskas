@@ -3,6 +3,7 @@ package pt.isel.ls.services.lists
 import pt.isel.ls.database.AppDatabase
 import pt.isel.ls.domain.Card
 import pt.isel.ls.domain.TaskList
+import pt.isel.ls.services.utils.checkToken
 import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
 
 class ListServices(private val database: AppDatabase) {
@@ -18,6 +19,9 @@ class ListServices(private val database: AppDatabase) {
      * @return list unique identifier
      */
     fun createList(token: String, bid: Int, name: String): TaskList {
+        checkToken(token)
+        database.getBoardDetails(bid)
+
         val users = database.getUsersFromBoard(bid)
         if (!users.any { it.token == token }) throw IllegalBoardAccessException
 
@@ -34,6 +38,7 @@ class ListServices(private val database: AppDatabase) {
      * @return TaskList object
      */
     fun getList(token: String, lid: Int): TaskList {
+        checkToken(token)
         val list = database.getListDetails(lid)
         val users = database.getUsersFromBoard(list.bid)
         if (!users.any { it.token == token }) throw IllegalBoardAccessException
@@ -50,6 +55,7 @@ class ListServices(private val database: AppDatabase) {
      * @return List of Card object
      */
     fun getCardsFromList(token: String, lid: Int): List<Card> {
+        checkToken(token)
         val list = database.getListDetails(lid)
         val users = database.getUsersFromBoard(list.bid)
         if (!users.any { it.token == token }) throw IllegalBoardAccessException
