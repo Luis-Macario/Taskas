@@ -1,7 +1,6 @@
 package pt.isel.ls.services.boards
 
 import pt.isel.ls.database.AppDatabase
-import pt.isel.ls.database.memory.BoardNotFoundException
 import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.TaskList
 import pt.isel.ls.domain.User
@@ -38,14 +37,10 @@ class BoardServices(private val database: AppDatabase) {
      */
     fun addUserToBoard(token: String, uid: Int, bid: Int) {
         checkToken(token)
-        try {
-            val users = getUsersFromBoard(token, bid)
-            if (!users.any { it.token == token }) throw IllegalBoardAccessException
+        val users = getUsersFromBoard(token, bid)
+        if (!users.any { it.token == token }) throw IllegalBoardAccessException
 
-            database.addUserToBoard(uid, bid)
-        } catch (e: BoardNotFoundException) {
-            throw NoSuchBoardException
-        }
+        database.addUserToBoard(uid, bid)
     }
 
     /**
@@ -80,14 +75,10 @@ class BoardServices(private val database: AppDatabase) {
     fun getUsersFromBoard(token: String, bid: Int): List<User> {
         checkToken(token)
         database.getBoardDetails(bid) // check if board exists
-        try {
-            val users = database.getUsersFromBoard(bid)
-            if (!users.any { it.token == token }) throw IllegalBoardAccessException
+        val users = database.getUsersFromBoard(bid)
+        if (!users.any { it.token == token }) throw IllegalBoardAccessException
 
-            return users
-        } catch (e: BoardNotFoundException) {
-            throw NoSuchBoardException
-        }
+        return users
     }
 
     /**

@@ -12,6 +12,7 @@ import pt.isel.ls.api.dto.board.AddUserRequest
 import pt.isel.ls.api.dto.board.BoardDTO
 import pt.isel.ls.api.dto.board.CreateBoardRequest
 import pt.isel.ls.api.dto.board.CreateBoardResponse
+import pt.isel.ls.api.dto.board.GetListsFromBoardResponse
 import pt.isel.ls.api.dto.board.GetUsersFromBoardResponse
 import pt.isel.ls.api.dto.board.toDTO
 import pt.isel.ls.api.dto.user.toDTO
@@ -27,7 +28,6 @@ import pt.isel.ls.domain.User
 import pt.isel.ls.services.TasksServices
 import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
 import pt.isel.ls.services.utils.exceptions.InvalidBearerToken
-import pt.isel.ls.services.utils.exceptions.NoSuchBoardException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -622,7 +622,7 @@ class BoardTests {
     }
 
     @Test
-    fun `POST to boards(slash))boardID(slash)users returns a 422 response if the board doesn't exist`() {
+    fun `POST to boards(slash))boardID(slash)users returns a 404 response if the board doesn't exist`() {
         val userID = userB.id
         val requestBody = Json.encodeToString(AddUserRequest(userID))
 
@@ -631,14 +631,146 @@ class BoardTests {
                 .header("Authorization", authHeaderA)
         )
 
-        assertEquals(Status.UNPROCESSABLE_ENTITY, response.status)
+        assertEquals(Status.NOT_FOUND, response.status)
         assertEquals("application/json", response.header("content-type"))
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
         assertEquals(
             ErrorResponse(
-                code = NoSuchBoardException.code,
-                name = NoSuchBoardException.javaClass.simpleName,
-                description = NoSuchBoardException.description
+                code = BoardNotFoundException.code,
+                name = BoardNotFoundException.javaClass.simpleName,
+                description = BoardNotFoundException.description
+            ),
+            errorResponse
+        )
+    }
+
+    @Test
+    fun `GET to boards(slash)boardID(slash)lists returns a 200 response with the correct response`() {
+        val response = app(
+            Request(Method.GET, "http://localhost:8080/boards/0/lists")
+                .header("Authorization", authHeaderA)
+        )
+
+        assertEquals(Status.OK, response.status)
+        assertEquals("application/json", response.header("content-type"))
+        val listsResponse = Json.decodeFromString<GetListsFromBoardResponse>(response.bodyString())
+        assertEquals(GetListsFromBoardResponse(emptyList()), listsResponse)
+    }
+
+    @Test
+    fun `GET to boards(slash)boardID(slash)lists returns a 400 response if invalid boardID`() {
+        val response = app(
+            Request(Method.GET, "http://localhost:8080/boards/invalidID/lists")
+                .header("Authorization", authHeaderA)
+        )
+
+        assertEquals(Status.BAD_REQUEST, response.status)
+        assertEquals("application/json", response.header("content-type"))
+        val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
+        assertEquals(
+            ErrorResponse(
+                code = InvalidBoardIDException.code,
+                name = InvalidBoardIDException.javaClass.simpleName,
+                description = InvalidBoardIDException.description
+            ),
+            errorResponse
+        )
+    }
+
+    @Test
+    fun `GET to boards(slash)boardID(slash)lists returns a 400 response if invalid auth header`() {
+        val response = app(
+            Request(Method.GET, "http://localhost:8080/boards/0/lists")
+                .header("Authorization", "ola")
+        )
+
+        assertEquals(Status.BAD_REQUEST, response.status)
+        assertEquals("application/json", response.header("content-type"))
+        val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
+        assertEquals(
+            ErrorResponse(
+                code = InvalidAuthHeader.code,
+                name = InvalidAuthHeader.javaClass.simpleName,
+                description = InvalidAuthHeader.description
+            ),
+            errorResponse
+        )
+    }
+
+    @Test
+    fun `GET to boards(slash)boardID(slash)lists returns a 400 response if invalid token`() {
+        val response = app(
+            Request(Method.GET, "http://localhost:8080/boards/0/lists")
+                .header("Authorization", "Bearer ola")
+        )
+
+        assertEquals(Status.BAD_REQUEST, response.status)
+        assertEquals("application/json", response.header("content-type"))
+        val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
+        assertEquals(
+            ErrorResponse(
+                code = InvalidBearerToken.code,
+                name = InvalidBearerToken.javaClass.simpleName,
+                description = InvalidBearerToken.description
+            ),
+            errorResponse
+        )
+    }
+
+    @Test
+    fun `GET to boards(slash)boardID(slash)lists returns a 401 response if no auth header`() {
+        val response = app(
+            Request(Method.GET, "http://localhost:8080/boards/0/lists")
+        )
+
+        assertEquals(Status.UNAUTHORIZED, response.status)
+        assertEquals("application/json", response.header("content-type"))
+        val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
+        assertEquals(
+            ErrorResponse(
+                code = NoAuthenticationException.code,
+                name = NoAuthenticationException.javaClass.simpleName,
+                description = NoAuthenticationException.description
+            ),
+            errorResponse
+        )
+    }
+
+    @Test
+    fun `GET to boards(slash)boardID(slash)lists returns a 403 response if user doesn't have access to that board`() {
+        val response = app(
+            Request(Method.GET, "http://localhost:8080/boards/0/lists")
+                .header("Authorization", authHeaderB)
+        )
+
+        assertEquals(Status.FORBIDDEN, response.status)
+        assertEquals("application/json", response.header("content-type"))
+        val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
+        assertEquals(
+            ErrorResponse(
+                code = IllegalBoardAccessException.code,
+                name = IllegalBoardAccessException.javaClass.simpleName,
+                description = IllegalBoardAccessException.description
+            ),
+            errorResponse
+        )
+    }
+
+    @Test
+    fun `GET to boards(slash)boardID(slash)lists returns a 404 response if a board with the provided boardID doesn't exist`() {
+        val response = app(
+            Request(Method.GET, "http://localhost:8080/boards/99/lists")
+                .header("Authorization", authHeaderA)
+        )
+
+        assertEquals(Status.NOT_FOUND, response.status)
+        assertEquals("application/json", response.header("content-type"))
+        val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
+        assertEquals(
+            ErrorResponse(
+                code = BoardNotFoundException.code,
+                name = BoardNotFoundException.javaClass.simpleName,
+                description = BoardNotFoundException.description
             ),
             errorResponse
         )
