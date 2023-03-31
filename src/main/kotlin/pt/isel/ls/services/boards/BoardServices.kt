@@ -15,7 +15,7 @@ class BoardServices(private val database: AppDatabase) {
      * Creates a new board
      *
      * @param token token of the user creating the board
-     * @param name project's name
+     * @param name board's name
      * @param description board's description, optional
      *
      * @return Board's unique identifier
@@ -34,18 +34,20 @@ class BoardServices(private val database: AppDatabase) {
      * @param bid board's unique id
      *
      *@throws IllegalBoardAccessException if the user doesn't have access to the board
-     *@throws NoSuchBoardException if board id is never found
+     *@throws NoSuchBoardException if board id doesn't belong to any board
      */
     fun addUserToBoard(token: String, uid: Int, bid: Int) {
         checkToken(token)
         try {
-            val users = getUsersFromBoard(token, bid)
-            if (!users.any { it.token == token }) throw IllegalBoardAccessException
-
-            database.addUserToBoard(uid, bid)
+            database.getBoardDetails(bid)
         } catch (e: BoardNotFoundException) {
             throw NoSuchBoardException
         }
+
+        val users = getUsersFromBoard(token, bid)
+        if (!users.any { it.token == token }) throw IllegalBoardAccessException
+
+        database.addUserToBoard(uid, bid)
     }
 
     /**
@@ -79,19 +81,20 @@ class BoardServices(private val database: AppDatabase) {
      */
     fun getUsersFromBoard(token: String, bid: Int): List<User> {
         checkToken(token)
-        database.getBoardDetails(bid) // check if board exists
-        try {
-            val users = database.getUsersFromBoard(bid)
-            if (!users.any { it.token == token }) throw IllegalBoardAccessException
 
-            return users
+        val users: List<User>
+        try {
+            users = database.getUsersFromBoard(bid)
         } catch (e: BoardNotFoundException) {
             throw NoSuchBoardException
         }
+
+        if (!users.any { it.token == token }) throw IllegalBoardAccessException
+        return users
     }
 
     /**
-     * Get all the users in a board
+     * Get all the lists in a board
      *
      * @param token token of the user requesting the board
      * @param bid board's unique id
@@ -103,7 +106,7 @@ class BoardServices(private val database: AppDatabase) {
     fun getListsFromBoard(token: String, bid: Int): List<TaskList> {
         checkToken(token)
         val users = getUsersFromBoard(token, bid)
-        if (!users.any { it.token == token }) throw IllegalListAccessException
+        if (!users.any { it.token == token }) throw IllegalBoardAccessException
         return database.getListsFromBoard(bid)
     }
 }

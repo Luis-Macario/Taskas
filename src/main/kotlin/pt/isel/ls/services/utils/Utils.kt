@@ -1,6 +1,6 @@
 package pt.isel.ls.services.utils
 
-import pt.isel.ls.services.utils.exceptions.InvalidBearerToken
+import pt.isel.ls.services.utils.exceptions.InvalidTokenException
 
 const val MAX_DESCRIPTION_LENGTH = 1000
 const val MIN_DESCRIPTION_LENGTH = 1
@@ -33,8 +33,8 @@ fun validDescription(description: String): Boolean =
  *
  * @param token String with the Token
  *
- * @throws InvalidBearerToken if the token parameter isn't a valid Token
+ * @throws InvalidTokenException if the token parameter isn't a valid Token
  */
 fun checkToken(token: String) {
-    if (!token.matches(TOKEN_REGEX.toRegex())) throw InvalidBearerToken
+    if (!token.matches(TOKEN_REGEX.toRegex())) throw InvalidTokenException
 }

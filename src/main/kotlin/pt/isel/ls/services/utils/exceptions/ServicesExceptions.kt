@@ -34,7 +34,7 @@ object NoSuchBoardException : ServicesException() {
     override val description = "There's no board with that id"
 }
 
-object InvalidBearerToken : ServicesException() {
+object InvalidTokenException : ServicesException() {
     override val code = 9000 // TODO: Figure out what code to use
-    override val description = "Authorization header is not valid"
+    override val description = "User token is not valid"
 }

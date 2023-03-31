@@ -21,7 +21,7 @@ import pt.isel.ls.services.utils.exceptions.IllegalCardAccessException
 import pt.isel.ls.services.utils.exceptions.IllegalListAccessException
 import pt.isel.ls.services.utils.exceptions.IllegalMoveCardRequestException
 import pt.isel.ls.services.utils.exceptions.IllegalUserAccessException
-import pt.isel.ls.services.utils.exceptions.InvalidBearerToken
+import pt.isel.ls.services.utils.exceptions.InvalidTokenException
 import pt.isel.ls.services.utils.exceptions.NoSuchBoardException
 import pt.isel.ls.services.utils.exceptions.ServicesException
 
@@ -87,7 +87,7 @@ fun TaskException.toStatus() =
 
         is ServicesException ->
             when (this) {
-                InvalidBearerToken -> Status.BAD_REQUEST
+                InvalidTokenException -> Status.BAD_REQUEST
                 IllegalBoardAccessException -> Status.FORBIDDEN
                 IllegalCardAccessException -> Status.FORBIDDEN
                 IllegalListAccessException -> Status.FORBIDDEN

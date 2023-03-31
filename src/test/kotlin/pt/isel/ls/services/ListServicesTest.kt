@@ -6,7 +6,10 @@ import pt.isel.ls.services.boards.BoardServices
 import pt.isel.ls.services.cards.CardServices
 import pt.isel.ls.services.lists.ListServices
 import pt.isel.ls.services.users.UserServices
+import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
+import java.util.UUID
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class ListServicesTest {
     private val database = TasksDataMem()
@@ -29,6 +32,20 @@ class ListServicesTest {
         )
     }
 
+    @Test
+    fun `Creating list with invalid token should throw IllegalBoardAccessException`() {
+        val user = uServices.createUser("Test User", "test_user@isel.pt")
+        val board = bServices.createBoard(user.token, "TestProject", "TestDescription")
+
+        assertFailsWith<IllegalBoardAccessException> {
+            lServices.createList(
+                UUID.randomUUID().toString(),
+                board.id,
+                "TestList"
+            )
+        }
+    }
+
     // getList
     @Test
     fun `Getting a list with a valid token, that belongs to the board,and a valid list id that exists in the board should return the correct list`() {
@@ -36,12 +53,26 @@ class ListServicesTest {
         val board = bServices.createBoard(user.token, "TestProject", "TestDescription")
         val list = lServices.createList(user.token, board.id, "TestList")
 
-        assertEquals(lServices.getList(user.token, board.id), list)
+        assertEquals(lServices.getList(user.token, list.id), list)
+    }
+
+    @Test
+    fun `Getting a list with an invalid token should throw IllegalListAccessException`() {
+        val user = uServices.createUser("Test User", "test_user@isel.pt")
+        val board = bServices.createBoard(user.token, "TestProject", "TestDescription")
+        val list = lServices.createList(user.token, board.id, "TestList")
+
+        assertFailsWith<IllegalBoardAccessException> {
+            lServices.getList(
+                UUID.randomUUID().toString(),
+                list.id
+            )
+        }
     }
 
     // getCardsFromList
     @Test
-    fun `Getting cards from a list `() {
+    fun `Calling  getCardsFromList with valid user token and list id should return cards in that list`() {
         val user = uServices.createUser("Test User", "test_user@isel.pt")
         val board = bServices.createBoard(user.token, "TestProject", "TestDescription")
         val list = lServices.createList(user.token, board.id, "TestList")
@@ -52,8 +83,21 @@ class ListServicesTest {
 
         val cards = lServices.getCardsFromList(user.token, list.id)
 
-        assertEquals(cards[0], card0)
-        assertEquals(cards[1], card1)
-        assertEquals(cards[2], card2)
+        assertEquals(cards, listOf(card0, card1, card2))
+        assertEquals(cards, database.cards.values.toList())
+    }
+
+    @Test
+    fun `Calling  getCardsFromList with invalid user token should throw IllegalBoardAccessException`() {
+        val user = uServices.createUser("Test User", "test_user@isel.pt")
+        val board = bServices.createBoard(user.token, "TestProject", "TestDescription")
+        val list = lServices.createList(user.token, board.id, "TestList")
+
+        assertFailsWith<IllegalBoardAccessException> {
+            lServices.getCardsFromList(
+                UUID.randomUUID().toString(),
+                list.id
+            )
+        }
     }
 }

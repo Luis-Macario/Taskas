@@ -18,7 +18,7 @@ data class Board(
     companion object {
         const val MAX_NAME_LENGTH = 100
         const val MIN_NAME_LENGTH = 5
-        private const val NAME_REGEX = "^[a-zA-Z]+(?: [a-zA-Z]+)*\$"
+        private const val NAME_REGEX = "^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*\$"
 
         /**
          * Checks whether a board name is valid or not

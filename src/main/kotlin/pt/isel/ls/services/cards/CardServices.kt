@@ -33,10 +33,10 @@ class CardServices(private val database: AppDatabase) {
         dueDate: String? = null
     ): Card {
         checkToken(token)
+
         val list = database.getListDetails(lid)
         val users = database.getUsersFromBoard(list.bid)
         if (!users.any { it.token == token }) throw IllegalListAccessException
-
         val date = if (dueDate != null) Date.valueOf(dueDate) else Date.valueOf(MAX_DATE)
 
         return database.createCard(lid, name, description, date)
@@ -54,6 +54,7 @@ class CardServices(private val database: AppDatabase) {
      */
     fun getCardDetails(token: String, cid: Int): Card {
         checkToken(token)
+
         val card = database.getCardDetails(cid)
         val users = database.getUsersFromBoard(card.bid)
 
@@ -69,6 +70,7 @@ class CardServices(private val database: AppDatabase) {
      * @param cid the id of the card we want to move
      * @param request the destination list identifier
      *
+     * @throws IllegalMoveCardRequestException if the source and destination lists are not the same
      * @throws IllegalCardAccessException if user doesn't have access to that card
      */
     fun moveCard(token: String, cid: Int, request: MoveCardRequest) {

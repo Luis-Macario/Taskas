@@ -4,7 +4,6 @@ import pt.isel.ls.database.AppDatabase
 import pt.isel.ls.domain.Card
 import pt.isel.ls.domain.TaskList
 import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
-import pt.isel.ls.services.utils.exceptions.IllegalListAccessException
 
 class ListServices(private val database: AppDatabase) {
     /**
@@ -31,14 +30,13 @@ class ListServices(private val database: AppDatabase) {
      * @param token token of the user requesting the list
      * @param lid list's unique identifier
      *
-     * @throws IllegalListAccessException if user doesn't have access to the list
-     *
+     * @throws IllegalBoardAccessException if user doesn't have access to the board specified by bid
      * @return TaskList object
      */
     fun getList(token: String, lid: Int): TaskList {
         val list = database.getListDetails(lid)
         val users = database.getUsersFromBoard(list.bid)
-        if (!users.any { it.token == token }) throw IllegalListAccessException
+        if (!users.any { it.token == token }) throw IllegalBoardAccessException
         return database.getListDetails(lid)
     }
 
@@ -47,14 +45,14 @@ class ListServices(private val database: AppDatabase) {
      *
      * @param lid list's unique identifier
      *
-     * @throws IllegalListAccessException if user doesn't have access to the list
+     * @throws IllegalBoardAccessException if user doesn't have access to the board specified by bid
      *
      * @return List of Card object
      */
     fun getCardsFromList(token: String, lid: Int): List<Card> {
         val list = database.getListDetails(lid)
         val users = database.getUsersFromBoard(list.bid)
-        if (!users.any { it.token == token }) throw IllegalListAccessException
+        if (!users.any { it.token == token }) throw IllegalBoardAccessException
         return database.getCardsFromList(lid)
     }
 }

@@ -20,7 +20,7 @@ class UserServicesTests {
     fun `Should be able to get student from id after creation`() {
         val user = services.createUser("Service Test", "ServiceTest@isel.pt")
 
-        assertEquals(user, services.getUser(user.id))
+        assertEquals(user, database.users[0])
     }
 
     @Test
@@ -29,21 +29,21 @@ class UserServicesTests {
         val user2 = services.createUser("Luis Macário", "HonorStudent@isel.pt")
         val user3 = services.createUser("Ricardo Pinto", "MegaTwix@isel.pt")
 
-        assertEquals(0, user1.id) // first user created has id 0
-        assertEquals(1, user2.id) // second user created has id 1
-        assertEquals(2, user3.id) // third user created has id 2
+        assertEquals(0, user1.id)
+        assertEquals(1, user2.id)
+        assertEquals(2, user3.id)
     }
 
     // getUser
     @Test
     fun `Should be able to get student from id`() {
-        val user1 = services.createUser("Francisco Medeiros", "RotulaDoChines@isel.pt")
-        val user2 = services.createUser("Luis Macário", "HonorStudent@isel.pt")
-        val user3 = services.createUser("Ricardo Pinto", "Batman@isel.pt")
+        val user0 = services.createUser("Francisco Medeiros", "RotulaDoChines@isel.pt")
+        val user1 = services.createUser("Luis Macário", "HonorStudent@isel.pt")
+        val user2 = services.createUser("Ricardo Pinto", "Batman@isel.pt")
 
-        assertEquals(user1, services.getUser(0))
-        assertEquals(user2, services.getUser(1))
-        assertEquals(user3, services.getUser(2))
+        assertEquals(user0, database.getUserDetails(0))
+        assertEquals(user1, database.getUserDetails(1))
+        assertEquals(user2, database.getUserDetails(2))
     }
 
     // getBoardsFromUser

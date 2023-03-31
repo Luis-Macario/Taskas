@@ -26,7 +26,7 @@ import pt.isel.ls.database.memory.UserAlreadyExistsInBoardException
 import pt.isel.ls.domain.User
 import pt.isel.ls.services.TasksServices
 import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
-import pt.isel.ls.services.utils.exceptions.InvalidBearerToken
+import pt.isel.ls.services.utils.exceptions.InvalidTokenException
 import pt.isel.ls.services.utils.exceptions.NoSuchBoardException
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -134,9 +134,9 @@ class BoardTests {
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
         assertEquals(
             ErrorResponse(
-                code = InvalidBearerToken.code,
-                name = InvalidBearerToken.javaClass.simpleName,
-                description = InvalidBearerToken.description
+                code = InvalidTokenException.code,
+                name = InvalidTokenException.javaClass.simpleName,
+                description = InvalidTokenException.description
             ),
             errorResponse
         )
@@ -251,9 +251,9 @@ class BoardTests {
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
         assertEquals(
             ErrorResponse(
-                code = InvalidBearerToken.code,
-                name = InvalidBearerToken.javaClass.simpleName,
-                description = InvalidBearerToken.description
+                code = InvalidTokenException.code,
+                name = InvalidTokenException.javaClass.simpleName,
+                description = InvalidTokenException.description
             ),
             errorResponse
         )
@@ -385,9 +385,9 @@ class BoardTests {
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
         assertEquals(
             ErrorResponse(
-                code = InvalidBearerToken.code,
-                name = InvalidBearerToken.javaClass.simpleName,
-                description = InvalidBearerToken.description
+                code = InvalidTokenException.code,
+                name = InvalidTokenException.javaClass.simpleName,
+                description = InvalidTokenException.description
             ),
             errorResponse
         )
@@ -545,9 +545,9 @@ class BoardTests {
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
         assertEquals(
             ErrorResponse(
-                code = InvalidBearerToken.code,
-                name = InvalidBearerToken.javaClass.simpleName,
-                description = InvalidBearerToken.description
+                code = InvalidTokenException.code,
+                name = InvalidTokenException.javaClass.simpleName,
+                description = InvalidTokenException.description
             ),
             errorResponse
         )
