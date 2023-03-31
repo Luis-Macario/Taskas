@@ -12,7 +12,7 @@ import pt.isel.ls.api.dto.user.CreateUserRequest
 import pt.isel.ls.api.dto.user.CreateUserResponse
 import pt.isel.ls.api.dto.user.GetBoardsFromUserResponse
 import pt.isel.ls.api.dto.user.UserDTO
-import pt.isel.ls.api.routers.utils.exceptions.InvalidAuthHeader
+import pt.isel.ls.api.routers.utils.exceptions.InvalidAuthHeaderException
 import pt.isel.ls.api.routers.utils.exceptions.InvalidBodyException
 import pt.isel.ls.api.routers.utils.exceptions.InvalidUserIDException
 import pt.isel.ls.api.routers.utils.exceptions.NoAuthenticationException
@@ -26,7 +26,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class UserTests {
+class UsersTests {
 
     private val app = TasksWebApi(TasksServices(TasksDataMem())).routes
 
@@ -220,9 +220,9 @@ class UserTests {
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
         assertEquals(
             ErrorResponse(
-                code = InvalidAuthHeader.code,
-                name = InvalidAuthHeader.javaClass.simpleName,
-                description = InvalidAuthHeader.description
+                code = InvalidAuthHeaderException.code,
+                name = InvalidAuthHeaderException.javaClass.simpleName,
+                description = InvalidAuthHeaderException.description
             ),
             errorResponse
         )

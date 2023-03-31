@@ -16,7 +16,7 @@ import pt.isel.ls.api.dto.board.GetListsFromBoardResponse
 import pt.isel.ls.api.dto.board.GetUsersFromBoardResponse
 import pt.isel.ls.api.dto.board.toDTO
 import pt.isel.ls.api.dto.user.toDTO
-import pt.isel.ls.api.routers.utils.exceptions.InvalidAuthHeader
+import pt.isel.ls.api.routers.utils.exceptions.InvalidAuthHeaderException
 import pt.isel.ls.api.routers.utils.exceptions.InvalidBoardIDException
 import pt.isel.ls.api.routers.utils.exceptions.InvalidBodyException
 import pt.isel.ls.api.routers.utils.exceptions.NoAuthenticationException
@@ -31,7 +31,7 @@ import pt.isel.ls.services.utils.exceptions.InvalidTokenException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class BoardTests {
+class BoardsTests {
     private val database = TasksDataMem()
     private val services = TasksServices(database)
     private val app = TasksWebApi(services).routes
@@ -111,9 +111,9 @@ class BoardTests {
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
         assertEquals(
             ErrorResponse(
-                code = InvalidAuthHeader.code,
-                name = InvalidAuthHeader.javaClass.simpleName,
-                description = InvalidAuthHeader.description
+                code = InvalidAuthHeaderException.code,
+                name = InvalidAuthHeaderException.javaClass.simpleName,
+                description = InvalidAuthHeaderException.description
             ),
             errorResponse
         )
@@ -230,9 +230,9 @@ class BoardTests {
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
         assertEquals(
             ErrorResponse(
-                code = InvalidAuthHeader.code,
-                name = InvalidAuthHeader.javaClass.simpleName,
-                description = InvalidAuthHeader.description
+                code = InvalidAuthHeaderException.code,
+                name = InvalidAuthHeaderException.javaClass.simpleName,
+                description = InvalidAuthHeaderException.description
             ),
             errorResponse
         )
@@ -365,9 +365,9 @@ class BoardTests {
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
         assertEquals(
             ErrorResponse(
-                code = InvalidAuthHeader.code,
-                name = InvalidAuthHeader.javaClass.simpleName,
-                description = InvalidAuthHeader.description
+                code = InvalidAuthHeaderException.code,
+                name = InvalidAuthHeaderException.javaClass.simpleName,
+                description = InvalidAuthHeaderException.description
             ),
             errorResponse
         )
@@ -522,9 +522,9 @@ class BoardTests {
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
         assertEquals(
             ErrorResponse(
-                code = InvalidAuthHeader.code,
-                name = InvalidAuthHeader.javaClass.simpleName,
-                description = InvalidAuthHeader.description
+                code = InvalidAuthHeaderException.code,
+                name = InvalidAuthHeaderException.javaClass.simpleName,
+                description = InvalidAuthHeaderException.description
             ),
             errorResponse
         )
@@ -689,9 +689,9 @@ class BoardTests {
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
         assertEquals(
             ErrorResponse(
-                code = InvalidAuthHeader.code,
-                name = InvalidAuthHeader.javaClass.simpleName,
-                description = InvalidAuthHeader.description
+                code = InvalidAuthHeaderException.code,
+                name = InvalidAuthHeaderException.javaClass.simpleName,
+                description = InvalidAuthHeaderException.description
             ),
             errorResponse
         )

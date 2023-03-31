@@ -7,7 +7,7 @@ import kotlinx.serialization.json.Json
 import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.routing.path
-import pt.isel.ls.api.routers.utils.exceptions.InvalidAuthHeader
+import pt.isel.ls.api.routers.utils.exceptions.InvalidAuthHeaderException
 import pt.isel.ls.api.routers.utils.exceptions.InvalidBoardIDException
 import pt.isel.ls.api.routers.utils.exceptions.InvalidBodyException
 import pt.isel.ls.api.routers.utils.exceptions.InvalidCardIDException
@@ -23,10 +23,10 @@ private const val BEARER_REGEX: String = "^Bearer .+\$"
  *
  * @return String without the "Bearer " part
  *
- * @throws InvalidAuthHeader if the token parameter isn't a valid Bearer Token
+ * @throws InvalidAuthHeaderException if the token parameter isn't a valid Bearer Token
  */
 fun String.parseBearerToken(): String {
-    if (!this.matches(BEARER_REGEX.toRegex())) throw InvalidAuthHeader
+    if (!this.matches(BEARER_REGEX.toRegex())) throw InvalidAuthHeaderException
     return this.substring(7)
 }
 

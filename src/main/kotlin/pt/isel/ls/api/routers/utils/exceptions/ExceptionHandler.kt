@@ -98,7 +98,7 @@ fun TaskException.toStatus() =
 
         is ApiException ->
             when (this) {
-                InvalidAuthHeader -> Status.BAD_REQUEST
+                InvalidAuthHeaderException -> Status.BAD_REQUEST
                 InvalidBoardIDException -> Status.BAD_REQUEST
                 InvalidCardIDException -> Status.BAD_REQUEST
                 InvalidListIDException -> Status.BAD_REQUEST
