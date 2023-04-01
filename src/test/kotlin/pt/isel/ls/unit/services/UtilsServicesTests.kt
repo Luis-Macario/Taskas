@@ -1,4 +1,4 @@
-package pt.isel.ls.services
+package pt.isel.ls.unit.services
 
 import org.junit.Test
 import pt.isel.ls.services.utils.MAX_DESCRIPTION_LENGTH

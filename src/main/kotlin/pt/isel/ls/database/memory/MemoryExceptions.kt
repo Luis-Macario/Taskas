@@ -44,6 +44,11 @@ object TaskListAlreadyExistsInBoardException : MemoryException() {
     override val description = "A list with that name already exists in that board"
 }
 
+object CardNameAlreadyExistsException : MemoryException() {
+    override val code = 4008
+    override val description = "A board with that name already exists"
+}
+
 object UsersBoardDoesNotExistException : MemoryException() {
     override val code = 5001
     override val description = "A user has a board that doesn't exist."

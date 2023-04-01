@@ -12,6 +12,7 @@ import pt.isel.ls.api.dto.user.CreateUserRequest
 import pt.isel.ls.api.dto.user.CreateUserResponse
 import pt.isel.ls.api.dto.user.GetBoardsFromUserResponse
 import pt.isel.ls.api.dto.user.UserDTO
+import pt.isel.ls.api.dto.user.toDTO
 import pt.isel.ls.api.routers.utils.exceptions.InvalidAuthHeaderException
 import pt.isel.ls.api.routers.utils.exceptions.InvalidBodyException
 import pt.isel.ls.api.routers.utils.exceptions.InvalidUserIDException
@@ -19,30 +20,40 @@ import pt.isel.ls.api.routers.utils.exceptions.NoAuthenticationException
 import pt.isel.ls.database.memory.EmailAlreadyExistsException
 import pt.isel.ls.database.memory.TasksDataMem
 import pt.isel.ls.database.memory.UserNotFoundException
+import pt.isel.ls.domain.User
 import pt.isel.ls.services.TasksServices
 import pt.isel.ls.services.utils.exceptions.IllegalUserAccessException
 import pt.isel.ls.services.utils.exceptions.InvalidTokenException
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class UsersTests {
+    private val database = TasksDataMem()
+    private val services = TasksServices(database)
+    private val app = TasksWebApi(services).routes
+    private val tokenA = "7d444840-9dc0-11d1-b245-5ffdce74fad2"
+    private val authHeaderA = "Bearer $tokenA"
+    private val tokenB = "7d444840-9dc0-11d1-b245-5ffdce74fad1"
+    private val authHeaderB = "Bearer $tokenB"
 
-    private val app = TasksWebApi(TasksServices(TasksDataMem())).routes
+    private val userA: User = database.createUser(tokenA, "Ricardo", "A47673@alunos.isel.pt")
+    private val userB: User = database.createUser(tokenB, "Luis", "A47671@alunos.isel.pt")
 
     @Test
     fun `POST to users returns a 201 response with the correct response`() {
-        val name = "Ricardo"
-        val email = "a47673@alunos.isel.pt"
+        val name = "Francisco"
+        val email = "A46631@alunos.isel.pt"
         val requestBody = Json.encodeToString(CreateUserRequest(name, email))
         val response = app(
             Request(Method.POST, "http://localhost:8080/users").body(requestBody)
         )
         assertEquals(Status.CREATED, response.status)
         assertEquals("application/json", response.header("content-type"))
-        assertEquals("/users/0", response.header("Location"))
+        assertEquals("/users/2", response.header("Location"))
         val userResponse = Json.decodeFromString<CreateUserResponse>(response.bodyString())
-        assertEquals(0, userResponse.id)
+        assertEquals(2, userResponse.id)
+        assertEquals(name, database.getUserDetails(2).name)
+        assertEquals(email, database.getUserDetails(2).email)
     }
 
     @Test
@@ -83,13 +94,9 @@ class UsersTests {
 
     @Test
     fun `POST to users returns a 409 response if a user with that email already exists`() {
-        val name = "Ricardo"
-        val email = "a47673@alunos.isel.pt"
+        val name = "anotherRicardo"
+        val email = "A47673@alunos.isel.pt"
         val requestBody = Json.encodeToString(CreateUserRequest(name, email))
-        app(
-            Request(Method.POST, "http://localhost:8080/users").body(requestBody)
-        )
-
         val response = app(
             Request(Method.POST, "http://localhost:8080/users").body(requestBody)
         )
@@ -108,19 +115,12 @@ class UsersTests {
 
     @Test
     fun `GET to users(slash)userID returns a 200 response with the correct response`() {
-        val name = "Ricardo"
-        val email = "a47673@alunos.isel.pt"
-        val requestBody = Json.encodeToString(CreateUserRequest(name, email))
-        app(
-            Request(Method.POST, "http://localhost:8080/users").body(requestBody)
-        )
         val response = app(Request(Method.GET, "http://localhost:8080/users/0"))
         assertEquals(Status.OK, response.status)
         assertEquals("application/json", response.header("content-type"))
         val userResponse = Json.decodeFromString<UserDTO>(response.bodyString())
         assertEquals(0, userResponse.id)
-        assertEquals(name, userResponse.name)
-        assertEquals(email, userResponse.email)
+        assertEquals(userA.toDTO(), userResponse)
     }
 
     @Test
@@ -140,8 +140,8 @@ class UsersTests {
     }
 
     @Test
-    fun `GET to users(slash)userID returns a 404 response for an invalid id`() {
-        val response = app(Request(Method.GET, "http://localhost:8080/users/75"))
+    fun `GET to users(slash)userID returns a 404 response if no user with that id exists`() {
+        val response = app(Request(Method.GET, "http://localhost:8080/users/99"))
 
         assertEquals(Status.NOT_FOUND, response.status)
         assertEquals("application/json", response.header("content-type"))
@@ -158,27 +158,22 @@ class UsersTests {
 
     @Test
     fun `GET to users(slash)userID(slash)boards returns a 200 response with the correct response`() {
-        val name = "Ricardo"
-        val email = "a47673@alunos.isel.pt"
-        val requestBody = Json.encodeToString(CreateUserRequest(name, email))
-        val token = Json.decodeFromString<CreateUserResponse>(
-            app(
-                Request(Method.POST, "http://localhost:8080/users").body(requestBody)
-            ).bodyString()
-        ).token
         val response = app(
             Request(Method.GET, "http://localhost:8080/users/0/boards")
-                .header("Authorization", "Bearer $token")
+                .header("Authorization", authHeaderA)
         )
         assertEquals(Status.OK, response.status)
         assertEquals("application/json", response.header("content-type"))
         val boards = Json.decodeFromString<GetBoardsFromUserResponse>(response.bodyString())
-        assertTrue(boards.boards.isEmpty())
+        assertEquals(emptyList(), boards.boards)
     }
 
     @Test
     fun `GET to users(slash)userID(slash)boards returns a 400 response for an invalid id`() {
-        val response = app(Request(Method.GET, "http://localhost:8080/users/invalidID/boards"))
+        val response = app(
+            Request(Method.GET, "http://localhost:8080/users/invalidID/boards")
+                .header("Authorization", authHeaderA)
+        )
         assertEquals(Status.BAD_REQUEST, response.status)
         assertEquals("application/json", response.header("content-type"))
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
@@ -214,7 +209,7 @@ class UsersTests {
             Request(Method.GET, "http://localhost:8080/users/0/boards")
                 .header("Authorization", "ola")
         )
-        println(response.bodyString())
+
         assertEquals(Status.BAD_REQUEST, response.status)
         assertEquals("application/json", response.header("content-type"))
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
@@ -234,7 +229,7 @@ class UsersTests {
             Request(Method.GET, "http://localhost:8080/users/0/boards")
                 .header("Authorization", "Bearer ola")
         )
-        println(response.bodyString())
+
         assertEquals(Status.BAD_REQUEST, response.status)
         assertEquals("application/json", response.header("content-type"))
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
@@ -250,16 +245,11 @@ class UsersTests {
 
     @Test
     fun `GET to users(slash)userID(slash)boards returns a 403 response if the user doesn't have access to that user`() {
-        app(
-            Request(Method.POST, "http://localhost:8080/users")
-                .body(Json.encodeToString(CreateUserRequest("Ricardo", "a47673@alunos.isel.pt")))
-        )
-
         val response = app(
             Request(Method.GET, "http://localhost:8080/users/0/boards")
-                .header("Authorization", "Bearer 7d444840-9dc0-11d1-b245-5ffdce74fad2")
+                .header("Authorization", authHeaderB)
         )
-        println(response.bodyString())
+
         assertEquals(Status.FORBIDDEN, response.status)
         assertEquals("application/json", response.header("content-type"))
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())

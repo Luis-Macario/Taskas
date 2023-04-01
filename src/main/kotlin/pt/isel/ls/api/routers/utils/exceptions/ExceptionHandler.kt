@@ -7,6 +7,7 @@ import pt.isel.ls.api.routers.utils.json
 import pt.isel.ls.database.memory.BoardNameAlreadyExistsException
 import pt.isel.ls.database.memory.BoardNotFoundException
 import pt.isel.ls.database.memory.BoardsUserDoesNotExistException
+import pt.isel.ls.database.memory.CardNameAlreadyExistsException
 import pt.isel.ls.database.memory.CardNotFoundException
 import pt.isel.ls.database.memory.EmailAlreadyExistsException
 import pt.isel.ls.database.memory.ListNotFoundException
@@ -80,9 +81,10 @@ fun TaskException.toStatus() =
                 EmailAlreadyExistsException -> Status.CONFLICT
                 BoardNameAlreadyExistsException -> Status.CONFLICT
                 UserAlreadyExistsInBoardException -> Status.CONFLICT
+                TaskListAlreadyExistsInBoardException -> Status.CONFLICT
+                CardNameAlreadyExistsException -> Status.CONFLICT
                 BoardsUserDoesNotExistException -> Status.INTERNAL_SERVER_ERROR
                 UsersBoardDoesNotExistException -> Status.INTERNAL_SERVER_ERROR
-                TaskListAlreadyExistsInBoardException -> Status.CONFLICT
             }
 
         is ServicesException ->

@@ -1,6 +1,8 @@
-package pt.isel.ls.domain
+package pt.isel.ls.unit.domain
 
 import org.junit.Test
+import pt.isel.ls.domain.Board
+import pt.isel.ls.domain.User
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse

@@ -1,6 +1,9 @@
-package pt.isel.ls.database.memory
+package pt.isel.ls.unit.database.memory
 
 import org.junit.Test
+import pt.isel.ls.database.memory.BoardNotFoundException
+import pt.isel.ls.database.memory.ListNotFoundException
+import pt.isel.ls.database.memory.TasksDataMem
 import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -27,7 +30,7 @@ class ListTests {
         val msg = assertFailsWith<BoardNotFoundException> {
             mem.createList(0, name)
         }
-        assertEquals("The board with the id provided doesn't exist", msg.description)
+        assertEquals("The board with the id provided doesn't exist", BoardNotFoundException.description)
     }
 
     @Test
@@ -51,7 +54,7 @@ class ListTests {
         val msg = assertFailsWith<ListNotFoundException> {
             mem.getListDetails(0)
         }
-        assertEquals("The list with the id provided doesn't exist", msg.description)
+        assertEquals("The list with the id provided doesn't exist", ListNotFoundException.description)
     }
 
     @Test
@@ -77,6 +80,6 @@ class ListTests {
         val msg = assertFailsWith<BoardNotFoundException> {
             mem.getListsFromBoard(1)
         }
-        assertEquals("The board with the id provided doesn't exist", msg.description)
+        assertEquals("The board with the id provided doesn't exist", BoardNotFoundException.description)
     }
 }

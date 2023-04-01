@@ -1,6 +1,7 @@
-package pt.isel.ls.domain
+package pt.isel.ls.unit.domain
 
 import org.junit.Test
+import pt.isel.ls.domain.Card
 import pt.isel.ls.services.utils.MAX_DATE
 import java.sql.Date
 import kotlin.test.assertEquals

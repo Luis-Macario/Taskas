@@ -1,6 +1,9 @@
-package pt.isel.ls.database.memory
+package pt.isel.ls.unit.database.memory
 
 import org.junit.Test
+import pt.isel.ls.database.memory.CardNotFoundException
+import pt.isel.ls.database.memory.ListNotFoundException
+import pt.isel.ls.database.memory.TasksDataMem
 import pt.isel.ls.domain.Card
 import java.sql.Date
 import java.util.*
@@ -35,7 +38,7 @@ class CardTests {
         val msg = assertFailsWith<ListNotFoundException> {
             mem.createCard(invalidListId, "Team Workk", "some work ".repeat(1), Date.valueOf("2019-1-26"))
         }
-        assertEquals("The list with the id provided doesn't exist", msg.description)
+        assertEquals("The list with the id provided doesn't exist", ListNotFoundException.description)
     }
 
     @Test
@@ -54,7 +57,7 @@ class CardTests {
         val msg = assertFailsWith<CardNotFoundException> {
             mem.getCardDetails(2)
         }
-        assertEquals("The card with the id provided doesn't exist", msg.description)
+        assertEquals("The card with the id provided doesn't exist", CardNotFoundException.description)
     }
 
     @Test
@@ -102,12 +105,12 @@ class CardTests {
         val msg = assertFailsWith<CardNotFoundException> {
             mem.getCardsFromList(lId)
         }
-        assertEquals("The card with the id provided doesn't exist", msg.description)
+        assertEquals("The card with the id provided doesn't exist", CardNotFoundException.description)
 
         val msg2 = assertFailsWith<ListNotFoundException> {
             mem.getCardsFromList(100)
         }
-        assertEquals("The list with the id provided doesn't exist", msg2.description)
+        assertEquals("The list with the id provided doesn't exist", ListNotFoundException.description)
     }
 
     @Test
@@ -138,7 +141,7 @@ class CardTests {
         val msg = assertFailsWith<ListNotFoundException> {
             mem.moveCard(cId, 10)
         }
-        assertEquals("The list with the id provided doesn't exist", msg.description)
+        assertEquals("The list with the id provided doesn't exist", ListNotFoundException.description)
     }
 
     @Test
@@ -153,6 +156,6 @@ class CardTests {
         val msg = assertFailsWith<CardNotFoundException> {
             mem.moveCard(invalidCardId, lId)
         }
-        assertEquals("The card with the id provided doesn't exist", msg.description)
+        assertEquals("The card with the id provided doesn't exist", CardNotFoundException.description)
     }
 }

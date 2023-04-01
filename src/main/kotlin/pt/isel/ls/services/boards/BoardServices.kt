@@ -6,7 +6,6 @@ import pt.isel.ls.domain.TaskList
 import pt.isel.ls.domain.User
 import pt.isel.ls.services.utils.checkToken
 import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
-import pt.isel.ls.services.utils.exceptions.IllegalListAccessException
 
 class BoardServices(private val database: AppDatabase) {
     /**
@@ -84,14 +83,14 @@ class BoardServices(private val database: AppDatabase) {
      * @param token token of the user requesting the board
      * @param bid board's unique id
      *
-     * @throws IllegalListAccessException if user doesn't have permission to get board details
+     * @throws IllegalBoardAccessException if user doesn't have permission to get board details
      *
      * @return List of TaskList objects
      */
     fun getListsFromBoard(token: String, bid: Int): List<TaskList> {
         checkToken(token)
         val users = getUsersFromBoard(token, bid)
-        if (!users.any { it.token == token }) throw IllegalListAccessException
+        if (!users.any { it.token == token }) throw IllegalBoardAccessException
         return database.getListsFromBoard(bid)
     }
 }

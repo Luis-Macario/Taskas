@@ -1,5 +1,8 @@
-package pt.isel.ls.database.memory
+package pt.isel.ls.unit.database.memory
 
+import pt.isel.ls.database.memory.EmailAlreadyExistsException
+import pt.isel.ls.database.memory.TasksDataMem
+import pt.isel.ls.database.memory.UserNotFoundException
 import pt.isel.ls.domain.User
 import java.util.*
 import kotlin.test.Test
@@ -51,7 +54,7 @@ class UserTests {
             mem.createUser(UUID.randomUUID().toString(), "Ricky", email)
         }
 
-        assertEquals("A user with that email already exists", msg.description)
+        assertEquals("A user with that email already exists", EmailAlreadyExistsException.description)
     }
 
     @Test
@@ -79,6 +82,6 @@ class UserTests {
             mem.getUserDetails(-1)
         }
 
-        assertEquals("A user with that id does not exist", msg.description)
+        assertEquals("A user with that id does not exist", UserNotFoundException.description)
     }
 }

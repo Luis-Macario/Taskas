@@ -1,4 +1,4 @@
-package pt.isel.ls.database.postgres
+package pt.isel.ls.unit.database.postgres
 
 import org.postgresql.ds.PGSimpleDataSource
 import java.io.File

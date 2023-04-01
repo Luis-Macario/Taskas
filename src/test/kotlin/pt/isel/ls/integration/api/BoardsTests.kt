@@ -58,6 +58,8 @@ class BoardsTests {
         assertEquals("/boards/1", response.header("Location"))
         val boardResponse = Json.decodeFromString<CreateBoardResponse>(response.bodyString())
         assertEquals(1, boardResponse.id)
+        assertEquals(name, database.getBoardDetails(1).name)
+        assertEquals(description, database.getBoardDetails(1).description)
     }
 
     @Test

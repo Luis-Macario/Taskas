@@ -1,6 +1,11 @@
-package pt.isel.ls.database.memory
+package pt.isel.ls.unit.database.memory
 
 import org.junit.Test
+import pt.isel.ls.database.memory.BoardNameAlreadyExistsException
+import pt.isel.ls.database.memory.BoardNotFoundException
+import pt.isel.ls.database.memory.TasksDataMem
+import pt.isel.ls.database.memory.UserAlreadyExistsInBoardException
+import pt.isel.ls.database.memory.UserNotFoundException
 import pt.isel.ls.domain.UserBoard
 import java.util.*
 import kotlin.test.assertEquals
@@ -36,7 +41,7 @@ class BoardTests {
             mem.createBoard(user.id, boardName, "Outra descrição")
         }
 
-        assertEquals("A board with that name already exists", msg.description)
+        assertEquals("A board with that name already exists", BoardNameAlreadyExistsException.description)
     }
 
     @Test
@@ -49,7 +54,7 @@ class BoardTests {
             mem.createBoard(100, boardName, "Outra descrição")
         }
 
-        assertEquals("A user with that id does not exist", msg.description)
+        assertEquals("A user with that id does not exist", UserNotFoundException.description)
     }
 
     @Test
@@ -79,7 +84,7 @@ class BoardTests {
         val msg = assertFailsWith<UserNotFoundException> {
             mem.addUserToBoard(100, board.id)
         }
-        assertEquals("A user with that id does not exist", msg.description)
+        assertEquals("A user with that id does not exist", UserNotFoundException.description)
     }
 
     @Test
@@ -90,7 +95,7 @@ class BoardTests {
         val msg = assertFailsWith<BoardNotFoundException> {
             mem.addUserToBoard(donkeyUser.id, 100)
         }
-        assertEquals("The board with the id provided doesn't exist", msg.description)
+        assertEquals("The board with the id provided doesn't exist", BoardNotFoundException.description)
     }
 
     @Test
@@ -102,7 +107,7 @@ class BoardTests {
         val msg = assertFailsWith<UserAlreadyExistsInBoardException> {
             mem.addUserToBoard(donkeyUser.id, board.id)
         }
-        assertEquals("A user already exists in that board", msg.description)
+        assertEquals("A user already exists in that board", UserAlreadyExistsInBoardException.description)
     }
 
     @Test
@@ -129,7 +134,7 @@ class BoardTests {
         val msg = assertFailsWith<BoardNotFoundException> {
             mem.getBoardDetails(100)
         }
-        assertEquals("The board with the id provided doesn't exist", msg.description)
+        assertEquals("The board with the id provided doesn't exist", BoardNotFoundException.description)
     }
 
     @Test
@@ -165,6 +170,6 @@ class BoardTests {
         val msg = assertFailsWith<BoardNotFoundException> {
             mem.getBoardsFromUser(donkeyUser.id)
         }
-        assertEquals("The board with the id provided doesn't exist", msg.description)
+        assertEquals("The board with the id provided doesn't exist", BoardNotFoundException.description)
     }
 }
