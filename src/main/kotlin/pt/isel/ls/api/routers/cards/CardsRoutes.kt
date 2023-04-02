@@ -34,6 +34,12 @@ class CardsRoutes(private val services: CardServices) {
         "/{cardID}/move" bind POST to ::moveCard
     )
 
+    /**
+     * Creates a new card
+     *
+     * @param request The request information
+     * @return the corresponding [Response]
+     */
     private fun createCard(request: Request): Response =
         runAndHandleExceptions {
             val cardRequest = request.getJsonBodyTo<CreateCardRequest>()
@@ -53,6 +59,12 @@ class CardsRoutes(private val services: CardServices) {
                 .json(cardResponse)
         }
 
+    /**
+     * Gets the details of a card
+     *
+     * @param request The request information
+     * @return the corresponding [Response]
+     */
     private fun getCardDetails(request: Request): Response =
         runAndHandleExceptions {
             val cardID = request.getCardID()
@@ -63,6 +75,12 @@ class CardsRoutes(private val services: CardServices) {
             Response(OK).json(cardResponse)
         }
 
+    /**
+     * Moves a card to a different list within the same board
+     *
+     * @param request The request information
+     * @return the corresponding [Response]
+     */
     private fun moveCard(request: Request): Response =
         runAndHandleExceptions {
             val cardID = request.getCardID()

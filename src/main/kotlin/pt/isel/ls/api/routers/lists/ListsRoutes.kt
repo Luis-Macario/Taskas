@@ -34,6 +34,12 @@ class ListsRoutes(private val services: ListServices) {
         "/{listID}/cards" bind GET to ::getCardsFromList
     )
 
+    /**
+     * Creates a new list
+     *
+     * @param request The request information
+     * @return the corresponding [Response]
+     */
     private fun createList(request: Request): Response =
         runAndHandleExceptions {
             val listRequest = request.getJsonBodyTo<CreateListRequest>()
@@ -51,16 +57,12 @@ class ListsRoutes(private val services: ListServices) {
                 .json(listResponse)
         }
 
-    private fun getCardsFromList(request: Request): Response =
-        runAndHandleExceptions {
-            val listID = request.getListID()
-            val bearerToken = request.getAuthorizationHeader()
-
-            val cards = services.getCardsFromList(bearerToken, listID)
-            val cardsResponse = GetCardFromListResponse(cards.map { it.toDTO() })
-            Response(OK).json(cardsResponse)
-        }
-
+    /**
+     * Gets the details of a list
+     *
+     * @param request The request information
+     * @return the corresponding [Response]
+     */
     private fun getListDetails(request: Request): Response =
         runAndHandleExceptions {
             val listID = request.getListID()
@@ -69,5 +71,21 @@ class ListsRoutes(private val services: ListServices) {
             val list = services.getList(bearerToken, listID)
             val listResponse = list.toDTO()
             Response(OK).json(listResponse)
+        }
+
+    /**
+     * Gets the list of Lists in a Card
+     *
+     * @param request The request information
+     * @return the corresponding [Response]
+     */
+    private fun getCardsFromList(request: Request): Response =
+        runAndHandleExceptions {
+            val listID = request.getListID()
+            val bearerToken = request.getAuthorizationHeader()
+
+            val cards = services.getCardsFromList(bearerToken, listID)
+            val cardsResponse = GetCardFromListResponse(cards.map { it.toDTO() })
+            Response(OK).json(cardsResponse)
         }
 }

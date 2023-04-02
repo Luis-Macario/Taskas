@@ -42,6 +42,12 @@ class BoardsRoutes(private val services: BoardServices) {
         "/{boardID}/lists" bind GET to ::getListsFromBoard
     )
 
+    /**
+     * Creates a new board
+     *
+     * @param request The request information
+     * @return the corresponding [Response]
+     */
     private fun createBoard(request: Request): Response =
         runAndHandleExceptions {
             val boardRequest = request.getJsonBodyTo<CreateBoardRequest>()
@@ -59,6 +65,12 @@ class BoardsRoutes(private val services: BoardServices) {
                 .json(boardResponse)
         }
 
+    /**
+     * Gets the details of a board
+     *
+     * @param request The request information
+     * @return the corresponding [Response]
+     */
     fun getBoardDetails(request: Request): Response =
         runAndHandleExceptions {
             val boardID = request.getBoardID()
@@ -70,6 +82,12 @@ class BoardsRoutes(private val services: BoardServices) {
             Response(OK).json(getBoardsDetails)
         }
 
+    /**
+     * Gets the list of users in a board
+     *
+     * @param request The request information
+     * @return the corresponding [Response]
+     */
     private fun getUsersFromBoard(request: Request): Response =
         runAndHandleExceptions {
             val boardID = request.getBoardID()
@@ -81,6 +99,12 @@ class BoardsRoutes(private val services: BoardServices) {
             Response(OK).json(getUsersResponse)
         }
 
+    /**
+     * Adds a user to a board
+     *
+     * @param request The request information
+     * @return the corresponding [Response]
+     */
     private fun addUserToBoard(request: Request): Response =
         runAndHandleExceptions {
             val boardID = request.getBoardID()
@@ -92,6 +116,12 @@ class BoardsRoutes(private val services: BoardServices) {
             Response(NO_CONTENT)
         }
 
+    /**
+     * Gets the list of Lists in a Board
+     *
+     * @param request The request information
+     * @return the corresponding [Response]
+     */
     private fun getListsFromBoard(request: Request): Response =
         runAndHandleExceptions {
             val boardID = request.getBoardID()

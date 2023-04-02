@@ -1,24 +1,27 @@
 package pt.isel.ls
 
+import pt.isel.ls.database.AppDatabase
 import pt.isel.ls.database.memory.TasksDataMem
+import pt.isel.ls.database.sql.TasksDataPostgres
 
 const val PORT_ENV = "PORT"
 const val DEFAULT_PORT = 8080
 const val JDBC_DATABASE_URL_ENV = "JDBC_DATABASE_URL"
 
 /**
- * Sports API application's entry point.
+ * Tasks API application's entry point.
  */
 fun main() {
     val jdbcDatabaseURL: String? = System.getenv(JDBC_DATABASE_URL_ENV)
     val port = System.getenv(PORT_ENV)?.toIntOrNull() ?: DEFAULT_PORT
-    /*
-    val database: AppDatabase = if (jdbcDatabaseURL != null)
-        TasksDataPG(jdbcDatabaseURL)
-    else
+    val database: AppDatabase = if (jdbcDatabaseURL != null) {
+        TasksDataPostgres(jdbcDatabaseURL)
+    } else {
         TasksDataMem()
-        */
-    val database = TasksDataMem()
+    }
 
-    TasksServer(port, database).also { it.start() }
+    TasksServer(port, database).also {
+        println("Starting the server. Listening at port $port.\nDatabase used is ${database::class.simpleName}")
+        it.start()
+    }
 }

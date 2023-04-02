@@ -4,12 +4,18 @@ import org.postgresql.ds.PGSimpleDataSource
 import pt.isel.ls.database.memory.BoardNotFoundException
 import pt.isel.ls.database.sql.TasksDataPostgres
 import java.sql.SQLException
-import kotlin.test.*
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertTrue
 
 class BoardTests {
 
+    private val url = System.getenv("JDBC_DATABASE_URL")
+
     private val dataSource = PGSimpleDataSource().apply {
-        this.setUrl(System.getenv("JDBC_DATABASE_URL"))
+        this.setUrl(url)
     }
 
     @BeforeTest
@@ -19,7 +25,7 @@ class BoardTests {
 
     @Test
     fun `createBoard creates a object board correctly`() {
-        val db = TasksDataPostgres()
+        val db = TasksDataPostgres(url)
         val boardName = "TODO Test Para Chess App"
         val boardDescription = "ISEL Project"
         val newBoard =
@@ -37,7 +43,7 @@ class BoardTests {
             val stm = it.prepareStatement(
                 """
                 SELECT name, description FROM boards WHERE  id = ?
-            """.trimIndent()
+                """.trimIndent()
             )
             stm.setInt(1, newBoard.id)
 
@@ -50,19 +56,18 @@ class BoardTests {
 
     @Test
     fun `create board throws BoardNameAlreadyExistsException when creating a board with a repeated name`() {
-        val db = TasksDataPostgres()
+        val db = TasksDataPostgres(url)
         val name = "TODO Test Para Chess App"
 
         db.createBoard(
-            uid = 1,            // User(1,Francisco Medeiros,a46631@alunos.isel.pt,160ee838-150b-4ca1-a2ff-2e964383c315)
+            uid = 1, // User(1,Francisco Medeiros,a46631@alunos.isel.pt,160ee838-150b-4ca1-a2ff-2e964383c315)
             name = name,
             description = "something to do"
         )
 
-
         assertFailsWith<SQLException> {
             db.createBoard(
-                uid = 1,            // User(1,Francisco Medeiros,a46631@alunos.isel.pt,160ee838-150b-4ca1-a2ff-2e964383c315)
+                uid = 1, // User(1,Francisco Medeiros,a46631@alunos.isel.pt,160ee838-150b-4ca1-a2ff-2e964383c315)
                 name = name,
                 description = "something to do"
             )
@@ -71,7 +76,7 @@ class BoardTests {
 
     @Test
     fun `create board throws SQLException when creating a board with a invalid uid`() {
-        val db = TasksDataPostgres()
+        val db = TasksDataPostgres(url)
         val uInvalidId = -1
 
         assertFailsWith<SQLException> {
@@ -85,7 +90,7 @@ class BoardTests {
 
     @Test
     fun `getBoard returns correct Board() after being created`() {
-        val db = TasksDataPostgres()
+        val db = TasksDataPostgres(url)
         val newBoard =
             db.createBoard(
                 uid = 1,
@@ -100,8 +105,8 @@ class BoardTests {
     }
 
     @Test
-    fun `getBoard throws BoardNotFoundException when used an invalid bid`(){
-        val db = TasksDataPostgres()
+    fun `getBoard throws BoardNotFoundException when used an invalid bid`() {
+        val db = TasksDataPostgres(url)
 
         assertFailsWith<BoardNotFoundException> {
             db.getBoardDetails(-1)
@@ -110,7 +115,7 @@ class BoardTests {
 
     @Test
     fun `addUserToBoard successfully adds user to the board`() {
-        val db = TasksDataPostgres()
+        val db = TasksDataPostgres(url)
         val newUser = db.createUser(
             "b8d9ac03-b1cf-4e01-b567-51762b98ec5c",
             "Francisco Ricardo Luis Gods",
@@ -123,7 +128,7 @@ class BoardTests {
             val stm = it.prepareStatement(
                 """
                 SELECT * FROM userboards WHERE bid = ? ORDER BY uid DESC LIMIT 1
-            """.trimIndent()
+                """.trimIndent()
             )
 
             stm.setInt(1, 1)
@@ -137,7 +142,7 @@ class BoardTests {
 
     @Test
     fun `getBoardsFromUser returns the correct Users`() {
-        val db = TasksDataPostgres()
+        val db = TasksDataPostgres(url)
         val boardName = "TODO Test Para Chess App"
         val boardDescription = "ISEL Project"
 
@@ -160,5 +165,4 @@ class BoardTests {
         assertEquals(newBoard3, boardList[2])
         assertEquals(newBoard4, boardList[3])
     }
-
 }

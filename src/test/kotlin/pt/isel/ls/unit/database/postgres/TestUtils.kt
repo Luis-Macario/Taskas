@@ -6,12 +6,12 @@ import java.io.File
 fun dropTableAndAddData(dataSource: PGSimpleDataSource) {
     dataSource.connection.use {
         it.createStatement().execute(
-            File("src/main/kotlin/pt/isel/ls/database/sql/createSchema.sql")
+            File("src/main/sql/createSchema.sql")
                 .readText()
         )
 
         it.createStatement().execute(
-            File("src/main/kotlin/pt/isel/ls/database/sql/addData.sql")
+            File("src/main/sql/addData.sql")
                 .readText()
         )
     }

@@ -33,6 +33,12 @@ class UsersRoutes(private val services: UserServices) {
         "/{userID}/boards" bind GET to ::getBoardsFromUser
     )
 
+    /**
+     * Creates a new user
+     *
+     * @param request The request information
+     * @return the corresponding [Response]
+     */
     private fun createUser(request: Request): Response =
         runAndHandleExceptions {
             val userRequest = request.getJsonBodyTo<CreateUserRequest>()
@@ -45,6 +51,12 @@ class UsersRoutes(private val services: UserServices) {
                 .json(userResponse)
         }
 
+    /**
+     * Gets the details of a user
+     *
+     * @param request The request information
+     * @return the corresponding [Response]
+     */
     private fun getUserDetails(request: Request): Response =
         runAndHandleExceptions {
             val uid = request.getUserID()
@@ -55,6 +67,12 @@ class UsersRoutes(private val services: UserServices) {
             Response(OK).json(userResponse)
         }
 
+    /**
+     * Gets the list of Boards in a User
+     *
+     * @param request The request information
+     * @return the corresponding [Response]
+     */
     private fun getBoardsFromUser(request: Request): Response =
         runAndHandleExceptions {
             val uid = request.getUserID()

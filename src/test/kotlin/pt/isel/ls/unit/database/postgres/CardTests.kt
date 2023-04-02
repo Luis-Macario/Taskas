@@ -6,11 +6,16 @@ import pt.isel.ls.database.memory.ListNotFoundException
 import pt.isel.ls.database.sql.TasksDataPostgres
 import java.sql.Date
 import java.sql.SQLException
-import kotlin.test.*
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class CardTests {
+    private val url = System.getenv("JDBC_DATABASE_URL")
+
     private val dataSource = PGSimpleDataSource().apply {
-        this.setUrl(System.getenv("JDBC_DATABASE_URL"))
+        this.setUrl(url)
     }
 
     @BeforeTest
@@ -20,7 +25,7 @@ class CardTests {
 
     @Test
     fun `createCard with valid parameters should create a card and return it`() {
-        val db = TasksDataPostgres()
+        val db = TasksDataPostgres(url)
 
         val lid = 1
         val name = "Unit tests"
@@ -42,7 +47,7 @@ class CardTests {
 
     @Test
     fun `createCard with invalid list ID should throw an ListNotFoundException`() {
-        val tasksData = TasksDataPostgres()
+        val tasksData = TasksDataPostgres(url)
         val listId = 1234
         val name = "Card name"
         val description = "Card description"
@@ -55,9 +60,9 @@ class CardTests {
 
     @Test
     fun `getCardsFromList returns correct list of cards`() {
-        val db = TasksDataPostgres()
+        val db = TasksDataPostgres(url)
 
-        val board = db.createBoard(1,"TODO Test Para Chess App","something to do" )
+        val board = db.createBoard(1, "TODO Test Para Chess App", "something to do")
         val list = db.createList(board.id, "My List")
 
         val card1 = db.createCard(list.id, "Card 1", "Description 1", Date.valueOf("2023-04-02"))
@@ -73,7 +78,7 @@ class CardTests {
 
     @Test
     fun `getCardsFromList returns emptyList if given a board without cards`() {
-        val db = TasksDataPostgres()
+        val db = TasksDataPostgres(url)
         val list = db.createList(1, "Test List")
 
         val sut = db.getCardsFromList(list.id)
@@ -83,7 +88,7 @@ class CardTests {
 
     @Test
     fun `getCardDetails returns correct card details`() {
-        val db = TasksDataPostgres()
+        val db = TasksDataPostgres(url)
 
         val board = db.createBoard(1, "TODO Test Para Chess App", "something to do")
         val list = db.createList(board.id, "List 1")
@@ -102,7 +107,7 @@ class CardTests {
 
     @Test
     fun `getCardDetails throws CardNotFoundException for non-existent card ID`() {
-        val db = TasksDataPostgres()
+        val db = TasksDataPostgres(url)
 
         assertFailsWith<CardNotFoundException> {
             db.getCardDetails(-1)
@@ -111,7 +116,7 @@ class CardTests {
 
     @Test
     fun `moveCard updates the card's list ID`() {
-        val db = TasksDataPostgres()
+        val db = TasksDataPostgres(url)
 
         val board = db.createBoard(1, "TODO Test Para Chess App", "something to do")
         val list1 = db.createList(board.id, "List 1")
@@ -127,7 +132,7 @@ class CardTests {
 
     @Test
     fun `moveCard throws SQLException if given wrong card ID or list ID`() {
-        val db = TasksDataPostgres()
+        val db = TasksDataPostgres(url)
 
         val board = db.createBoard(1, "TODO Test Para Chess App", "something to do")
         val list1 = db.createList(board.id, "List 1")
@@ -135,9 +140,9 @@ class CardTests {
         db.createCard(list1.id, "Card 1", "Description 1", Date.valueOf("2023-04-02"))
 
         val msg = assertFailsWith<SQLException> {
-            db.moveCard(1234, list2.id) }
+            db.moveCard(1234, list2.id)
+        }
 
         assertEquals("Updating card.lid failed, no rows affected.", msg.message)
     }
-
 }

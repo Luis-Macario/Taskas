@@ -9,6 +9,12 @@ import pt.isel.ls.api.TasksWebApi
 import pt.isel.ls.database.AppDatabase
 import pt.isel.ls.services.TasksServices
 
+/**
+ * Represents the Tasks Server
+ *
+ * @param port The port for the server to listen
+ * @param database the database the server will use to store information
+ */
 class TasksServer(port: Int, database: AppDatabase) {
     private val server: Http4kServer
 
@@ -23,10 +29,16 @@ class TasksServer(port: Int, database: AppDatabase) {
         server = app.asServer(Jetty(port))
     }
 
+    /**
+     * Starts the server
+     */
     fun start() {
         server.start()
     }
 
+    /**
+     * Stops the server
+     */
     fun stop() {
         server.stop()
     }

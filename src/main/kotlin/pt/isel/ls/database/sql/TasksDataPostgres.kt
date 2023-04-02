@@ -14,9 +14,9 @@ import java.sql.Date
 import java.sql.SQLException
 import java.sql.Statement
 
-class TasksDataPostgres : AppDatabase {
+class TasksDataPostgres(url: String) : AppDatabase {
     private val dataSource = PGSimpleDataSource().apply {
-        this.setUrl(System.getenv("JDBC_DATABASE_URL"))
+        this.setUrl(url)
     }
 
     override fun createUser(token: String, name: String, email: String): User {
