@@ -10,23 +10,38 @@ This document contains the relevant design and implementation aspects of LS proj
 
 The following diagram holds the Entity-Relationship model for the information managed by the system.
 
-(_include an image or a link to the conceptual diagram_)
+<img alt="EA Diagram" src="\2223-2-LEIC42D-G03\docs\EA_Diagram.png"/>
 
 We highlight the following aspects:
 
-* (_include a list of relevant design issues_)
+We designed the ER diagram to capture the main entities and their relationships in the system. The diagram includes the following entities: User, Board, List, and Card.
+
+One of the relevant design issues in this conceptual model is the relationship between the Board and the User entities. In our design, we have a many-to-many relationship, where a user can belong to multiple boards, and a board can have multiple users. This allows for flexibility in managing access to boards and users.
+
+Another important design issue is the relationship between Lists and Cards entities. In our model, we have a one-to-many relationship, where a list can have multiple cards, but a card can belong to only one list. This simplifies the organization of tasks and helps to maintain a clear hierarchy of information.
 
 The conceptual model has the following restrictions:
 
-* (_include a list of relevant design issues_)
+A User email and token must be unique; A Board name must be unique; A List name must be unique in the board; 
+
     
 ### Physical Model ###
 
-The physical model of the database is available in (_link to the SQL script with the schema definition_).
+The physical model of the database is available in [SQL Schema](src/main/kotlin/pt/isel/ls/database/sql/createSchema.sql).
 
 We highlight the following aspects of this model:
 
-* (_include a list of relevant design issues_)
+There are five tables: users, boards, taskLists, cards, and userBoards.
+
+The "users" table has a unique email and token for each user.
+
+The "boards" table has a unique name and a non-null description.
+
+The "taskLists" table has a non-null name and a boolean flag indicating whether it is archived or not.
+
+The "cards" table has a non-null name, description, initDate, and finishDate (defaulted to 9999-12-31).
+
+The "userBoards" table creates a many-to-many relationship between users and boards.
 
 ## Software organization
 
@@ -47,7 +62,10 @@ A request arrives in the TasksServer module, which currently only routes it to t
 The TasksWebApi module then routes the request into 1 of 4 possible routes: users, boards, lists, or cards. With each of those options having their own module, named {Entity}Routes.
 The Module for an entity, for example UsersRoutes, then extracts the relevant information from the request and passes it on to the TasksServices module.
 
-(_Inserir informação do TasksServices e do TasksDataMem_)
+(_Inserir informação do TasksServices)
+
+When a request is received by the TasksDataMem, it performs the requested function such as adding, updating a user/board/list/card in the in-memory data.
+
 
 When the relevant information arrives back to the {Entity}Routes, then the Response is made and sent back to the TasksServer, which delivers it to it's consumer.
 
@@ -63,9 +81,13 @@ When the relevant information arrives back to the {Entity}Routes, then the Respo
 
 ### Data Access
 
-(_describe any created classes to help on data access_).
+For data access we have two ways to do it:
 
-(_identify any non-trivial used SQL statements_).
+The TasksDataPostgres class, an implementation of the AppDatabase interface that interacts with a PostgreSQL database to perform create, read and update operations, for that we use an instance of PGSimpleDataSource to connect to a PostgreSQL database.
+
+The TasksDataMem class, an implementation of the AppDatabase interface that interacts with a in-memory data to perform create, read and update operations.
+
+These classes have various methods that perform different operations such as createUser, getUserDetails, getUsersFromBoard, createBoard, getBoardDetails, addUserToBoard, getBoardsFromUser, etc...
 
 ### Error Handling/Processing
 
