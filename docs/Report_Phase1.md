@@ -46,7 +46,9 @@ When more information is needed for a request, for example POST boards/boardID/u
 A request arrives in the TasksServer module, which currently only routes it to the TasksWebApi module.
 The TasksWebApi module then routes the request into 1 of 4 possible routes: users, boards, lists, or cards. With each of those options having their own module, named {Entity}Routes.
 The Module for an entity, for example UsersRoutes, then extracts the relevant information from the request and passes it on to the TasksServices module.
+
 (_Inserir informação do TasksServices e do TasksDataMem_)
+
 When the relevant information arrives back to the {Entity}Routes, then the Response is made and sent back to the TasksServer, which delivers it to it's consumer.
 
 (_describe how a request goes through the different elements of your solution_)
