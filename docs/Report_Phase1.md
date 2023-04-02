@@ -74,7 +74,7 @@ When the relevant information arrives back to the {Entity}Routes, then the Respo
 
 ### Connection Management
 
-(_describe how connections are created, used and disposed_, namely its relation with transaction scopes).
+Currently, we are using a simple connection to the database by utilizing the PGSimpleDataSource connection.
 
 ### Data Access
 
@@ -94,6 +94,5 @@ That exception is then handled in the TasksWebApi, which captures the Exception 
 
 ## Critical Evaluation
 
-(_enumerate the functionality that is not concluded and the identified defects_)
+We need to upgrade our database connection to better support transactions. In the next phase, we will implement the necessary changes.
 
-(_identify improvements to be made on the next phase_)
