@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.0.0
 info:
   description: Simple Task Management API
   version: "0.1.0"
@@ -8,9 +8,6 @@ info:
     url: 'https://www.gnu.org/licenses/agpl-3.0.en.html'
 
 servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/RicardoPinto26/TaskManagementApp/0.1.0
   - description: localhost
     url: http://localhost:8080/api
 
@@ -44,7 +41,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateUserResponse'
         '400':
-          description: Invalid Request Body
+          description: Invalid or Missing Request Body
           content:
             application/json:
               schema:
@@ -102,7 +99,7 @@ paths:
         - User Management
       summary: get all user available boards
       description: |
-        Get a list of all the boards available to the provided user
+        Get a list of all the boards availabe to the provided user
       parameters:
         - name: userID
           in: path
@@ -118,7 +115,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetUserBoardsResponse'
         '400':
-          description: Invalid ID provided
+          description: Invalid userID or Invalid Authentication
           content:
             application/json:
               schema:
@@ -126,13 +123,7 @@ paths:
         '401':
           $ref: '#/components/responses/UserNotAuthenticatedResponse'
         '403':
-          description: User doesn't have access to that user's boards
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-        '404':
-          description: No boards found
+          description: User doesn't have access to that user
           content:
             application/json:
               schema:
@@ -164,7 +155,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateBoardResponse'
         '400':
-          description: Invalid Request Body
+          description: Invalid or Missing Request Body, or invalid Authentication
           content:
             application/json:
               schema:
@@ -192,7 +183,7 @@ paths:
       parameters:
         - name: boardID
           in: path
-          description: The board's id
+          description: The boards's id
           required: true
           schema:
             type: integer
@@ -204,7 +195,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Board'
         '400':
-          description: Invalid ID provided
+          description: Invalid boardID or invalid Authentication
           content:
             application/json:
               schema:
@@ -235,7 +226,7 @@ paths:
         - Board Management
       summary: get all users
       description: |
-        Get a list of all the boards available to the provided user
+        Get a list of all the boards availabe to the provided user
       parameters:
         - name: boardID
           in: path
@@ -251,7 +242,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetBoardUsersResponse'
         '400':
-          description: Invalid ID provided
+          description: Invalid boardID or invalid Authentication
           content:
             application/json:
               schema:
@@ -260,6 +251,12 @@ paths:
           $ref: '#/components/responses/UserNotAuthenticatedResponse'
         '403':
           description: User doesn't have access to that board
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '404':
+          description: Board not found
           content:
             application/json:
               schema:
@@ -292,7 +289,7 @@ paths:
         '204':
           description: User was added
         '400':
-          description: Invalid Board ID or Invalid Request Body
+          description: Invalid Board ID, Invalid or Missing Request Body, or invalid Authentication
           content:
             application/json:
               schema:
@@ -301,6 +298,12 @@ paths:
           $ref: '#/components/responses/UserNotAuthenticatedResponse'
         '403':
           description: User doesn't have access to that board
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '404':
+          description: Board not Found
           content:
             application/json:
               schema:
@@ -338,7 +341,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetBoardsListsResponse'
         '400':
-          description: Invalid ID provided
+          description: Invalid boardID or invalid Authentication
           content:
             application/json:
               schema:
@@ -352,7 +355,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AppError'
         '404':
-          description: No Lists found
+          description: No Board found
           content:
             application/json:
               schema:
@@ -385,7 +388,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateListResponse'
         '400':
-          description: Invalid Board ID or Invalid Request Body
+          description: Invalid/Missing Request Body or Invalid Authentication
           content:
             application/json:
               schema:
@@ -394,6 +397,12 @@ paths:
           $ref: '#/components/responses/UserNotAuthenticatedResponse'
         '403':
           description: User doesn't have access to that board
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '404':
+          description: Board not Found
           content:
             application/json:
               schema:
@@ -432,7 +441,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/List'
         '400':
-          description: Invalid ID provided
+          description: Invalid ID provided or Invalid Authentication
           content:
             application/json:
               schema:
@@ -440,7 +449,7 @@ paths:
         '401':
           $ref: '#/components/responses/UserNotAuthenticatedResponse'
         '403':
-          description: User doesn't have access to that board
+          description: User doesn't have access to that list
           content:
             application/json:
               schema:
@@ -478,7 +487,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetListsCardsResponse'
         '400':
-          description: Invalid ID provided
+          description: Invalid listID or Invalid Authentication
           content:
             application/json:
               schema:
@@ -486,13 +495,13 @@ paths:
         '401':
           $ref: '#/components/responses/UserNotAuthenticatedResponse'
         '403':
-          description: User doesn't have access to that board
+          description: User doesn't have access to that list
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
         '404':
-          description: No Cards found
+          description: List not found
           content:
             application/json:
               schema:
@@ -525,7 +534,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateCardResponse'
         '400':
-          description: Invalid Board ID, List ID or Invalid Request Body
+          description: Invalid/Missing Request Body or Invalid Authentication
           content:
             application/json:
               schema:
@@ -533,7 +542,13 @@ paths:
         '401':
           $ref: '#/components/responses/UserNotAuthenticatedResponse'
         '403':
-          description: User doesn't have access to that board
+          description: User doesn't have access to that list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '404':
+          description: List Not Found
           content:
             application/json:
               schema:
@@ -571,7 +586,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Card'
         '400':
-          description: Invalid ID provided
+          description: Invalid cardID provided or Invalid Authentication
           content:
             application/json:
               schema:
@@ -579,7 +594,7 @@ paths:
         '401':
           $ref: '#/components/responses/UserNotAuthenticatedResponse'
         '403':
-          description: User doesn't have access to that board
+          description: User doesn't have access to that card
           content:
             application/json:
               schema:
@@ -620,7 +635,7 @@ paths:
         '204':
           description: the card's details
         '400':
-          description: Invalid ID provided
+          description: Invalid cardID, Invalid/Missing Request Body or Invalid Authentication
           content:
             application/json:
               schema:
@@ -629,6 +644,18 @@ paths:
           $ref: '#/components/responses/UserNotAuthenticatedResponse'
         '403':
           description: User doesn't have access to that card
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '404':
+          description: Card/List not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '422':
+          description: List is not on the same board as card
           content:
             application/json:
               schema:

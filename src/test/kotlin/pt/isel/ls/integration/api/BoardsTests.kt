@@ -454,7 +454,7 @@ class BoardsTests {
     }
 
     @Test
-    fun `POST to boards(slash))boardID(slash)users returns a 200 response if y`() {
+    fun `POST to boards(slash))boardID(slash)users returns a 204 response if successful`() {
         val userID = userB.id
         val requestBody = Json.encodeToString(AddUserRequest(userID))
         val response = app(
@@ -601,29 +601,6 @@ class BoardsTests {
     }
 
     @Test
-    fun `POST to boards(slash))boardID(slash)users returns a 409 response if user is already in board`() {
-        val userID = userA.id
-        val requestBody = Json.encodeToString(AddUserRequest(userID))
-
-        val response = app(
-            Request(Method.POST, "http://localhost:8080/boards/0/users").body(requestBody)
-                .header("Authorization", authHeaderA)
-        )
-
-        assertEquals(Status.CONFLICT, response.status)
-        assertEquals("application/json", response.header("content-type"))
-        val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
-        assertEquals(
-            ErrorResponse(
-                code = UserAlreadyExistsInBoardException.code,
-                name = UserAlreadyExistsInBoardException.javaClass.simpleName,
-                description = UserAlreadyExistsInBoardException.description
-            ),
-            errorResponse
-        )
-    }
-
-    @Test
     fun `POST to boards(slash))boardID(slash)users returns a 404 response if the board doesn't exist`() {
         val userID = userB.id
         val requestBody = Json.encodeToString(AddUserRequest(userID))
@@ -641,6 +618,29 @@ class BoardsTests {
                 code = BoardNotFoundException.code,
                 name = BoardNotFoundException.javaClass.simpleName,
                 description = BoardNotFoundException.description
+            ),
+            errorResponse
+        )
+    }
+
+    @Test
+    fun `POST to boards(slash))boardID(slash)users returns a 409 response if user is already in board`() {
+        val userID = userA.id
+        val requestBody = Json.encodeToString(AddUserRequest(userID))
+
+        val response = app(
+            Request(Method.POST, "http://localhost:8080/boards/0/users").body(requestBody)
+                .header("Authorization", authHeaderA)
+        )
+
+        assertEquals(Status.CONFLICT, response.status)
+        assertEquals("application/json", response.header("content-type"))
+        val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
+        assertEquals(
+            ErrorResponse(
+                code = UserAlreadyExistsInBoardException.code,
+                name = UserAlreadyExistsInBoardException.javaClass.simpleName,
+                description = UserAlreadyExistsInBoardException.description
             ),
             errorResponse
         )

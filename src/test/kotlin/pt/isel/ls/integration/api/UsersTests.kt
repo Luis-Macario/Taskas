@@ -188,22 +188,6 @@ class UsersTests {
     }
 
     @Test
-    fun `GET to users(slash)userID(slash)boards returns a 401 response if no Authentication header is present`() {
-        val response = app(Request(Method.GET, "http://localhost:8080/users/0/boards"))
-        assertEquals(Status.UNAUTHORIZED, response.status)
-        assertEquals("application/json", response.header("content-type"))
-        val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
-        assertEquals(
-            ErrorResponse(
-                code = NoAuthenticationException.code,
-                name = NoAuthenticationException.javaClass.simpleName,
-                description = NoAuthenticationException.description
-            ),
-            errorResponse
-        )
-    }
-
-    @Test
     fun `GET to users(slash)userID(slash)boards returns a 400 response if an invalid Authentication header is present`() {
         val response = app(
             Request(Method.GET, "http://localhost:8080/users/0/boards")
@@ -238,6 +222,23 @@ class UsersTests {
                 code = InvalidTokenException.code,
                 name = InvalidTokenException.javaClass.simpleName,
                 description = InvalidTokenException.description
+            ),
+            errorResponse
+        )
+    }
+
+    @Test
+    fun `GET to users(slash)userID(slash)boards returns a 401 response if no Authentication header is present`() {
+        val response = app(Request(Method.GET, "http://localhost:8080/users/0/boards"))
+
+        assertEquals(Status.UNAUTHORIZED, response.status)
+        assertEquals("application/json", response.header("content-type"))
+        val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
+        assertEquals(
+            ErrorResponse(
+                code = NoAuthenticationException.code,
+                name = NoAuthenticationException.javaClass.simpleName,
+                description = NoAuthenticationException.description
             ),
             errorResponse
         )
