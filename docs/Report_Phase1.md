@@ -90,7 +90,6 @@ These classes have various methods that perform different operations such as cre
 
 Any module under the TasksWebApi (or more specifically, it's {Entity}Routes) should throw an Exception when some type of problem is found, that results in the request not being fufilled.
 That exception is then handled in the TasksWebApi, which captures the Exception and returns an Error Response to the server module, containing the correct information about the Exception that was thrown.
-(_describe how errors are handled and their effects on the application behavior_).
 
 ## Critical Evaluation
 
