@@ -27,7 +27,7 @@ A User email and token must be unique; A Board name must be unique; A List name 
     
 ### Physical Model ###
 
-The physical model of the database is available in [SQL Schema](../src/main/kotlin/pt/isel/ls/database/sql/createSchema.sql).
+The physical model of the database is available in [SQL Schema](../src/main/sql/createSchema.sql).
 
 We highlight the following aspects of this model:
 
