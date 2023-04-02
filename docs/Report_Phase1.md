@@ -62,18 +62,15 @@ A request arrives in the TasksServer module, which currently only routes it to t
 The TasksWebApi module then routes the request into 1 of 4 possible routes: users, boards, lists, or cards. With each of those options having their own module, named {Entity}Routes.
 The Module for an entity, for example UsersRoutes, then extracts the relevant information from the request and passes it on to the TasksServices module.
 
-(_Inserir informação do TasksServices)
+The TasksServices module results from the aggregation of 4 different services concerning:UserServices, BoardServices, ListServices and CardServices.
+
+For actions that require user board access, for example getting all the boards belonging to a user, the TaskServices modules will check if the user has to appropriate access and,
+in case the user doesn't have the appropriate access the TaskServices module will throw and exception ( more on **Error Handling/Processing** ).
+If the user has the appropriate access, an appropriate request is made to the TaskDataMem.
 
 When a request is received by the TasksDataMem, it performs the requested function such as adding, updating a user/board/list/card in the in-memory data.
 
-
 When the relevant information arrives back to the {Entity}Routes, then the Response is made and sent back to the TasksServer, which delivers it to it's consumer.
-
-(_describe how a request goes through the different elements of your solution_)
-
-(_describe the relevant classes/functions used internally in a request_)
-
-(_describe how and where request parameters are validated_)
 
 ### Connection Management
 

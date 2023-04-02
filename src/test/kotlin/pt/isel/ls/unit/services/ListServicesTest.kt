@@ -7,6 +7,7 @@ import pt.isel.ls.services.cards.CardServices
 import pt.isel.ls.services.lists.ListServices
 import pt.isel.ls.services.users.UserServices
 import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
+import pt.isel.ls.services.utils.exceptions.IllegalListAccessException
 import java.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -62,7 +63,7 @@ class ListServicesTest {
         val board = bServices.createBoard(user.token, "TestProject", "TestDescription")
         val list = lServices.createList(user.token, board.id, "TestList")
 
-        assertFailsWith<IllegalBoardAccessException> {
+        assertFailsWith<IllegalListAccessException> {
             lServices.getList(
                 UUID.randomUUID().toString(),
                 list.id
@@ -88,12 +89,12 @@ class ListServicesTest {
     }
 
     @Test
-    fun `Calling  getCardsFromList with invalid user token should throw IllegalBoardAccessException`() {
+    fun `Calling  getCardsFromList with invalid user token should throw IllegalListAccessException`() {
         val user = uServices.createUser("Test User", "test_user@isel.pt")
         val board = bServices.createBoard(user.token, "TestProject", "TestDescription")
         val list = lServices.createList(user.token, board.id, "TestList")
 
-        assertFailsWith<IllegalBoardAccessException> {
+        assertFailsWith<IllegalListAccessException> {
             lServices.getCardsFromList(
                 UUID.randomUUID().toString(),
                 list.id
