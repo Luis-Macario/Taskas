@@ -15,7 +15,7 @@ CREATE TABLE users
 CREATE TABLE boards
 (
     id SERIAL PRIMARY KEY ,
-    name VARCHAR(100) NOT NULL CHECK ( char_length(name) > 20 ),
+    name VARCHAR(100) UNIQUE NOT NULL CHECK ( char_length(name) > 20 ),
     description VARCHAR(1000) NOT NULL CHECK ( char_length(description) > 0 )
 );
 

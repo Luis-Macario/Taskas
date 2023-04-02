@@ -109,7 +109,8 @@ class TasksDataPostgres : AppDatabase {
             stm.setString(1, email)
 
             val rs = stm.executeQuery()
-            return rs.next()
+            rs.next()
+            return rs.getBoolean(1)
         }
     }
 
@@ -119,11 +120,12 @@ class TasksDataPostgres : AppDatabase {
                 """
                 INSERT INTO boards (name, description) 
                 VALUES (?,?) 
-                """.trimIndent()
+                """.trimIndent(),
+                Statement.RETURN_GENERATED_KEYS
             )
 
             stm.setString(1, name)
-            stm.setString(1, description)
+            stm.setString(2, description)
 
             val affectedRows: Int = stm.executeUpdate()
             if (affectedRows == 0) {
@@ -157,7 +159,7 @@ class TasksDataPostgres : AppDatabase {
                 return Board(
                     id = rs.getInt("id"),
                     name = rs.getString("name"),
-                    description = rs.getString("descritpion")
+                    description = rs.getString("description")
                 )
             } else {
                 throw BoardNotFoundException
@@ -173,7 +175,8 @@ class TasksDataPostgres : AppDatabase {
                 """
                 INSERT INTO userboards 
                 values (?,?)
-                """.trimIndent()
+                """.trimIndent(),
+                Statement.RETURN_GENERATED_KEYS
             )
             stm.setInt(1, uid)
             stm.setInt(2, bid)
@@ -184,7 +187,7 @@ class TasksDataPostgres : AppDatabase {
             }
 
             val generatedKeys = stm.generatedKeys
-            val id = if (generatedKeys.next()) {
+            if (generatedKeys.next()) {
                 generatedKeys.getInt(1)
             } else {
                 throw SQLException("Adding a User to a Board failed, no ID obtained.")
@@ -227,7 +230,8 @@ class TasksDataPostgres : AppDatabase {
                 """
                 INSERT INTO tasklists (bid, name)
                 VALUES (?,?) 
-                """.trimIndent()
+                """.trimIndent(),
+                Statement.RETURN_GENERATED_KEYS
             )
 
             stm.setInt(1, bid)
@@ -254,10 +258,10 @@ class TasksDataPostgres : AppDatabase {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
-                SELECT b.id , b.name , b.description
+                SELECT tk.id , tk.bid , tk.name
                 FROM tasklists as tk
                 JOIN boards b on b.id = tk.bid
-                where tk.id = ?
+                where tk.bid = ?
                 """.trimIndent()
             )
             stm.setInt(1, bid)
@@ -312,7 +316,8 @@ class TasksDataPostgres : AppDatabase {
                 """
                 INSERT INTO cards (bid, lid, name, description, initdate)
                 VALUES (?,?,?,?,?) 
-                """.trimIndent()
+                """.trimIndent(),
+                Statement.RETURN_GENERATED_KEYS
             )
 
             val bid = getListDetails(lid).bid
@@ -321,7 +326,7 @@ class TasksDataPostgres : AppDatabase {
             stm.setInt(2, lid)
             stm.setString(3, name)
             stm.setString(4, description)
-            stm.setDate(4, dueDate)
+            stm.setDate(5, dueDate)
 
             val affectedRows: Int = stm.executeUpdate()
             if (affectedRows == 0) {
@@ -343,7 +348,7 @@ class TasksDataPostgres : AppDatabase {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
-                SELECT c.id, c.bid, c.name,+ c.description, c.initdate
+                SELECT c.id, c.bid,c.lid, c.name, c.description, c.initdate
                 FROM cards as c
                 JOIN tasklists t on t.id = c.lid
                 WHERE t.id = ?
@@ -359,9 +364,10 @@ class TasksDataPostgres : AppDatabase {
                     Card(
                         id = rs.getInt(1),
                         bid = rs.getInt(2),
-                        name = rs.getString(3),
-                        description = rs.getString(4),
-                        initDate = rs.getDate(5)
+                        lid = rs.getInt(3),
+                        name = rs.getString(4),
+                        description = rs.getString(5),
+                        initDate = rs.getDate(6)
                     )
                 )
             }
