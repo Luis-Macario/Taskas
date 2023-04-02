@@ -10,7 +10,7 @@ This document contains the relevant design and implementation aspects of LS proj
 
 The following diagram holds the Entity-Relationship model for the information managed by the system.
 
-<img alt="EA Diagram" src="\2223-2-LEIC42D-G03\docs\EA_Diagram.png"/>
+![EA Diagram](EA_Diagram.png)
 
 We highlight the following aspects:
 
@@ -27,7 +27,7 @@ A User email and token must be unique; A Board name must be unique; A List name 
     
 ### Physical Model ###
 
-The physical model of the database is available in [SQL Schema](src/main/kotlin/pt/isel/ls/database/sql/createSchema.sql).
+The physical model of the database is available in [SQL Schema](../src/main/kotlin/pt/isel/ls/database/sql/createSchema.sql).
 
 We highlight the following aspects of this model:
 
