@@ -32,13 +32,22 @@ We highlight the following aspects of this model:
 
 ### Open-API Specification ###
 
-(_include a link to the YAML file containing the Open-API Specification_)
+[Open-API Specification](task-management-api-spec.yaml)
 
 In our Open-API specification, we highlight the following aspects:
 
-(_include a list of relevant issues or details in your specification_)
+Each entity has it's own path:
+/users, /boards, /lists, /cards.
+
+When more information is needed for a request, for example POST boards/boardID/users, that information must come in the request body.
 
 ### Request Details
+
+A request arrives in the TasksServer module, which currently only routes it to the TasksWebApi module.
+The TasksWebApi module then routes the request into 1 of 4 possible routes: users, boards, lists, or cards. With each of those options having their own module, named {Entity}Routes.
+The Module for an entity, for example UsersRoutes, then extracts the relevant information from the request and passes it on to the TasksServices module.
+(_Inserir informação do TasksServices e do TasksDataMem_)
+When the relevant information arrives back to the {Entity}Routes, then the Response is made and sent back to the TasksServer, which delivers it to it's consumer.
 
 (_describe how a request goes through the different elements of your solution_)
 
@@ -58,6 +67,8 @@ In our Open-API specification, we highlight the following aspects:
 
 ### Error Handling/Processing
 
+Any module under the TasksWebApi (or more specifically, it's {Entity}Routes) should throw an Exception when some type of problem is found, that results in the request not being fufilled.
+That exception is then handled in the TasksWebApi, which captures the Exception and returns an Error Response to the server module, containing the correct information about the Exception that was thrown.
 (_describe how errors are handled and their effects on the application behavior_).
 
 ## Critical Evaluation
