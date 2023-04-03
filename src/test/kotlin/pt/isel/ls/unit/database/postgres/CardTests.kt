@@ -145,4 +145,28 @@ class CardTests {
 
         assertEquals("Updating card.lid failed, no rows affected.", msg.message)
     }
+
+    @Test
+    fun `deleteCard should delete the list given the id`(){
+        val db = TasksDataPostgres(url)
+
+        val board = db.createBoard(1, "TODO Test Para Chess App", "something to do")
+        val list = db.createList(board.id, "List 1")
+        val card = db.createCard(list.id, "Card 1", "Description 1", Date.valueOf("2023-04-02"))
+
+        db.deleteCard(card.id)
+
+        assertFailsWith<CardNotFoundException> {
+            db.getCardDetails(card.id)
+        }
+    }
+
+    @Test
+    fun `deleteCard should throw SQLException if given non-existent id`(){
+        val db = TasksDataPostgres(url)
+
+        assertFailsWith<SQLException> {
+            db.deleteCard(-1)
+        }
+    }
 }

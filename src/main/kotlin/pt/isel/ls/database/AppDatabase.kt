@@ -21,10 +21,12 @@ interface AppDatabase {
     fun getListsFromBoard(bid: Int): List<TaskList>
     fun getListDetails(lid: Int): TaskList
     fun checkListsFromSameBoard(l1: Int, l2: Int): Boolean
+    fun deleteList(lid: Int)
 
     fun createCard(lid: Int, name: String, description: String, dueDate: Date): Card
     fun getCardsFromList(lid: Int): List<Card>
     fun getCardDetails(cid: Int): Card
     fun moveCard(cid: Int, lid: Int)
+    fun deleteCard(cid: Int)
     fun tokenToId(bToken: String): Int
 }

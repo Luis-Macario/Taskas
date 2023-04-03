@@ -23,7 +23,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 " INSERT INTO  users(name, email, token) " +
-                    "VALUES (?,?,?)",
+                        "VALUES (?,?,?)",
                 Statement.RETURN_GENERATED_KEYS
             )
             stm.setString(1, name)
@@ -309,6 +309,23 @@ class TasksDataPostgres(url: String) : AppDatabase {
         TODO("Not yet implemented")
     }
 
+    override fun deleteList(lid: Int) {
+        dataSource.connection.use {
+            val stm = it.prepareStatement(
+                """
+                DELETE FROM tasklists WHERE id = ?
+            """.trimIndent()
+            )
+
+            stm.setInt(1, lid)
+
+            val affectedRows: Int = stm.executeUpdate()
+            if (affectedRows == 0) {
+                throw SQLException("Deleting list failed, no rows affected.")
+            }
+        }
+    }
+
     override fun createCard(lid: Int, name: String, description: String, dueDate: Date): Card {
         // TODO("Check for boardNotFound - services")
         dataSource.connection.use {
@@ -420,6 +437,24 @@ class TasksDataPostgres(url: String) : AppDatabase {
             }
         }
     }
+
+    override fun deleteCard(cid: Int) {
+        dataSource.connection.use {
+            val stm = it.prepareStatement(
+                """
+                DELETE FROM cards WHERE id = ?
+            """.trimIndent()
+            )
+
+            stm.setInt(1, cid)
+
+            val affectedRows: Int = stm.executeUpdate()
+            if (affectedRows == 0) {
+                throw SQLException("Delete card failed, no rows affected.")
+            }
+        }
+    }
+
 
     override fun tokenToId(bToken: String): Int {
         dataSource.connection.use {

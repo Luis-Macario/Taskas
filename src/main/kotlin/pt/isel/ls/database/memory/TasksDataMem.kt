@@ -184,6 +184,10 @@ class TasksDataMem : AppDatabase {
         TODO("Not yet implemented")
     }
 
+    override fun deleteList(lid: Int) {
+        taskLists.values.filter { it.id != lid }
+    }
+
     /**
      * Creates a new Card
      *
@@ -240,6 +244,10 @@ class TasksDataMem : AppDatabase {
         val c = getCardDetails(cid)
         if (!taskLists.values.any { it.id == lid }) throw ListNotFoundException
         cards[cid] = c.copy(lid = lid)
+    }
+
+    override fun deleteCard(cid: Int) {
+        cards.values.filter { it.id != cid }
     }
 
     /**

@@ -4,6 +4,7 @@ import org.postgresql.ds.PGSimpleDataSource
 import pt.isel.ls.database.memory.ListNotFoundException
 import pt.isel.ls.database.sql.TasksDataPostgres
 import pt.isel.ls.domain.TaskList
+import java.sql.SQLException
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -103,5 +104,26 @@ class ListTests {
         }
 
         assertEquals(ListNotFoundException.description, msg.description)
+    }
+
+    @Test
+    fun `deleteList should delete the list given the id`(){
+        val db = TasksDataPostgres(url)
+
+        val newList = db.createList(1, "TODO WEEk 12")
+        db.deleteList(newList.id)
+
+        assertFailsWith<ListNotFoundException> {
+            db.getListDetails(newList.id)
+        }
+    }
+
+    @Test
+    fun `deleteList should throw SQLException if given non-existent id`(){
+        val db = TasksDataPostgres(url)
+
+        assertFailsWith<SQLException> {
+            db.deleteList(-1)
+        }
     }
 }
