@@ -147,7 +147,7 @@ class CardTests {
     }
 
     @Test
-    fun `deleteCard should delete the list given the id`(){
+    fun `deleteCard should delete the list given the id`() {
         val db = TasksDataPostgres(url)
 
         val board = db.createBoard(1, "TODO Test Para Chess App", "something to do")
@@ -162,7 +162,7 @@ class CardTests {
     }
 
     @Test
-    fun `deleteCard should throw SQLException if given non-existent id`(){
+    fun `deleteCard should throw SQLException if given non-existent id`() {
         val db = TasksDataPostgres(url)
 
         assertFailsWith<SQLException> {

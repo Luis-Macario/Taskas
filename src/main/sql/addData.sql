@@ -8,9 +8,9 @@ INSERT INTO users(name, email, token)
 VALUES ('Luis Macario', 'a47671@alunos.isel.pt', '658baaa9-4035-415e-9674-6957704600ba');
 
 INSERT INTO boards(name, description)
-VALUES ('Start backend work #123', 'Backend work for the Compose Desktop project');
+VALUES ('Start backend work 123', 'Backend work for the Compose Desktop project');
 INSERT INTO boards(name, description)
-VALUES ('Start model work #12345', 'Create the package model for the Compose Desktop project');
+VALUES ('Start model work 12345', 'Create the package model for the Compose Desktop project');
 
 INSERT INTO tasklists(bid,name)
 VALUES (1,'To Do');

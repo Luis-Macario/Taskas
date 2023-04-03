@@ -107,7 +107,7 @@ class ListTests {
     }
 
     @Test
-    fun `deleteList should delete the list given the id`(){
+    fun `deleteList should delete the list given the id`() {
         val db = TasksDataPostgres(url)
 
         val newList = db.createList(1, "TODO WEEk 12")
@@ -119,7 +119,7 @@ class ListTests {
     }
 
     @Test
-    fun `deleteList should throw SQLException if given non-existent id`(){
+    fun `deleteList should throw SQLException if given non-existent id`() {
         val db = TasksDataPostgres(url)
 
         assertFailsWith<SQLException> {

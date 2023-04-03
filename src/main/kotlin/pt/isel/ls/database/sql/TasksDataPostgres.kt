@@ -23,7 +23,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 " INSERT INTO  users(name, email, token) " +
-                        "VALUES (?,?,?)",
+                    "VALUES (?,?,?)",
                 Statement.RETURN_GENERATED_KEYS
             )
             stm.setString(1, name)
@@ -314,7 +314,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
             val stm = it.prepareStatement(
                 """
                 DELETE FROM tasklists WHERE id = ?
-            """.trimIndent()
+                """.trimIndent()
             )
 
             stm.setInt(1, lid)
@@ -443,7 +443,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
             val stm = it.prepareStatement(
                 """
                 DELETE FROM cards WHERE id = ?
-            """.trimIndent()
+                """.trimIndent()
             )
 
             stm.setInt(1, cid)
@@ -454,7 +454,6 @@ class TasksDataPostgres(url: String) : AppDatabase {
             }
         }
     }
-
 
     override fun tokenToId(bToken: String): Int {
         dataSource.connection.use {
