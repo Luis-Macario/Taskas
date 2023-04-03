@@ -1,7 +1,9 @@
 package pt.isel.ls
 
+import org.http4k.routing.ResourceLoader
 import org.http4k.routing.bind
 import org.http4k.routing.routes
+import org.http4k.routing.singlePageApp
 import org.http4k.server.Http4kServer
 import org.http4k.server.Jetty
 import org.http4k.server.asServer
@@ -23,7 +25,8 @@ class TasksServer(port: Int, database: AppDatabase) {
         val webAPI = TasksWebApi(services)
 
         val app = routes(
-            "/api" bind webAPI.routes
+            "/api" bind webAPI.routes,
+            singlePageApp(ResourceLoader.Directory("static-content"))
         )
 
         server = app.asServer(Jetty(port))
