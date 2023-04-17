@@ -25,46 +25,27 @@ function createElement(tagName, ...stringsOrElements) {
 }
 
 function h1(string) {
-    const h1 = document.createElement("h1")
-    const text = document.createTextNode(string)
-    h1.appendChild(text)
-    return h1
+    return createElement("h1", string)
 }
 
 function ul(...listItems) {
-    const ul = document.createElement("ul")
-    listItems.forEach(item => {
-        ul.appendChild(item)
-    })
-    return ul
+    return createElement("ul", listItems)
 }
 
 function li(string) {
-    const li = document.createElement("li")
-    const text = document.createTextNode(string)
-    li.appendChild(text)
-    return li
+    return createElement("li", string)
 }
 
 function p(stringOrElement) {
-    const p = document.createElement("p")
-    const content = (typeof stringOrElement === "string") ? document.createTextNode(stringOrElement) : stringOrElement
-    p.appendChild(content)
-    return p
+    return createElement("p", stringOrElement)
 }
 
 function div(...elements) {
-    const div = document.createElement("div")
-    elements.forEach(element => {
-        div.appendChild(element)
-    })
-    return div
+    return createElement("div", elements)
 }
 
 function a(href, string) {
-    const a = document.createElement("a")
-    const text = document.createTextNode(string)
-    a.appendChild(text)
+    const a = createElement("a", string)
     a.href = href
     return a
 }
@@ -82,7 +63,10 @@ function getUser(mainContent, id) {
         headers: {
             "Authorization": "Bearer " + hardCodedBearer
         }
-    }).then(res => res.json())
+    }).then(res => {
+        if (res.status < 200 || res.status > 299) throw res.json()
+        return res.json()
+    })
         .then(user => {
             mainContent.replaceChildren(
                 div(
@@ -94,7 +78,11 @@ function getUser(mainContent, id) {
                     )
                 )
             )
-        })
+        }).catch(e => {
+        return e
+    }).then(error => {
+        showErrorResponse(mainContent, error)
+    })
 }
 
 async function getBoards(mainContent, id) {
@@ -104,7 +92,10 @@ async function getBoards(mainContent, id) {
             "Authorization": "Bearer " + hardCodedBearer
         }
     })
-        .then(res => res.json())
+        .then(res => {
+            if (res.status < 200 || res.status > 299) throw res.json()
+            return res.json()
+        })
         .then(boards => {
             mainContent.replaceChildren(
                 div(
@@ -117,7 +108,11 @@ async function getBoards(mainContent, id) {
                     })
                 )
             )
-        })
+        }).catch(e => {
+        return e
+    }).then(error => {
+        showErrorResponse(mainContent, error)
+    })
 }
 
 function getBoardDetails(mainContent, id) {
@@ -125,7 +120,10 @@ function getBoardDetails(mainContent, id) {
         headers: {
             "Authorization": "Bearer " + hardCodedBearer
         }
-    }).then(res => res.json())
+    }).then(res => {
+        if (res.status < 200 || res.status > 299) throw res.json()
+        return res.json()
+    })
         .then(board => {
             mainContent.replaceChildren(
                 div(
@@ -143,11 +141,167 @@ function getBoardDetails(mainContent, id) {
     })
 }
 
+function getUsersFromBoard(mainContent, id) {
+    fetch(API_BASE_URL + `boards/${id}/users`, {
+        headers: {
+            "Authorization": "Bearer " + hardCodedBearer
+        }
+    })
+        .then(res => {
+            if (res.status < 200 || res.status > 299) throw res.json()
+            return res.json()
+        })
+        .then(users => {
+            mainContent.replaceChildren(
+                div(
+                    h1("Users"),
+                    ...users.users.map(s => {
+                        return p(
+                            a("#users/" + s.id, "User " + s.id)
+                        )
+
+                    })
+                )
+            )
+        }).catch(e => {
+        return e
+    }).then(error => {
+        showErrorResponse(mainContent, error)
+    })
+}
+
+function getListsFromBoard(mainContent, id) {
+    fetch(API_BASE_URL + `boards/${id}/lists`, {
+        headers: {
+            "Authorization": "Bearer " + hardCodedBearer
+        }
+    })
+        .then(res => {
+            if (res.status < 200 || res.status > 299) throw res.json()
+            return res.json()
+        })
+        .then(lists => {
+            mainContent.replaceChildren(
+                div(
+                    h1("Lists"),
+                    ...lists.lists.map(s => {
+                        return p(
+                            a("#lists/" + s.id, "List " + s.id)
+                        )
+
+                    })
+                )
+            )
+        }).catch(e => {
+        return e
+    }).then(error => {
+        showErrorResponse(mainContent, error)
+    })
+}
+
+function getList(mainContent, id) {
+    fetch(API_BASE_URL + `lists/${id}`, {
+        headers: {
+            "Authorization": "Bearer " + hardCodedBearer
+        }
+    })
+        .then(res => {
+            if (res.status < 200 || res.status > 299) throw res.json()
+            return res.json()
+        })
+        .then(list => {
+            mainContent.replaceChildren(
+                div(
+                    h1("List Info"),
+                    ul(
+                        li(`Name: ${list.name}`),
+                        li(`id: ${list.id}`),
+                    )
+                )
+            )
+        }).catch(e => {
+        return e
+    }).then(error => {
+        showErrorResponse(mainContent, error)
+    })
+}
+
+function getCardsFromList(mainContent, id) {
+    fetch(API_BASE_URL + `lists/${id}/cards`, {
+        headers: {
+            "Authorization": "Bearer " + hardCodedBearer
+        }
+    })
+        .then(res => {
+            if (res.status < 200 || res.status > 299) throw res.json()
+            return res.json()
+        })
+        .then(cards => {
+            mainContent.replaceChildren(
+                div(
+                    h1("Cards"),
+                    ...cards.cards.map(s => {
+                        return p(
+                            a("#cards/" + s.id, "Card " + s.id)
+                        )
+
+                    })
+                )
+            )
+        }).catch(e => {
+        return e
+    }).then(error => {
+        showErrorResponse(mainContent, error)
+    })
+}
+
+function showErrorResponse(mainContent, error) {
+    console.log(error)
+    mainContent.replaceChildren(
+        div(
+            h1(`${error.code} ${error.name}`),
+            p(`${error.description}`)
+        )
+    )
+}
+
+function getCard(mainContent, id) {
+    fetch(API_BASE_URL + `cards/${id}`, {
+        headers: {
+            "Authorization": "Bearer " + hardCodedBearer
+        }
+    })
+        .then(res => {
+            if (res.status < 200 || res.status > 299) throw res.json()
+            return res.json()
+        })
+        .then(card => {
+            mainContent.replaceChildren(
+                div(
+                    h1("Card Info"),
+                    ul(
+                        li(`Name: ${card.name}`),
+                        li(`id: ${card.id}`),
+                    )
+                )
+            )
+        }).catch(e => {
+        return e
+    }).then(error => {
+        showErrorResponse(mainContent, error)
+    })
+}
+
 export const handlers = {
     getHome,
     getUser,
     getBoards,
-    getBoardDetails
+    getBoardDetails,
+    getUsersFromBoard,
+    getListsFromBoard,
+    getList,
+    getCardsFromList,
+    getCard
 }
 
 export default handlers
