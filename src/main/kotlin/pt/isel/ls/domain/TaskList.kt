@@ -7,7 +7,7 @@ import pt.isel.ls.services.utils.validId
  *
  * @property id List's unique identifier
  * @property bid id of the Board that created the list
- * @property name List's unique identifier
+ * @property name List's name
  */
 data class TaskList(
     val id: Int,

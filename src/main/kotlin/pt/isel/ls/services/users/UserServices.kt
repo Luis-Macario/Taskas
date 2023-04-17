@@ -1,7 +1,7 @@
 package pt.isel.ls.services.users
 
 import pt.isel.ls.database.AppDatabase
-import pt.isel.ls.domain.Board
+import pt.isel.ls.domain.SimpleBoard
 import pt.isel.ls.domain.User
 import pt.isel.ls.services.utils.checkToken
 import pt.isel.ls.services.utils.exceptions.IllegalUserAccessException
@@ -38,7 +38,7 @@ class UserServices(private val database: AppDatabase) {
      *
      * @return List of board objects
      */
-    fun getBoardsFromUser(token: String, uid: Int): List<Board> {
+    fun getBoardsFromUser(token: String, uid: Int): List<SimpleBoard> {
         checkToken(token)
         val user = database.getUserDetails(uid)
         if (user.token != token) throw IllegalUserAccessException

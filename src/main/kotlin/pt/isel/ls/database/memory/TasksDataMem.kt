@@ -3,9 +3,12 @@ package pt.isel.ls.database.memory
 import pt.isel.ls.database.AppDatabase
 import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.Card
+import pt.isel.ls.domain.SimpleBoard
+import pt.isel.ls.domain.SimpleList
 import pt.isel.ls.domain.TaskList
 import pt.isel.ls.domain.User
 import pt.isel.ls.domain.UserBoard
+import pt.isel.ls.domain.toSimpleBoard
 import java.sql.Date
 
 class TasksDataMem : AppDatabase {
@@ -83,7 +86,7 @@ class TasksDataMem : AppDatabase {
         if (!users.values.any { it.id == uid }) throw UserNotFoundException
         if (boards.values.any { it.name == name }) throw BoardNameAlreadyExistsException
 
-        val newBoard = Board(id, name, description)
+        val newBoard = Board(id, name, description, emptyList())
         boards[id] = newBoard
         addUserToBoard(uid, id)
 
@@ -97,7 +100,7 @@ class TasksDataMem : AppDatabase {
      * @throws BoardNotFoundException if the board was not found
      * @return the Board() details
      */
-    override fun getBoardDetails(bid: Int): Board = boards[bid] ?: throw BoardNotFoundException
+    override fun getBoardDetails(bid: Int): SimpleBoard = boards[bid]?.toSimpleBoard() ?: throw BoardNotFoundException
 
     /**
      * Add a User to a Board
@@ -126,7 +129,7 @@ class TasksDataMem : AppDatabase {
      * @return list of boards from that User
      */
     // TODO("Should we throw the UsersBoardDoesNotExist ??")
-    override fun getBoardsFromUser(uid: Int): List<Board> =
+    override fun getBoardsFromUser(uid: Int): List<SimpleBoard> =
         userBoard.values
             .filter { it.uId == uid }
             .map { board ->
@@ -150,6 +153,9 @@ class TasksDataMem : AppDatabase {
         val newList = TaskList(id, bid, name)
         taskLists[id] = newList
 
+        val board = boards[bid]
+        if (board != null) board.lists += SimpleList(id, name)
+
         return newList
     }
 
@@ -161,12 +167,12 @@ class TasksDataMem : AppDatabase {
      * @throws BoardNotFoundException if the board was not found
      * @return the list of TaskList from that Board
      */
-    override fun getListsFromBoard(bid: Int): List<TaskList> {
+    override fun getListsFromBoard(bid: Int): List<SimpleList> {
         if (!boards.values.any { it.id == bid }) throw BoardNotFoundException
         return taskLists.values
             .filter { it.bid == bid }
             .map {
-                getListDetails(it.id)
+                SimpleList(it.id, it.name)
             }
     }
 

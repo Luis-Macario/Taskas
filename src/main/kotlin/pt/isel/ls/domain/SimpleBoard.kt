@@ -10,11 +10,10 @@ import pt.isel.ls.services.utils.validId
  * @property description a small description of the project, empty string by default
  * @property name project's name
  */
-data class Board(
+data class SimpleBoard(
     val id: Int,
     val name: String,
-    val description: String,
-    var lists: List<SimpleList>
+    val description: String
 ) {
     companion object {
         const val MAX_NAME_LENGTH = 100
@@ -38,3 +37,5 @@ data class Board(
         require(validId(id)) { "Invalid board id: $id" }
     }
 }
+
+fun Board.toSimpleBoard() = SimpleBoard(this.id, this.name, this.description)
