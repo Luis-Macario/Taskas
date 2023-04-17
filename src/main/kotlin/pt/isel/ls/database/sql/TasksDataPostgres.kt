@@ -8,6 +8,8 @@ import pt.isel.ls.database.memory.ListNotFoundException
 import pt.isel.ls.database.memory.UserNotFoundException
 import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.Card
+import pt.isel.ls.domain.SimpleBoard
+import pt.isel.ls.domain.SimpleList
 import pt.isel.ls.domain.TaskList
 import pt.isel.ls.domain.User
 import java.sql.Date
@@ -141,11 +143,11 @@ class TasksDataPostgres(url: String) : AppDatabase {
 
             addUserToBoard(uid, id)
 
-            return Board(id, name, description)
+            return Board(id, name, description, emptyList())
         }
     }
 
-    override fun getBoardDetails(bid: Int): Board {
+    override fun getBoardDetails(bid: Int): SimpleBoard {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
@@ -156,7 +158,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
 
             val rs = stm.executeQuery()
             if (rs.next()) {
-                return Board(
+                return SimpleBoard(
                     id = rs.getInt("id"),
                     name = rs.getString("name"),
                     description = rs.getString("description")
@@ -195,7 +197,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
-    override fun getBoardsFromUser(uid: Int): List<Board> {
+    override fun getBoardsFromUser(uid: Int): List<SimpleBoard> {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
@@ -208,11 +210,11 @@ class TasksDataPostgres(url: String) : AppDatabase {
             stm.setInt(1, uid)
 
             val rs = stm.executeQuery()
-            val boardList = mutableListOf<Board>()
+            val boardList = mutableListOf<SimpleBoard>()
 
             while (rs.next()) {
                 boardList.add(
-                    Board(
+                    SimpleBoard(
                         id = rs.getInt("id"),
                         name = rs.getString("name"),
                         description = rs.getString("description")
@@ -253,7 +255,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
-    override fun getListsFromBoard(bid: Int): List<TaskList> {
+    override fun getListsFromBoard(bid: Int): List<SimpleList> {
         // TODO("check for BoardNotFound - sevices")
         dataSource.connection.use {
             val stm = it.prepareStatement(
@@ -267,18 +269,17 @@ class TasksDataPostgres(url: String) : AppDatabase {
             stm.setInt(1, bid)
 
             val rs = stm.executeQuery()
-            val tasksList = mutableListOf<TaskList>()
+            val simpleList = mutableListOf<SimpleList>()
 
             while (rs.next()) {
-                tasksList.add(
-                    TaskList(
+                simpleList.add(
+                    SimpleList(
                         id = rs.getInt(1),
-                        bid = rs.getInt(2),
                         name = rs.getString(3)
                     )
                 )
             }
-            return tasksList.toList()
+            return simpleList.toList()
         }
     }
 

@@ -2,6 +2,8 @@ package pt.isel.ls.database
 
 import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.Card
+import pt.isel.ls.domain.SimpleBoard
+import pt.isel.ls.domain.SimpleList
 import pt.isel.ls.domain.TaskList
 import pt.isel.ls.domain.User
 import java.sql.Date
@@ -13,12 +15,12 @@ interface AppDatabase {
     fun checkEmailAlreadyExists(email: String): Boolean
 
     fun createBoard(uid: Int, name: String, description: String): Board
-    fun getBoardDetails(bid: Int): Board
+    fun getBoardDetails(bid: Int): SimpleBoard
     fun addUserToBoard(uid: Int, bid: Int)
-    fun getBoardsFromUser(uid: Int): List<Board>
+    fun getBoardsFromUser(uid: Int): List<SimpleBoard>
 
     fun createList(bid: Int, name: String): TaskList
-    fun getListsFromBoard(bid: Int): List<TaskList>
+    fun getListsFromBoard(bid: Int): List<SimpleList>
     fun getListDetails(lid: Int): TaskList
     fun checkListsFromSameBoard(l1: Int, l2: Int): Boolean
     fun deleteList(lid: Int)

@@ -9,8 +9,7 @@ function addDefaultNotFoundRouteHandler(notFoundRH) {
 }
 
 function getRouteHandler(path){
-    const myPath = path.replace(/[0-9]+/g, '')
-    const route = routes.find(r => r.path === myPath)
+    const route = routes.find(r => r.path === path)
     return route ? route.handler : notFoundRouteHandler
 }
 

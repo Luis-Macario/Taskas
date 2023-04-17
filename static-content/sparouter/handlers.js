@@ -13,6 +13,17 @@ or
 Note: You have to use the DOM Api, but not directly
 */
 
+const hardCodedBearer = "160ee838-150b-4ca1-a2ff-2e964383c315"
+
+function createElement(tagName, ...stringsOrElements) {
+    const element = document.createElement(tagName)
+    stringsOrElements.forEach(item => {
+        const content = (typeof item === "string") ? document.createTextNode(item) : item
+        element.appendChild(content)
+    })
+    return element
+}
+
 function h1(string) {
     const h1 = document.createElement("h1")
     const text = document.createTextNode(string)
@@ -66,28 +77,31 @@ function getHome(mainContent) {
     )
 }
 
-function getUser(mainContent) {
-    fetch(API_BASE_URL + "users/2", {
+function getUser(mainContent, id) {
+    fetch(API_BASE_URL + "users/" + id, {
         headers: {
-            "Authorization": "Bearer 12971dc2-6816-4851-b110-e19065747785"
+            "Authorization": "Bearer " + hardCodedBearer
         }
     }).then(res => res.json())
         .then(user => {
             mainContent.replaceChildren(
                 div(
                     h1("User Details"),
-                    p(`Name: ${user.name}`),
-                    p(`Email: ${user.email}`),
-                    p(`id: ${user.id}`)
+                    ul(
+                        li(`Name: ${user.name}`),
+                        li(`Email: ${user.email}`),
+                        li(`id: ${user.id}`),
+                    )
                 )
             )
         })
 }
 
-function getBoards(mainContent) {
-    fetch(API_BASE_URL + "users/2/boards", {
+async function getBoards(mainContent, id) {
+
+    fetch(API_BASE_URL + `users/${id}/boards`, {
         headers: {
-            "Authorization": "Bearer 12971dc2-6816-4851-b110-e19065747785"
+            "Authorization": "Bearer " + hardCodedBearer
         }
     })
         .then(res => res.json())
@@ -97,7 +111,7 @@ function getBoards(mainContent) {
                     h1("Boards"),
                     ...boards.boards.map(s => {
                         return p(
-                            a("#board/" + s.id, "Link Example to boards/" + s.id)
+                            a("#boards/" + s.id, "Link Example to boards/" + s.id)
                         )
 
                     })
@@ -109,17 +123,24 @@ function getBoards(mainContent) {
 function getBoardDetails(mainContent, id) {
     fetch(API_BASE_URL + `boards/${id}`, {
         headers: {
-            "Authorization": "Bearer 12971dc2-6816-4851-b110-e19065747785"
+            "Authorization": "Bearer " + hardCodedBearer
         }
     }).then(res => res.json())
         .then(board => {
             mainContent.replaceChildren(
                 div(
                     h1(board.name),
-                    p(board.description)
+                    p(board.description),
+                    ...board.lists.map( l =>
+                        a("#lists/" + l.id, "Link Example to lists/" + l.id)
+                    )
                 )
             )
-        })
+        }).catch(e => {
+        return e
+    }).then(error => {
+        showErrorResponse(mainContent, error)
+    })
 }
 
 export const handlers = {
