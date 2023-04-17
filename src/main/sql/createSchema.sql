@@ -32,6 +32,7 @@ CREATE TABLE cards
     id SERIAL PRIMARY KEY,
     bid INT references boards(id) ON DELETE CASCADE ON UPDATE CASCADE,
     lid INT references taskLists(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    indexList INT NOT NULL CHECK ( indexList >= 0 ),
     name VARCHAR(100) NOT NULL,
     description VARCHAR(1000) NOT NULL,
     initDate DATE NOT NULL,

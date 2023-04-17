@@ -59,8 +59,8 @@ class ListTests {
         val bid = 1
         val listTaskList = listOf(
             TaskList(1, bid, "To Do"),
-            TaskList(3, bid, "Done"),
-            TaskList(5, bid, "Doing")
+            TaskList(2, bid, "Doing"),
+            TaskList(3, bid, "Done")
         )
 
         val sut = db.getListsFromBoard(bid)

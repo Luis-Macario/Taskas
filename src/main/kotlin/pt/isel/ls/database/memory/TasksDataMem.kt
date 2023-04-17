@@ -213,7 +213,7 @@ class TasksDataMem : AppDatabase {
      * @throws ListNotFoundException if the list was not found
      * @return list of cards from a TaskList
      */
-    override fun getCardsFromList(lid: Int): List<Card> {
+    override fun getCardsFromList(lid: Int, bid: Int): List<Card> {
         if (!taskLists.values.any { it.id == lid }) throw ListNotFoundException
         return cards.values
             .filter { it.lid == lid }
@@ -240,7 +240,7 @@ class TasksDataMem : AppDatabase {
      *
      * @throws ListNotFoundException if the list was not found
      */
-    override fun moveCard(cid: Int, lid: Int) {
+    override fun moveCard(cid: Int, lid: Int, cix: Int) {
         val c = getCardDetails(cid)
         if (!taskLists.values.any { it.id == lid }) throw ListNotFoundException
         cards[cid] = c.copy(lid = lid)

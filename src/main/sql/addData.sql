@@ -15,24 +15,32 @@ VALUES ('Start model work 12345', 'Create the package model for the Compose Desk
 INSERT INTO tasklists(bid,name)
 VALUES (1,'To Do');
 INSERT INTO tasklists(bid,name)
-VALUES (2,'Doing');
+VALUES (1,'Doing');
 INSERT INTO tasklists(bid,name)
 VALUES (1,'Done');
 INSERT INTO tasklists(bid,name)
 VALUES (2,'To Do');
 INSERT INTO tasklists(bid,name)
-VALUES (1,'Doing');
+VALUES (2,'Doing');
 INSERT INTO tasklists(bid,name)
 VALUES (2,'Done');
 
-INSERT INTO cards(bid, lid, name, description, initdate)
-VALUES (1, 1, 'Creating X', 'Creating X using Y', Date('2023-03-27'));
-INSERT INTO cards(bid, lid, name, description, initdate)
-VALUES (1, 2, 'Creating Z', 'Creating Z using Y', Date('2023-03-27'));
-INSERT INTO cards(bid, lid, name, description, initdate)
-VALUES (2, 1, 'Creating X', 'Creating X using Y', Date('2023-03-27'));
-INSERT INTO cards(bid, lid, name, description, initdate)
-VALUES (2, 2, 'Creating Z', 'Creating Z using Y', Date('2023-03-27'));
+INSERT INTO cards(bid, lid,indexList,  name, description, initdate)
+VALUES (1, 1, 1, 'Creating X1', 'Creating X using Y', Date('2023-03-27'));
+INSERT INTO cards(bid, lid, indexlist, name, description, initdate)
+VALUES (1, 1, 2 , 'Creating Z2', 'Creating Z using Y', Date('2023-03-27'));
+INSERT INTO cards(bid, lid, indexList, name, description, initdate)
+VALUES (1, 1, 3,  'Creating X3', 'Creating X using Y', Date('2023-03-27'));
+INSERT INTO cards(bid, lid, indexList, name, description, initdate)
+VALUES (1, 2, 1, 'Creating Z4', 'Creating Z using Y', Date('2023-03-27'));
+INSERT INTO cards(bid, lid,indexList,  name, description, initdate)
+VALUES (1, 2, 2, 'Creating X1', 'Creating X using Y', Date('2023-03-27'));
+INSERT INTO cards(bid, lid, indexlist, name, description, initdate)
+VALUES (1, 2, 3 , 'Creating Z2', 'Creating Z using Y', Date('2023-03-27'));
+INSERT INTO cards(bid, lid, indexList, name, description, initdate)
+VALUES (2, 1, 1,  'Creating X3', 'Creating X using Y', Date('2023-03-27'));
+INSERT INTO cards(bid, lid, indexList, name, description, initdate)
+VALUES (2, 1, 2, 'Creating Z4', 'Creating Z using Y', Date('2023-03-27'));
 
 INSERT INTO userboards
 VALUES (1, 1);
