@@ -84,7 +84,7 @@ class CardTests {
                 mem.createCard(lId, "Team Work4", "some work 4".repeat(1), cardDate).id
             )
 
-        val sut = mem.getCardsFromList(lId,bId)
+        val sut = mem.getCardsFromList(lId, bId)
 
         assertEquals(listOf(c, c2, c3, c4), sut)
     }
@@ -103,12 +103,12 @@ class CardTests {
         mem.cards[1] = Card(2, bId, lId, "Team Work ", "some work ".repeat(1), cardDate)
 
         val msg = assertFailsWith<CardNotFoundException> {
-            mem.getCardsFromList(lId,bId)
+            mem.getCardsFromList(lId, bId)
         }
         assertEquals(msg.description, CardNotFoundException.description)
 
         val msg2 = assertFailsWith<ListNotFoundException> {
-            mem.getCardsFromList(100,bId)
+            mem.getCardsFromList(100, bId)
         }
         assertEquals(msg2.description, ListNotFoundException.description)
     }
@@ -125,7 +125,7 @@ class CardTests {
         assertEquals(0, mem.cards[0]?.lid)
 
         val newList = mem.createList(bId, "Some work ")
-        mem.moveCard(cId, newList.id,0)
+        mem.moveCard(cId, newList.id, 0)
         assertEquals(newList.id, mem.cards[0]?.lid)
     }
 
@@ -139,7 +139,7 @@ class CardTests {
         val cId = mem.createCard(lId, "Team Work ", "some work ".repeat(1), Date.valueOf("2025-1-26")).id
 
         val msg = assertFailsWith<ListNotFoundException> {
-            mem.moveCard(cId, 10,0)
+            mem.moveCard(cId, 10, 0)
         }
         assertEquals(msg.description, ListNotFoundException.description)
     }
@@ -154,7 +154,7 @@ class CardTests {
         val invalidCardId = 10
 
         val msg = assertFailsWith<CardNotFoundException> {
-            mem.moveCard(invalidCardId, lId,0)
+            mem.moveCard(invalidCardId, lId, 0)
         }
         assertEquals(msg.description, CardNotFoundException.description)
     }

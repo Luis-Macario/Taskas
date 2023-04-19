@@ -25,7 +25,7 @@ interface AppDatabase {
     fun deleteList(lid: Int)
 
     fun createCard(lid: Int, name: String, description: String, dueDate: Date): Card
-    fun getCardsFromList(lid: Int, bid: Int, ): List<Card>
+    fun getCardsFromList(lid: Int, bid: Int): List<Card>
     fun getCardDetails(cid: Int): Card
     fun moveCard(cid: Int, lid: Int, cix: Int)
     fun deleteCard(cid: Int)

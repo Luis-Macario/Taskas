@@ -84,6 +84,6 @@ class CardServices(private val database: AppDatabase) {
         if (card.bid != destList.bid) throw IllegalMoveCardRequestException
         if (!users.any { it.token == token }) throw IllegalCardAccessException
 
-        database.moveCard(cid, request.listID, 0 )
+        database.moveCard(cid, request.listID, 0)
     }
 }

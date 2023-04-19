@@ -27,7 +27,7 @@ class ListServices(private val database: AppDatabase) {
         if (!users.any { it.token == token }) throw IllegalBoardAccessException
 
         val simpleList = database.createList(bid, name)
-        val cards = database.getCardsFromList(simpleList.id)
+        val cards = database.getCardsFromList(simpleList.id, bid)
 
         return TaskList(simpleList.id, bid, name, false, cards)
     }
@@ -47,7 +47,7 @@ class ListServices(private val database: AppDatabase) {
         val users = database.getUsersFromBoard(simpleList.bid)
         if (!users.any { it.token == token }) throw IllegalListAccessException
 
-        val cards = database.getCardsFromList(simpleList.id)
+        val cards = database.getCardsFromList(simpleList.id, simpleList.bid)
 
         return TaskList(
             lid,
@@ -72,6 +72,6 @@ class ListServices(private val database: AppDatabase) {
         val list = database.getListDetails(lid)
         val users = database.getUsersFromBoard(list.bid)
         if (!users.any { it.token == token }) throw IllegalListAccessException
-        return database.getCardsFromList(lid,list.bid)
+        return database.getCardsFromList(lid, list.bid)
     }
 }

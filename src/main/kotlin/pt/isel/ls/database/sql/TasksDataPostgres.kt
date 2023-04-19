@@ -10,7 +10,6 @@ import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.Card
 import pt.isel.ls.domain.SimpleBoard
 import pt.isel.ls.domain.SimpleList
-import pt.isel.ls.domain.TaskList
 import pt.isel.ls.domain.User
 import java.sql.Date
 import java.sql.SQLException
@@ -223,7 +222,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
-    override fun createList(bid: Int, name: String): TaskList {
+    override fun createList(bid: Int, name: String): SimpleList {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
@@ -248,7 +247,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
                 throw SQLException("Creating taskList failed, no ID obtained.")
             }
 
-            return TaskList(id, bid, name)
+            return SimpleList(id, bid, name)
         }
     }
 
@@ -270,6 +269,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
             while (rs.next()) {
                 simpleList.add(
                     SimpleList(
+                        bid = bid,
                         id = rs.getInt(1),
                         name = rs.getString(3)
                     )
@@ -279,7 +279,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
-    override fun getListDetails(lid: Int): TaskList {
+    override fun getListDetails(lid: Int): SimpleList {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
@@ -291,7 +291,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
 
             val rs = stm.executeQuery()
             if (rs.next()) {
-                return TaskList(
+                return SimpleList(
                     id = rs.getInt("id"),
                     bid = rs.getInt("bid"),
                     name = rs.getString("name")
@@ -333,10 +333,11 @@ class TasksDataPostgres(url: String) : AppDatabase {
                 Statement.RETURN_GENERATED_KEYS
             )
 
-            val stmGetMaxIndexList = it.prepareStatement("""
+            val stmGetMaxIndexList = it.prepareStatement(
+                """
                 SELECT max(indexlist) FROM cards where bid = ? and lid = ?  
-            """.trimIndent())
-
+                """.trimIndent()
+            )
 
             val bid = getListDetails(lid).bid
 
@@ -348,11 +349,10 @@ class TasksDataPostgres(url: String) : AppDatabase {
 
             stm.setInt(1, bid)
             stm.setInt(2, lid)
-            stm.setInt(3,  indexList)
+            stm.setInt(3, indexList)
             stm.setString(4, name)
             stm.setString(5, description)
             stm.setDate(6, dueDate)
-
 
             val affectedRows: Int = stm.executeUpdate()
             if (affectedRows == 0) {

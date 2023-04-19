@@ -69,7 +69,7 @@ class CardTests {
         val card3 = db.createCard(list.id, "Card 3", "Description 3", Date.valueOf("2023-04-04"))
 
         // Get the list of cards from the db
-        val sut = db.getCardsFromList(list.id,board.id)
+        val sut = db.getCardsFromList(list.id, board.id)
 
         assertEquals(3, sut.size)
         assertEquals(listOf(card1, card2, card3), sut)
@@ -80,7 +80,7 @@ class CardTests {
         val db = TasksDataPostgres(url)
         val list = db.createList(1, "Test List")
 
-        val sut = db.getCardsFromList(list.id,1 )
+        val sut = db.getCardsFromList(list.id, 1)
 
         assertEquals(emptyList(), sut)
     }
@@ -119,7 +119,7 @@ class CardTests {
 
         val cardDetails = db.getCardDetails(1)
         println(cardDetails)
-        var oldList = db.getCardsFromList(cardDetails.lid!!,cardDetails.bid)
+        var oldList = db.getCardsFromList(cardDetails.lid, cardDetails.bid)
         var moveToList = db.getCardsFromList(2, 1)
 
         assertEquals(3, oldList.size)
@@ -127,12 +127,11 @@ class CardTests {
 
         db.moveCard(cardDetails.id, 2, 1)
 
-        oldList = db.getCardsFromList(cardDetails.lid!!,cardDetails.bid)
+        oldList = db.getCardsFromList(cardDetails.lid, cardDetails.bid)
         moveToList = db.getCardsFromList(2, 1)
 
         assertEquals(2, oldList.size)
         assertEquals(4, moveToList.size)
-
     }
 
     @Test
@@ -144,10 +143,10 @@ class CardTests {
         val list2 = db.createList(board.id, "List 2")
         db.createCard(list1.id, "Card 1", "Description 1", Date.valueOf("2023-04-02"))
 
-        //TODO("Find how to throw sql exception when using plpgsql")
-       // val msg = assertFailsWith<SQLException> {
-         //   db.moveCard(1234, list2.id, 0)
-        //}
+        // TODO("Find how to throw sql exception when using plpgsql")
+        // val msg = assertFailsWith<SQLException> {
+        //   db.moveCard(1234, list2.id, 0)
+        // }
 
         // assertEquals("Updating card.lid failed, no rows affected.", msg.message)
     }
@@ -170,9 +169,9 @@ class CardTests {
     @Test
     fun `deleteCard should throw SQLException if given non-existent id`() {
         val db = TasksDataPostgres(url)
-        //TODO("Find how to throw sql exception when using plpgsql")
-        //assertFailsWith<SQLException> {
-           // db.deleteCard(-1)
-        //}
+        // TODO("Find how to throw sql exception when using plpgsql")
+        // assertFailsWith<SQLException> {
+        // db.deleteCard(-1)
+        // }
     }
 }

@@ -290,7 +290,8 @@ function getCard(mainContent, id) {
                     h1("Card Info"),
                     ul(
                         li(`Name: ${card.name}`),
-                        li(`id: ${card.id}`),
+                        li(`Id: ${card.id}`),
+                        li(`Description: ${card.description}`),
                     )
                 )
             )
