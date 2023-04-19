@@ -29,11 +29,11 @@ function h1(string) {
 }
 
 function ul(...listItems) {
-    return createElement("ul", listItems)
+    return createElement("ul", ...listItems)
 }
 
-function li(string) {
-    return createElement("li", string)
+function li(stringOrElement) {
+    return createElement("li", stringOrElement)
 }
 
 function p(stringOrElement) {
@@ -41,7 +41,7 @@ function p(stringOrElement) {
 }
 
 function div(...elements) {
-    return createElement("div", elements)
+    return createElement("div", ...elements)
 }
 
 function a(href, string) {
@@ -99,10 +99,10 @@ async function getBoards(mainContent, id) {
         .then(boards => {
             mainContent.replaceChildren(
                 div(
-                    h1("Boards"),
+                    h1("My Boards"),
                     ...boards.boards.map(s => {
-                        return p(
-                            a("#boards/" + s.id, "Link Example to boards/" + s.id)
+                        return li(
+                            a("#boards/" + s.id, "Link Example to board" + s.id)
                         )
 
                     })
@@ -129,8 +129,11 @@ function getBoardDetails(mainContent, id) {
                 div(
                     h1(board.name),
                     p(board.description),
-                    ...board.lists.map( l =>
-                        a("#lists/" + l.id, "Link Example to lists/" + l.id)
+                    ul(
+                        ...board.lists.map(l =>
+                            li(a("#lists/" + l.id, "Link Example to lists/" + l.id))
+                        ),
+                        li(a(`#boards/${id}/users`, "Get Board Users"))
                     )
                 )
             )
@@ -154,12 +157,10 @@ function getUsersFromBoard(mainContent, id) {
         .then(users => {
             mainContent.replaceChildren(
                 div(
-                    h1("Users"),
-                    ...users.users.map(s => {
-                        return p(
-                            a("#users/" + s.id, "User " + s.id)
-                        )
-
+                    p(a(`#boards/${id}`, "Return to board")),
+                    h1("Board Users"),
+                    ...users.users.map(user => {
+                        return li(`${user.name}[${user.id}] : ${user.email} `)
                     })
                 )
             )
@@ -185,10 +186,9 @@ function getListsFromBoard(mainContent, id) {
                 div(
                     h1("Lists"),
                     ...lists.lists.map(s => {
-                        return p(
+                        return li(
                             a("#lists/" + s.id, "List " + s.id)
                         )
-
                     })
                 )
             )
@@ -210,12 +210,20 @@ function getList(mainContent, id) {
             return res.json()
         })
         .then(list => {
+            const cards = list.cards
             mainContent.replaceChildren(
                 div(
+                    p(a(`#boards/${list.bid}`, "Return to board")),
                     h1("List Info"),
                     ul(
                         li(`Name: ${list.name}`),
                         li(`id: ${list.id}`),
+                        ...cards.map(card => {
+                                return li(
+                                    a(`#cards/${card.id}`, "Card:" + card.name)
+                                )
+                            }
+                        )
                     )
                 )
             )
@@ -226,7 +234,7 @@ function getList(mainContent, id) {
     })
 }
 
-function getCardsFromList(mainContent, id) {
+/*function getCardsFromList(mainContent, id) {
     fetch(API_BASE_URL + `lists/${id}/cards`, {
         headers: {
             "Authorization": "Bearer " + hardCodedBearer
@@ -253,7 +261,7 @@ function getCardsFromList(mainContent, id) {
     }).then(error => {
         showErrorResponse(mainContent, error)
     })
-}
+}*/
 
 function showErrorResponse(mainContent, error) {
     console.log(error)
@@ -278,6 +286,7 @@ function getCard(mainContent, id) {
         .then(card => {
             mainContent.replaceChildren(
                 div(
+                    p(a(`#lists/${card.lid}`, "Return to list")),
                     h1("Card Info"),
                     ul(
                         li(`Name: ${card.name}`),
@@ -300,7 +309,7 @@ export const handlers = {
     getUsersFromBoard,
     getListsFromBoard,
     getList,
-    getCardsFromList,
+    //getCardsFromList,
     getCard
 }
 

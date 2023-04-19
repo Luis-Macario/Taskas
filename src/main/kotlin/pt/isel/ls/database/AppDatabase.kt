@@ -4,7 +4,6 @@ import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.Card
 import pt.isel.ls.domain.SimpleBoard
 import pt.isel.ls.domain.SimpleList
-import pt.isel.ls.domain.TaskList
 import pt.isel.ls.domain.User
 import java.sql.Date
 
@@ -19,9 +18,9 @@ interface AppDatabase {
     fun addUserToBoard(uid: Int, bid: Int)
     fun getBoardsFromUser(uid: Int): List<SimpleBoard>
 
-    fun createList(bid: Int, name: String): TaskList
+    fun createList(bid: Int, name: String): SimpleList
     fun getListsFromBoard(bid: Int): List<SimpleList>
-    fun getListDetails(lid: Int): TaskList
+    fun getListDetails(lid: Int): SimpleList
     fun checkListsFromSameBoard(l1: Int, l2: Int): Boolean
     fun deleteList(lid: Int)
 

@@ -5,7 +5,6 @@ import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.Card
 import pt.isel.ls.domain.SimpleBoard
 import pt.isel.ls.domain.SimpleList
-import pt.isel.ls.domain.TaskList
 import pt.isel.ls.domain.User
 import pt.isel.ls.domain.UserBoard
 import pt.isel.ls.domain.toSimpleBoard
@@ -22,7 +21,7 @@ class TasksDataMem : AppDatabase {
     val users: MutableMap<Int, User> = mutableMapOf()
     val boards: MutableMap<Int, Board> = mutableMapOf()
     val userBoard: MutableMap<Int, UserBoard> = mutableMapOf()
-    val taskLists: MutableMap<Int, TaskList> = mutableMapOf()
+    val taskLists: MutableMap<Int, SimpleList> = mutableMapOf()
     val cards: MutableMap<Int, Card> = mutableMapOf()
 
     /**
@@ -145,16 +144,16 @@ class TasksDataMem : AppDatabase {
      *  @throws BoardNotFoundException if the board was not found
      * @return the created TaskList()
      */
-    override fun createList(bid: Int, name: String): TaskList {
+    override fun createList(bid: Int, name: String): SimpleList {
         val id = listId.also { listId += 1 }
         if (!boards.values.any { it.id == bid }) throw BoardNotFoundException
         if (taskLists.values.any { it.bid == bid && it.name == name }) throw TaskListAlreadyExistsInBoardException
 
-        val newList = TaskList(id, bid, name)
+        val newList = SimpleList(id, bid, name)
         taskLists[id] = newList
 
         val board = boards[bid]
-        if (board != null) board.lists += SimpleList(id, name)
+        if (board != null) board.lists += SimpleList(id, bid, name)
 
         return newList
     }
@@ -172,7 +171,7 @@ class TasksDataMem : AppDatabase {
         return taskLists.values
             .filter { it.bid == bid }
             .map {
-                SimpleList(it.id, it.name)
+                SimpleList(it.id, bid, it.name)
             }
     }
 
@@ -184,7 +183,7 @@ class TasksDataMem : AppDatabase {
      * @throws ListNotFoundException if the list was not found
      * @return the TaskList() details
      */
-    override fun getListDetails(lid: Int): TaskList = taskLists[lid] ?: throw ListNotFoundException
+    override fun getListDetails(lid: Int): SimpleList = taskLists[lid] ?: throw ListNotFoundException
 
     override fun checkListsFromSameBoard(l1: Int, l2: Int): Boolean {
         TODO("Not yet implemented")

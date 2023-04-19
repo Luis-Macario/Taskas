@@ -8,5 +8,6 @@ package pt.isel.ls.domain
  */
 data class SimpleList(
     val id: Int,
+    val bid: Int,
     val name: String
 )

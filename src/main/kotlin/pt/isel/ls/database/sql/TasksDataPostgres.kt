@@ -10,7 +10,6 @@ import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.Card
 import pt.isel.ls.domain.SimpleBoard
 import pt.isel.ls.domain.SimpleList
-import pt.isel.ls.domain.TaskList
 import pt.isel.ls.domain.User
 import java.sql.Date
 import java.sql.SQLException
@@ -225,7 +224,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
-    override fun createList(bid: Int, name: String): TaskList {
+    override fun createList(bid: Int, name: String): SimpleList {
         // TODO("Check for boardNotFound - services")
         dataSource.connection.use {
             val stm = it.prepareStatement(
@@ -251,7 +250,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
                 throw SQLException("Creating taskList failed, no ID obtained.")
             }
 
-            return TaskList(id, bid, name)
+            return SimpleList(id, bid, name)
         }
     }
 
@@ -275,6 +274,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
                 simpleList.add(
                     SimpleList(
                         id = rs.getInt(1),
+                        bid = rs.getInt(2),
                         name = rs.getString(3)
                     )
                 )
@@ -283,7 +283,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
-    override fun getListDetails(lid: Int): TaskList {
+    override fun getListDetails(lid: Int): SimpleList {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
@@ -292,10 +292,9 @@ class TasksDataPostgres(url: String) : AppDatabase {
             )
 
             stm.setInt(1, lid)
-
             val rs = stm.executeQuery()
             if (rs.next()) {
-                return TaskList(
+                return SimpleList(
                     id = rs.getInt("id"),
                     bid = rs.getInt("bid"),
                     name = rs.getString("name")

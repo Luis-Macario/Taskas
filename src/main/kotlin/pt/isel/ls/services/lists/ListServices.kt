@@ -26,7 +26,10 @@ class ListServices(private val database: AppDatabase) {
         val users = database.getUsersFromBoard(bid)
         if (!users.any { it.token == token }) throw IllegalBoardAccessException
 
-        return database.createList(bid, name)
+        val simpleList = database.createList(bid, name)
+        val cards = database.getCardsFromList(simpleList.id)
+
+        return TaskList(simpleList.id, bid, name, false, cards)
     }
 
     /**
@@ -40,10 +43,19 @@ class ListServices(private val database: AppDatabase) {
      */
     fun getList(token: String, lid: Int): TaskList {
         checkToken(token)
-        val list = database.getListDetails(lid)
-        val users = database.getUsersFromBoard(list.bid)
+        val simpleList = database.getListDetails(lid)
+        val users = database.getUsersFromBoard(simpleList.bid)
         if (!users.any { it.token == token }) throw IllegalListAccessException
-        return database.getListDetails(lid)
+
+        val cards = database.getCardsFromList(simpleList.id)
+
+        return TaskList(
+            lid,
+            simpleList.bid,
+            simpleList.name,
+            false,
+            cards
+        )
     }
 
     /**
