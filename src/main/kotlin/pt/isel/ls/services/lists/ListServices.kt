@@ -72,6 +72,6 @@ class ListServices(private val database: AppDatabase) {
         val list = database.getListDetails(lid)
         val users = database.getUsersFromBoard(list.bid)
         if (!users.any { it.token == token }) throw IllegalListAccessException
-        return database.getCardsFromList(lid)
+        return database.getCardsFromList(lid,list.bid)
     }
 }

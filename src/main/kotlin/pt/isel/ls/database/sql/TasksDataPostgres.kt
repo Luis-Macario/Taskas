@@ -10,6 +10,7 @@ import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.Card
 import pt.isel.ls.domain.SimpleBoard
 import pt.isel.ls.domain.SimpleList
+import pt.isel.ls.domain.TaskList
 import pt.isel.ls.domain.User
 import java.sql.Date
 import java.sql.SQLException
@@ -169,8 +170,6 @@ class TasksDataPostgres(url: String) : AppDatabase {
     }
 
     override fun addUserToBoard(uid: Int, bid: Int) {
-        // TODO("Check for UserNotFound for services")
-        // TODO("Check for BoardNotFound for services")
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
@@ -224,8 +223,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
-    override fun createList(bid: Int, name: String): SimpleList {
-        // TODO("Check for boardNotFound - services")
+    override fun createList(bid: Int, name: String): TaskList {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
@@ -250,12 +248,11 @@ class TasksDataPostgres(url: String) : AppDatabase {
                 throw SQLException("Creating taskList failed, no ID obtained.")
             }
 
-            return SimpleList(id, bid, name)
+            return TaskList(id, bid, name)
         }
     }
 
     override fun getListsFromBoard(bid: Int): List<SimpleList> {
-        // TODO("check for BoardNotFound - sevices")
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
@@ -274,7 +271,6 @@ class TasksDataPostgres(url: String) : AppDatabase {
                 simpleList.add(
                     SimpleList(
                         id = rs.getInt(1),
-                        bid = rs.getInt(2),
                         name = rs.getString(3)
                     )
                 )
@@ -283,7 +279,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
-    override fun getListDetails(lid: Int): SimpleList {
+    override fun getListDetails(lid: Int): TaskList {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
@@ -292,9 +288,10 @@ class TasksDataPostgres(url: String) : AppDatabase {
             )
 
             stm.setInt(1, lid)
+
             val rs = stm.executeQuery()
             if (rs.next()) {
-                return SimpleList(
+                return TaskList(
                     id = rs.getInt("id"),
                     bid = rs.getInt("bid"),
                     name = rs.getString("name")
@@ -327,23 +324,35 @@ class TasksDataPostgres(url: String) : AppDatabase {
     }
 
     override fun createCard(lid: Int, name: String, description: String, dueDate: Date): Card {
-        // TODO("Check for boardNotFound - services")
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
-                INSERT INTO cards (bid, lid, name, description, initdate)
-                VALUES (?,?,?,?,?) 
+                INSERT INTO cards (bid, lid, indexlist, name, description, initdate)
+                VALUES (?,?,?,?,?,?) 
                 """.trimIndent(),
                 Statement.RETURN_GENERATED_KEYS
             )
 
+            val stmGetMaxIndexList = it.prepareStatement("""
+                SELECT max(indexlist) FROM cards where bid = ? and lid = ?  
+            """.trimIndent())
+
+
             val bid = getListDetails(lid).bid
+
+            stmGetMaxIndexList.setInt(1, bid)
+            stmGetMaxIndexList.setInt(2, lid)
+            val rs = stmGetMaxIndexList.executeQuery()
+            rs.next()
+            val indexList = rs.getInt(1) + 1
 
             stm.setInt(1, bid)
             stm.setInt(2, lid)
-            stm.setString(3, name)
-            stm.setString(4, description)
-            stm.setDate(5, dueDate)
+            stm.setInt(3,  indexList)
+            stm.setString(4, name)
+            stm.setString(5, description)
+            stm.setDate(6, dueDate)
+
 
             val affectedRows: Int = stm.executeUpdate()
             if (affectedRows == 0) {
@@ -361,17 +370,17 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
-    override fun getCardsFromList(lid: Int): List<Card> {
+    override fun getCardsFromList(lid: Int, bid: Int): List<Card> {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
                 SELECT c.id, c.bid,c.lid, c.name, c.description, c.initdate
                 FROM cards as c
-                JOIN tasklists t on t.id = c.lid
-                WHERE t.id = ?
+                WHERE c.bid = ? and c.lid = ?
                 """.trimIndent()
             )
-            stm.setInt(1, lid)
+            stm.setInt(1, bid)
+            stm.setInt(2, lid)
 
             val rs = stm.executeQuery()
             val tasksList = mutableListOf<Card>()
@@ -418,38 +427,36 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
-    override fun moveCard(cid: Int, lid: Int) {
+    override fun moveCard(cid: Int, lid: Int, cix: Int) {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
-                UPDATE cards
-                SET lid = ?
-                WHERE id = ?
+                CALL "move_card"(?, ? , ?)
                 """.trimIndent()
             )
 
-            stm.setInt(1, lid)
-            stm.setInt(2, cid)
+            stm.setInt(1, cid)
+            stm.setInt(2, lid)
+            stm.setInt(3, cix)
 
-            val affectedRows: Int = stm.executeUpdate()
-            if (affectedRows == 0) {
+            val affectedRows: Boolean = stm.execute()
+            if (affectedRows) {
                 throw SQLException("Updating card.lid failed, no rows affected.")
             }
         }
     }
-
     override fun deleteCard(cid: Int) {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
-                DELETE FROM cards WHERE id = ?
+                 CALL "delete_card"(?)
                 """.trimIndent()
             )
 
             stm.setInt(1, cid)
 
-            val affectedRows: Int = stm.executeUpdate()
-            if (affectedRows == 0) {
+            val affectedRows: Boolean = stm.execute()
+            if (affectedRows) {
                 throw SQLException("Delete card failed, no rows affected.")
             }
         }
