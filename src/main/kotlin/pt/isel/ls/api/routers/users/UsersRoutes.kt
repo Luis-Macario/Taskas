@@ -13,11 +13,8 @@ import pt.isel.ls.api.dto.user.CreateUserRequest
 import pt.isel.ls.api.dto.user.CreateUserResponse
 import pt.isel.ls.api.dto.user.GetBoardsFromUserResponse
 import pt.isel.ls.api.dto.user.toDTO
+import pt.isel.ls.api.routers.utils.*
 import pt.isel.ls.api.routers.utils.exceptions.runAndHandleExceptions
-import pt.isel.ls.api.routers.utils.getAuthorizationHeader
-import pt.isel.ls.api.routers.utils.getJsonBodyTo
-import pt.isel.ls.api.routers.utils.getUserID
-import pt.isel.ls.api.routers.utils.json
 import pt.isel.ls.services.users.UserServices
 
 /**
@@ -77,10 +74,13 @@ class UsersRoutes(private val services: UserServices) {
         runAndHandleExceptions {
             val uid = request.getUserID()
             val bearerToken = request.getAuthorizationHeader()
+            val (skip, limit) = request.getPagging()
 
             val boards = services.getBoardsFromUser(bearerToken, uid)
-            val boardsResponse = GetBoardsFromUserResponse(boards.map { it.toDTO() })
+                .drop(skip)
+                .take(limit)
 
+            val boardsResponse = GetBoardsFromUserResponse(boards.map { it.toDTO() })
             Response(OK).json(boardsResponse)
         }
 }

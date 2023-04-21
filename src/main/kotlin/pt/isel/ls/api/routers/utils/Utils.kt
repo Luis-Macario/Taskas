@@ -39,6 +39,22 @@ fun String.parseBearerToken(): String {
 fun Request.getAuthorizationHeader(): String =
     (header("Authorization") ?: throw NoAuthenticationException).parseBearerToken()
 
+
+/**
+ * Attempts to get the string "skip" and "limit" located in the query parameters of the [Request]
+ *
+ * @return the string located in the Query Parameters
+ */
+fun Request.getPagging(): Pair<Int, Int> {
+    val skip = query("skip")?.toIntOrNull() ?: 0
+    val limit = query("limit")?.toIntOrNull() ?: 100
+
+    if (skip < 0 || limit < 1) {
+        return Pair(0, 100)
+    }
+    return Pair(skip, limit)
+}
+
 /**
  * gets the userID from the [Request]
  *

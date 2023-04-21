@@ -86,8 +86,9 @@ function getUser(mainContent, id) {
 }
 
 async function getBoards(mainContent, id) {
-
-    fetch(API_BASE_URL + `users/${id}/boards`, {
+    const skip = 0
+    const limit = 1
+    fetch(API_BASE_URL + `users/${id}/boards?skip=${skip}&limit=${limit}`, {
         headers: {
             "Authorization": "Bearer " + hardCodedBearer
         }
@@ -145,7 +146,9 @@ function getBoardDetails(mainContent, id) {
 }
 
 function getUsersFromBoard(mainContent, id) {
-    fetch(API_BASE_URL + `boards/${id}/users`, {
+    const skip = 2
+    const limit = 1
+    fetch(API_BASE_URL + `boards/${id}/users?skip=${skip}&limit=${limit}`, {
         headers: {
             "Authorization": "Bearer " + hardCodedBearer
         }
@@ -172,7 +175,9 @@ function getUsersFromBoard(mainContent, id) {
 }
 
 function getListsFromBoard(mainContent, id) {
-    fetch(API_BASE_URL + `boards/${id}/lists`, {
+    const skip = 1
+    const limit = 3
+    fetch(API_BASE_URL + `boards/${id}/lists?skip=${skip}&limit=${limit}`, {
         headers: {
             "Authorization": "Bearer " + hardCodedBearer
         }
@@ -217,12 +222,15 @@ function getList(mainContent, id) {
                     h1("List Info"),
                     ul(
                         li(`Name: ${list.name}`),
-                        li(`id: ${list.id}`),
+                        li(`id: ${list.id}`),/*
                         ...cards.map(card => {
                                 return li(
                                     a(`#cards/${card.id}`, "Card:" + card.name)
+                                    a(`#lists/${id}/cards`, "Get cards from list")
                                 )
-                            }
+                            }*/
+                        li(
+                            a(`#lists/${id}/cards`, `Get Cards from List[${id}]`)
                         )
                     )
                 )
@@ -234,8 +242,10 @@ function getList(mainContent, id) {
     })
 }
 
-/*function getCardsFromList(mainContent, id) {
-    fetch(API_BASE_URL + `lists/${id}/cards`, {
+function getCardsFromList(mainContent, id) {
+    const skip = 1
+    const limit = 3
+    fetch(API_BASE_URL + `lists/${id}/cards?skip=${skip}&limit=${limit}`, {
         headers: {
             "Authorization": "Bearer " + hardCodedBearer
         }
@@ -247,6 +257,7 @@ function getList(mainContent, id) {
         .then(cards => {
             mainContent.replaceChildren(
                 div(
+                    p(a(`#lists/${id}`, "Return to list")),
                     h1("Cards"),
                     ...cards.cards.map(s => {
                         return p(
@@ -261,7 +272,7 @@ function getList(mainContent, id) {
     }).then(error => {
         showErrorResponse(mainContent, error)
     })
-}*/
+}
 
 function showErrorResponse(mainContent, error) {
     console.log(error)
@@ -287,6 +298,7 @@ function getCard(mainContent, id) {
             mainContent.replaceChildren(
                 div(
                     p(a(`#lists/${card.lid}`, "Return to list")),
+                    p(a(`#lists/${card.lid}/cards`, "Return to cards")),
                     h1("Card Info"),
                     ul(
                         li(`Name: ${card.name}`),
@@ -310,7 +322,7 @@ export const handlers = {
     getUsersFromBoard,
     getListsFromBoard,
     getList,
-    //getCardsFromList,
+    getCardsFromList,
     getCard
 }
 

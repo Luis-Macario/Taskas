@@ -449,7 +449,9 @@ class TasksDataPostgres(url: String) : AppDatabase {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
-                 CALL "delete_card"(?)
+                    BEGIN  transaction;
+                 CALL "delete_card"(?);
+                 End transaction;
                 """.trimIndent()
             )
 

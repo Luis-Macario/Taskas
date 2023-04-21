@@ -18,11 +18,8 @@ import pt.isel.ls.api.dto.board.GetUsersFromBoardResponse
 import pt.isel.ls.api.dto.board.toDTO
 import pt.isel.ls.api.dto.list.toDTO
 import pt.isel.ls.api.dto.user.toDTO
+import pt.isel.ls.api.routers.utils.*
 import pt.isel.ls.api.routers.utils.exceptions.runAndHandleExceptions
-import pt.isel.ls.api.routers.utils.getAuthorizationHeader
-import pt.isel.ls.api.routers.utils.getBoardID
-import pt.isel.ls.api.routers.utils.getJsonBodyTo
-import pt.isel.ls.api.routers.utils.json
 import pt.isel.ls.services.boards.BoardServices
 
 /**
@@ -92,8 +89,12 @@ class BoardsRoutes(private val services: BoardServices) {
         runAndHandleExceptions {
             val boardID = request.getBoardID()
             val bearerToken = request.getAuthorizationHeader()
+            val (skip, limit) = request.getPagging()
 
             val users = services.getUsersFromBoard(bearerToken, boardID)
+                .drop(skip)
+                .take(limit)
+
             val getUsersResponse = GetUsersFromBoardResponse(users.map { it.toDTO() })
 
             Response(OK).json(getUsersResponse)
@@ -126,10 +127,13 @@ class BoardsRoutes(private val services: BoardServices) {
         runAndHandleExceptions {
             val boardID = request.getBoardID()
             val bearerToken = request.getAuthorizationHeader()
+            val (skip, limit) = request.getPagging()
 
             val lists = services.getListsFromBoard(bearerToken, boardID)
-            val getListsResponse = GetListsFromBoardResponse(lists.map { it.toDTO() })
+                .drop(skip)
+                .take(limit)
 
+            val getListsResponse = GetListsFromBoardResponse(lists.map { it.toDTO() })
             Response(OK).json(getListsResponse)
         }
 }
