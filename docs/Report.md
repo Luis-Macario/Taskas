@@ -1,8 +1,6 @@
-# Phase 1 
-
 ## Introduction
 
-This document contains the relevant design and implementation aspects of LS project's first phase.
+This document contains the relevant design and implementation aspects of our project.
 
 ## Modeling the database
 
@@ -90,6 +88,11 @@ These classes have various methods that perform different operations such as cre
 
 Any module under the TasksWebApi (or more specifically, it's {Entity}Routes) should throw an Exception when some type of problem is found, that results in the request not being fufilled.
 That exception is then handled in the TasksWebApi, which captures the Exception and returns an Error Response to the server module, containing the correct information about the Exception that was thrown.
+
+### Single Page Application (SPA)
+
+There is a web application associated with the developed API. There is a single html page that is sent to the client, as well as other static-content, such as the javascript necessary to handle the SPA.
+Each time a user attempts to change into a different section of the page, instead of another GET request being sent and a new html page being returned, the URI Fragment is changed. The client-side javascript detects this change and proceeds to send a request to the API, then changing the displayed html page depending on the request/response.
 
 ## Critical Evaluation
 
