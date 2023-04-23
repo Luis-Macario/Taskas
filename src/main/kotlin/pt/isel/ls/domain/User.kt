@@ -46,3 +46,8 @@ data class User(
         require(validId(id)) { "Invalid user id: $id" }
     }
 }
+
+fun checkUserCredentials(name: String, email: String){
+    require(User.validName(name)) { "Invalid username: $name" }
+    require(User.validEmail(email)) { "Invalid email: $email" }
+}

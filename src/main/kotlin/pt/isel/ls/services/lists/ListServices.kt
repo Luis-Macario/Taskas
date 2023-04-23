@@ -3,6 +3,7 @@ package pt.isel.ls.services.lists
 import pt.isel.ls.database.AppDatabase
 import pt.isel.ls.domain.Card
 import pt.isel.ls.domain.TaskList
+import pt.isel.ls.domain.checkListCredentials
 import pt.isel.ls.services.utils.checkToken
 import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
 import pt.isel.ls.services.utils.exceptions.IllegalListAccessException
@@ -21,6 +22,7 @@ class ListServices(private val database: AppDatabase) {
      */
     fun createList(token: String, bid: Int, name: String): TaskList {
         checkToken(token)
+        checkListCredentials(name)
         database.getBoardDetails(bid)
 
         val users = database.getUsersFromBoard(bid)

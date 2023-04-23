@@ -323,12 +323,12 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
-    override fun createCard(lid: Int, name: String, description: String, dueDate: Date): Card {
+    override fun createCard(lid: Int, name: String, description: String, initDate: Date, dueDate: Date): Card {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
-                INSERT INTO cards (bid, lid, indexlist, name, description, initdate)
-                VALUES (?,?,?,?,?,?) 
+                INSERT INTO cards (bid, lid, indexlist, name, description, initdate, finishdate)
+                VALUES (?,?,?,?,?,?,?) 
                 """.trimIndent(),
                 Statement.RETURN_GENERATED_KEYS
             )
@@ -352,7 +352,8 @@ class TasksDataPostgres(url: String) : AppDatabase {
             stm.setInt(3, indexList)
             stm.setString(4, name)
             stm.setString(5, description)
-            stm.setDate(6, dueDate)
+            stm.setDate(6, initDate)
+            stm.setDate(7, dueDate)
 
             val affectedRows: Int = stm.executeUpdate()
             if (affectedRows == 0) {

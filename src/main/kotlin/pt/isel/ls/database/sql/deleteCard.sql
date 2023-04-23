@@ -10,12 +10,9 @@ DECLARE
     listIdx int = -1;
 BEGIN
     SELECT bid, lid, indexlist INTO boardId, listId, listIdx FROM cards where id = cid;
-    IF boardId = -1 then Raise EXCEPTION ' The board id must be higher than 1';
-    END IF;
-    IF listId = -1 then Raise EXCEPTION ' The List id must be higher than 1';
-    END IF;
-    IF listIdx = -1 then Raise EXCEPTION ' The List index must be higher than 1';
-    END IF;
+    IF boardId = -1  or listId = -1 or listIdx = -1 then
+        Raise EXCEPTION ' Card with that id [%] not found', cid;
+    end if;
 
     DELETE FROM cards WHERE id = cid;
     UPDATE cards  as c SET indexlist = c.indexlist - 1  WHERE c.lid = listId and  c.bid = boardId and c.indexlist >= listIdx;

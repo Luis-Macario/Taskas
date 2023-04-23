@@ -56,3 +56,11 @@ data class Card(
         require(validDates(initDate, finishDate)) { "Invalid dates: $finishDate happens before $initDate" }
     }
 }
+
+fun checkCardCredentials(name: String, description: String, initDate: String, finishDate: String?){
+    require(Card.validName(name)) { "Invalid card name: $name" }
+    require(validDescription(description)) { "Invalid description: $description" }
+    require(Card.validDates(Date.valueOf(initDate), Date.valueOf(finishDate) ?: Date.valueOf("9999-12-31"))) {
+        "Invalid dates: ${Date.valueOf(finishDate) ?: Date.valueOf("9999-12-31")} happens before $initDate"
+    }
+}

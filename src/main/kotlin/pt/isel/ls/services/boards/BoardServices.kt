@@ -4,6 +4,7 @@ import pt.isel.ls.database.AppDatabase
 import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.SimpleList
 import pt.isel.ls.domain.User
+import pt.isel.ls.domain.checkBoardCredentials
 import pt.isel.ls.services.utils.checkToken
 import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
 
@@ -19,6 +20,7 @@ class BoardServices(private val database: AppDatabase) {
      */
     fun createBoard(token: String, name: String, description: String): Board {
         checkToken(token)
+        checkBoardCredentials(name, description)
         val uid = database.tokenToId(token)
         return database.createBoard(uid, name, description)
     }

@@ -200,7 +200,7 @@ class TasksDataMem : AppDatabase {
      *
      * @return the created Card()
      */
-    override fun createCard(lid: Int, name: String, description: String, dueDate: Date): Card {
+    override fun createCard(lid: Int, name: String, description: String, initDate: Date, dueDate: Date): Card {
         if (cards.values.filter { it.lid == lid }.any { it.name == name }) throw CardNameAlreadyExistsException
         val id = cardId.also { cardId += 1 }
         val initDate = Date(System.currentTimeMillis())

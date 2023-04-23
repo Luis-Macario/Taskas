@@ -36,3 +36,7 @@ data class TaskList(
         require(validName(name)) { "Invalid task name: $name" }
     }
 }
+
+fun checkListCredentials(name: String){
+    require(TaskList.validName(name)) { "Invalid tasklist name: $name" }
+}

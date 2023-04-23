@@ -87,7 +87,7 @@ function getUser(mainContent, id) {
 
 async function getBoards(mainContent, id) {
     const skip = 0
-    const limit = 1
+    const limit = 10
     fetch(API_BASE_URL + `users/${id}/boards?skip=${skip}&limit=${limit}`, {
         headers: {
             "Authorization": "Bearer " + hardCodedBearer
@@ -146,8 +146,8 @@ function getBoardDetails(mainContent, id) {
 }
 
 function getUsersFromBoard(mainContent, id) {
-    const skip = 2
-    const limit = 1
+    const skip = 0
+    const limit = 10
     fetch(API_BASE_URL + `boards/${id}/users?skip=${skip}&limit=${limit}`, {
         headers: {
             "Authorization": "Bearer " + hardCodedBearer
@@ -175,8 +175,8 @@ function getUsersFromBoard(mainContent, id) {
 }
 
 function getListsFromBoard(mainContent, id) {
-    const skip = 1
-    const limit = 3
+    const skip = 0
+    const limit = 10
     fetch(API_BASE_URL + `boards/${id}/lists?skip=${skip}&limit=${limit}`, {
         headers: {
             "Authorization": "Bearer " + hardCodedBearer
@@ -222,16 +222,15 @@ function getList(mainContent, id) {
                     h1("List Info"),
                     ul(
                         li(`Name: ${list.name}`),
-                        li(`id: ${list.id}`),/*
+                        li(`id: ${list.id}`),
                         ...cards.map(card => {
                                 return li(
                                     a(`#cards/${card.id}`, "Card:" + card.name)
-                                    a(`#lists/${id}/cards`, "Get cards from list")
                                 )
-                            }*/
-                        li(
-                            a(`#lists/${id}/cards`, `Get Cards from List[${id}]`)
-                        )
+                            })
+                        //li(
+                        //    a(`#lists/${id}/cards`, `Get Cards from List[${id}]`)  --next phase
+                       // )
                     )
                 )
             )
@@ -298,7 +297,7 @@ function getCard(mainContent, id) {
             mainContent.replaceChildren(
                 div(
                     p(a(`#lists/${card.lid}`, "Return to list")),
-                    p(a(`#lists/${card.lid}/cards`, "Return to cards")),
+                    //p(a(`#lists/${card.lid}/cards`, "Return to cards")),  --next phase
                     h1("Card Info"),
                     ul(
                         li(`Name: ${card.name}`),

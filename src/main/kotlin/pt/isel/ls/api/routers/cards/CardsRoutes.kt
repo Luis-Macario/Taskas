@@ -2,6 +2,7 @@ package pt.isel.ls.api.routers.cards
 
 import org.http4k.core.Method.GET
 import org.http4k.core.Method.POST
+import org.http4k.core.Method.DELETE
 import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status.Companion.CREATED
@@ -31,7 +32,8 @@ class CardsRoutes(private val services: CardServices) {
     val routes: RoutingHttpHandler = routes(
         "/" bind POST to ::createCard,
         "/{cardID}" bind GET to ::getCardDetails,
-        "/{cardID}/move" bind POST to ::moveCard
+        "/{cardID}/move" bind POST to ::moveCard,
+        "/{cardID}" bind DELETE to ::deleteCard,
     )
 
     /**
@@ -51,6 +53,7 @@ class CardsRoutes(private val services: CardServices) {
                     cardRequest.listID,
                     cardRequest.name,
                     cardRequest.description,
+                    cardRequest.initDate,
                     cardRequest.dueDate
                 )
             val cardResponse = CreateCardResponse(card.id)
@@ -89,5 +92,20 @@ class CardsRoutes(private val services: CardServices) {
 
             services.moveCard(bearerToken, cardID, moveCardRequest)
             Response(NO_CONTENT)
+        }
+
+    /**
+     * Gets the details of a card
+     *
+     * @param request The request information
+     * @return the corresponding [Response]
+     */
+    private fun deleteCard(request: Request): Response =
+        runAndHandleExceptions {
+            val cardID = request.getCardID()
+            val bearerToken = request.getAuthorizationHeader()
+
+            services.deleteCard(bearerToken, cardID)
+            Response(OK)
         }
 }

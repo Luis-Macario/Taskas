@@ -15,8 +15,8 @@ CREATE TABLE users
 CREATE TABLE boards
 (
     id SERIAL PRIMARY KEY ,
-    name VARCHAR(100) UNIQUE NOT NULL CHECK ( char_length(name) > 20 ),
-    description VARCHAR(1000) NOT NULL CHECK ( char_length(description) > 0 )
+    name VARCHAR(100) UNIQUE NOT NULL CHECK ( char_length(name) > 5  and char_length(name) < 100),
+    description VARCHAR(1000) NOT NULL CHECK ( char_length(description) > 0 and char_length(description) < 1000)
 );
 
 CREATE TABLE taskLists

@@ -3,6 +3,7 @@ package pt.isel.ls.services.cards
 import pt.isel.ls.api.dto.card.MoveCardRequest
 import pt.isel.ls.database.AppDatabase
 import pt.isel.ls.domain.Card
+import pt.isel.ls.domain.checkCardCredentials
 import pt.isel.ls.services.utils.MAX_DATE
 import pt.isel.ls.services.utils.checkToken
 import pt.isel.ls.services.utils.exceptions.IllegalCardAccessException
@@ -30,16 +31,18 @@ class CardServices(private val database: AppDatabase) {
         lid: Int,
         name: String,
         description: String,
+        initDate: String,
         dueDate: String? = null
     ): Card {
         checkToken(token)
+        checkCardCredentials(name, description, initDate, dueDate)
 
         val list = database.getListDetails(lid)
         val users = database.getUsersFromBoard(list.bid)
         if (!users.any { it.token == token }) throw IllegalListAccessException
         val date = if (dueDate != null) Date.valueOf(dueDate) else Date.valueOf(MAX_DATE)
 
-        return database.createCard(lid, name, description, date)
+        return database.createCard(lid, name, description, Date.valueOf(initDate), date)
     }
 
     /**
@@ -85,5 +88,16 @@ class CardServices(private val database: AppDatabase) {
         if (!users.any { it.token == token }) throw IllegalCardAccessException
 
         database.moveCard(cid, request.listID, 0)
+    }
+
+    fun deleteCard(token: String, cid: Int){
+        checkToken(token)
+
+        val card = database.getCardDetails(cid)
+        val bid = card.bid
+        val users = database.getUsersFromBoard(bid)
+        if (!users.any { it.token == token }) throw IllegalCardAccessException
+
+        database.deleteCard(cid)
     }
 }

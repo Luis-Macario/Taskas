@@ -3,6 +3,7 @@ package pt.isel.ls.services.users
 import pt.isel.ls.database.AppDatabase
 import pt.isel.ls.domain.SimpleBoard
 import pt.isel.ls.domain.User
+import pt.isel.ls.domain.checkUserCredentials
 import pt.isel.ls.services.utils.checkToken
 import pt.isel.ls.services.utils.exceptions.IllegalUserAccessException
 import java.util.UUID
@@ -18,6 +19,7 @@ class UserServices(private val database: AppDatabase) {
      */
     fun createUser(name: String, email: String): User {
         val token = UUID.randomUUID().toString()
+        checkUserCredentials(name, email)
         return database.createUser(token, name, email)
     }
 

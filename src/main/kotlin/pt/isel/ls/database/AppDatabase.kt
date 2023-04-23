@@ -24,7 +24,7 @@ interface AppDatabase {
     fun checkListsFromSameBoard(l1: Int, l2: Int): Boolean
     fun deleteList(lid: Int)
 
-    fun createCard(lid: Int, name: String, description: String, dueDate: Date): Card
+    fun createCard(lid: Int, name: String, description: String, initDate: Date, dueDate: Date): Card
     fun getCardsFromList(lid: Int, bid: Int): List<Card>
     fun getCardDetails(cid: Int): Card
     fun moveCard(cid: Int, lid: Int, cix: Int)

@@ -19,7 +19,7 @@ data class Board(
     companion object {
         const val MAX_NAME_LENGTH = 100
         const val MIN_NAME_LENGTH = 5
-        private const val NAME_REGEX = "^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*\$"
+        const val NAME_REGEX = "^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*\$"
 
         /**
          * Checks whether a board name is valid or not
@@ -37,4 +37,9 @@ data class Board(
         require(validDescription(description)) { "Invalid board description: $description" }
         require(validId(id)) { "Invalid board id: $id" }
     }
+}
+
+fun checkBoardCredentials(name: String, description: String){
+    require(Board.validName(name)) { "Invalid board name: $name" }
+    require(validDescription(description)) { "Invalid board description: $description" }
 }
