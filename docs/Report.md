@@ -94,6 +94,9 @@ That exception is then handled in the TasksWebApi, which captures the Exception 
 There is a web application associated with the developed API. There is a single html page that is sent to the client, as well as other static-content, such as the javascript necessary to handle the SPA.
 Each time a user attempts to change into a different section of the page, instead of another GET request being sent and a new html page being returned, the URI Fragment is changed. The client-side javascript detects this change and proceeds to send a request to the API, then changing the displayed html page depending on the request/response.
 
+The following navegation graph shows how each "page" of the SPA is connected:
+![Navegation Graph](Navegation_Graph.png)
+
 ## Critical Evaluation
 
 We need to upgrade our database connection to better support transactions. In the next phase, we will implement the necessary changes.
