@@ -66,6 +66,8 @@ For actions that require user board access, for example getting all the boards b
 in case the user doesn't have the appropriate access the TaskServices module will throw and exception ( more on **Error Handling/Processing** ).
 If the user has the appropriate access, an appropriate request is made to the TaskDataMem.
 
+During resource(user/board/list..etc) creation in case of invalid input, such as invalid email for user creation, a error will also be thrown.
+
 When a request is received by the TasksDataMem, it performs the requested function such as adding, updating a user/board/list/card in the in-memory data.
 
 When the relevant information arrives back to the {Entity}Routes, then the Response is made and sent back to the TasksServer, which delivers it to it's consumer.
@@ -96,6 +98,11 @@ Each time a user attempts to change into a different section of the page, instea
 
 The following navegation graph shows how each "page" of the SPA is connected:
 ![Navegation Graph](Navegation_Graph.png)
+
+To support this navegation graph some changes where made to the domain,the most important being that,
+a board now contains all the list belonging to it and a list now contains all the cards belonging to it.
+Because of this we now have a SimpleList and a TaskList aswell as a Board and a SimpleBoard.
+SimpleList and SimpleBoard objects are stored within the data module and TaskLists and Boards are created in the services module.
 
 ## Critical Evaluation
 

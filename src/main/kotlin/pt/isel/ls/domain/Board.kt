@@ -7,8 +7,10 @@ import pt.isel.ls.services.utils.validId
  * Board representation
  *
  * @property id board's unique identifier
- * @property description a small description of the project, empty string by default
  * @property name project's name
+ * @property description a small description of the project, empty string by default
+ * @property lists List of the simpleLists belonging to the board
+ *
  */
 data class Board(
     val id: Int,
@@ -39,7 +41,7 @@ data class Board(
     }
 }
 
-fun checkBoardCredentials(name: String, description: String){
+fun checkBoardCredentials(name: String, description: String) {
     require(Board.validName(name)) { "Invalid board name: $name" }
     require(validDescription(description)) { "Invalid board description: $description" }
 }

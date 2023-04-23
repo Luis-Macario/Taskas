@@ -14,8 +14,12 @@ import pt.isel.ls.api.dto.list.CreateListRequest
 import pt.isel.ls.api.dto.list.CreateListResponse
 import pt.isel.ls.api.dto.list.GetCardFromListResponse
 import pt.isel.ls.api.dto.list.toDTO
-import pt.isel.ls.api.routers.utils.*
 import pt.isel.ls.api.routers.utils.exceptions.runAndHandleExceptions
+import pt.isel.ls.api.routers.utils.getAuthorizationHeader
+import pt.isel.ls.api.routers.utils.getJsonBodyTo
+import pt.isel.ls.api.routers.utils.getListID
+import pt.isel.ls.api.routers.utils.getPagging
+import pt.isel.ls.api.routers.utils.json
 import pt.isel.ls.services.lists.ListServices
 
 /**
@@ -86,7 +90,7 @@ class ListsRoutes(private val services: ListServices) {
                 .drop(skip)
                 .take(limit)
 
-            val cardsResponse = GetCardFromListResponse( cards.map { it.toDTO() })
+            val cardsResponse = GetCardFromListResponse(cards.map { it.toDTO() })
             Response(OK).json(cardsResponse)
         }
 }

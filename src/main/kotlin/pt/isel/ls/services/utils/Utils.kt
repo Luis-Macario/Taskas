@@ -28,7 +28,6 @@ fun validId(id: Int): Boolean = id >= 0
 fun validName(name: String): Boolean =
     ((name.length in Board.MIN_NAME_LENGTH..Board.MAX_NAME_LENGTH) && name.matches(Board.NAME_REGEX.toRegex()))
 
-
 /**
  * Checks whether descritpion is valid
  *

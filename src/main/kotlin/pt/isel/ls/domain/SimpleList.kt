@@ -1,9 +1,10 @@
 package pt.isel.ls.domain
 
 /**
- * List representation
+ * Simple list representation
  *
  * @property id List's unique identifier
+ * @property bid Id of the board containing this list
  * @property name List's name
  */
 data class SimpleList(

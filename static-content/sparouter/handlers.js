@@ -1,18 +1,3 @@
-/*
-This example creates the students views using directly the DOM Api
-But you can create the views in a different way, for example, for the student details you can:
-    createElement("ul",
-        createElement("li", "Name : " + student.name),
-        createElement("li", "Number : " + student.number)
-    )
-or
-    ul(
-        li("Name : " + student.name),
-        li("Number : " + student.name)
-    )
-Note: You have to use the DOM Api, but not directly
-*/
-
 const hardCodedBearer = "160ee838-150b-4ca1-a2ff-2e964383c315"
 
 function createElement(tagName, ...stringsOrElements) {

@@ -4,7 +4,7 @@ import pt.isel.ls.services.utils.validDescription
 import pt.isel.ls.services.utils.validId
 
 /**
- * Board representation
+ * Simple Board representation
  *
  * @property id board's unique identifier
  * @property description a small description of the project, empty string by default

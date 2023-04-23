@@ -90,7 +90,7 @@ class CardServices(private val database: AppDatabase) {
         database.moveCard(cid, request.listID, 0)
     }
 
-    fun deleteCard(token: String, cid: Int){
+    fun deleteCard(token: String, cid: Int) {
         checkToken(token)
 
         val card = database.getCardDetails(cid)

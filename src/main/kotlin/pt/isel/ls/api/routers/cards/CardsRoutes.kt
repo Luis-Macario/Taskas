@@ -1,8 +1,8 @@
 package pt.isel.ls.api.routers.cards
 
+import org.http4k.core.Method.DELETE
 import org.http4k.core.Method.GET
 import org.http4k.core.Method.POST
-import org.http4k.core.Method.DELETE
 import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status.Companion.CREATED
@@ -33,7 +33,7 @@ class CardsRoutes(private val services: CardServices) {
         "/" bind POST to ::createCard,
         "/{cardID}" bind GET to ::getCardDetails,
         "/{cardID}/move" bind POST to ::moveCard,
-        "/{cardID}" bind DELETE to ::deleteCard,
+        "/{cardID}" bind DELETE to ::deleteCard
     )
 
     /**

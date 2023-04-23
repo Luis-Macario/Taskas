@@ -8,6 +8,8 @@ import pt.isel.ls.services.utils.validId
  * @property id List's unique identifier
  * @property bid id of the Board that created the list
  * @property name List's name
+ * @property archived whether this list is archived or not
+ * @property cards List of the cards belonging to this list
  */
 data class TaskList(
     val id: Int,
@@ -37,6 +39,6 @@ data class TaskList(
     }
 }
 
-fun checkListCredentials(name: String){
+fun checkListCredentials(name: String) {
     require(TaskList.validName(name)) { "Invalid tasklist name: $name" }
 }

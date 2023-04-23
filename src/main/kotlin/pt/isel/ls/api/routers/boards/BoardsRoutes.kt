@@ -18,8 +18,12 @@ import pt.isel.ls.api.dto.board.GetUsersFromBoardResponse
 import pt.isel.ls.api.dto.board.toDTO
 import pt.isel.ls.api.dto.list.toDTO
 import pt.isel.ls.api.dto.user.toDTO
-import pt.isel.ls.api.routers.utils.*
 import pt.isel.ls.api.routers.utils.exceptions.runAndHandleExceptions
+import pt.isel.ls.api.routers.utils.getAuthorizationHeader
+import pt.isel.ls.api.routers.utils.getBoardID
+import pt.isel.ls.api.routers.utils.getJsonBodyTo
+import pt.isel.ls.api.routers.utils.getPagging
+import pt.isel.ls.api.routers.utils.json
 import pt.isel.ls.services.boards.BoardServices
 
 /**
