@@ -23,8 +23,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
     override fun createUser(token: String, name: String, email: String): User {
         dataSource.connection.use {
             val stm = it.prepareStatement(
-                " INSERT INTO  users(name, email, token) " +
-                    "VALUES (?,?,?)",
+                " INSERT INTO  users(name, email, token) VALUES (?,?,?)",
                 Statement.RETURN_GENERATED_KEYS
             )
             stm.setString(1, name)
@@ -430,6 +429,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
 
     override fun moveCard(cid: Int, lid: Int, cix: Int) {
         dataSource.connection.use {
+            it.autoCommit = false
             val stm = it.prepareStatement(
                 """
                 CALL "move_card"(?, ? , ?)
@@ -440,27 +440,39 @@ class TasksDataPostgres(url: String) : AppDatabase {
             stm.setInt(2, lid)
             stm.setInt(3, cix)
 
-            val affectedRows: Boolean = stm.execute()
-            if (affectedRows) {
-                throw SQLException("Updating card.lid failed, no rows affected.")
+            try {
+                stm.execute()
+
+                // commit the transaction
+                it.commit()
+            } catch (e: Exception) {
+                // rollback the transaction in case of an error
+                it.rollback()
+                throw e
             }
         }
     }
+
     override fun deleteCard(cid: Int) {
         dataSource.connection.use {
+            it.autoCommit = false
+
             val stm = it.prepareStatement(
                 """
-                    BEGIN  transaction;
                  CALL "delete_card"(?);
-                 End transaction;
                 """.trimIndent()
             )
-
             stm.setInt(1, cid)
 
-            val affectedRows: Boolean = stm.execute()
-            if (affectedRows) {
-                throw SQLException("Delete card failed, no rows affected.")
+            try {
+                stm.execute()
+
+                // commit the transaction
+                it.commit()
+            } catch (e: Exception) {
+                // rollback the transaction in case of an error
+                it.rollback()
+                throw e
             }
         }
     }

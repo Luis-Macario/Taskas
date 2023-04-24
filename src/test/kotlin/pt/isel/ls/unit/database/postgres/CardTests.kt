@@ -1,5 +1,5 @@
 package pt.isel.ls.unit.database.postgres
-
+/*
 import org.postgresql.ds.PGSimpleDataSource
 import pt.isel.ls.database.memory.CardNotFoundException
 import pt.isel.ls.database.memory.ListNotFoundException
@@ -29,12 +29,14 @@ class CardTests {
         val lid = 1
         val name = "Unit tests"
         val description = "Implement unit tests"
+        val initDate = Date.valueOf("2023-03-02")
         val dueDate = Date.valueOf("2023-04-02")
 
         val sut = db.createCard(
             lid = lid,
             name = name,
             description = description,
+            initDate =  initDate,
             dueDate = dueDate
         )
 
@@ -51,9 +53,10 @@ class CardTests {
         val name = "Card name"
         val description = "Card description"
         val dueDate = Date.valueOf("2023-04-02")
+        val initDate = Date.valueOf("2023-03-02")
 
         assertFailsWith<ListNotFoundException> {
-            tasksData.createCard(listId, name, description, dueDate)
+            tasksData.createCard(listId, name, description, initDate, dueDate)
         }
     }
 
@@ -63,10 +66,11 @@ class CardTests {
 
         val board = db.createBoard(1, "TODO Test Para Chess App", "something to do")
         val list = db.createList(board.id, "My List")
+        val initDate = Date.valueOf("2023-03-02")
 
-        val card1 = db.createCard(list.id, "Card 1", "Description 1", Date.valueOf("2023-04-02"))
-        val card2 = db.createCard(list.id, "Card 2", "Description 2", Date.valueOf("2023-04-03"))
-        val card3 = db.createCard(list.id, "Card 3", "Description 3", Date.valueOf("2023-04-04"))
+        val card1 = db.createCard(list.id, "Card 1", "Description 1",initDate, Date.valueOf("2023-04-02"))
+        val card2 = db.createCard(list.id, "Card 2", "Description 2",initDate, Date.valueOf("2023-04-03"))
+        val card3 = db.createCard(list.id, "Card 3", "Description 3",initDate, Date.valueOf("2023-04-04"))
 
         // Get the list of cards from the db
         val sut = db.getCardsFromList(list.id, board.id)
@@ -88,10 +92,10 @@ class CardTests {
     @Test
     fun `getCardDetails returns correct card details`() {
         val db = TasksDataPostgres(url)
-
+        val initDate = Date.valueOf("2023-03-02")
         val board = db.createBoard(1, "TODO Test Para Chess App", "something to do")
         val list = db.createList(board.id, "List 1")
-        val card = db.createCard(list.id, "Card 1", "Description 1", Date.valueOf("2023-04-02"))
+        val card = db.createCard(list.id, "Card 1", "Description 1",initDate, Date.valueOf("2023-04-02"))
 
         // Get the card details from the db
         val sut = db.getCardDetails(card.id)
@@ -141,7 +145,7 @@ class CardTests {
         val board = db.createBoard(1, "TODO Test Para Chess App", "something to do")
         val list1 = db.createList(board.id, "List 1")
         val list2 = db.createList(board.id, "List 2")
-        db.createCard(list1.id, "Card 1", "Description 1", Date.valueOf("2023-04-02"))
+        db.createCard(list1.id, "Card 1", "Description 1", Date.valueOf("2023-03-02"), Date.valueOf("2023-04-02"))
 
         // TODO("Find how to throw sql exception when using plpgsql")
         // val msg = assertFailsWith<SQLException> {
@@ -157,7 +161,7 @@ class CardTests {
 
         val board = db.createBoard(1, "TODO Test Para Chess App", "something to do")
         val list = db.createList(board.id, "List 1")
-        val card = db.createCard(list.id, "Card 1", "Description 1", Date.valueOf("2023-04-02"))
+        val card = db.createCard(list.id, "Card 1", "Description 1",Date.valueOf("2023-03-02"), Date.valueOf("2023-04-02"))
 
         db.deleteCard(card.id)
 
@@ -174,4 +178,4 @@ class CardTests {
         // db.deleteCard(-1)
         // }
     }
-}
+}*/

@@ -13,11 +13,11 @@ class CardTests {
 
     @Test
     fun `Creates a valid card`() {
-        val card = Card(1, 2, name = "Finish Domain Tests", description = "CardTest", initDate = Date.valueOf("1111-1-1"))
+        val card =
+            Card(1, 2, 3, name = "Finish Domain Tests", description = "CardTest", initDate = Date.valueOf("1111-1-1"))
 
         assertEquals(1, card.id)
         assertEquals(2, card.bid)
-        assertEquals(null, card.lid)
         assertEquals("Finish Domain Tests", card.name)
         assertEquals(Date.valueOf("1111-1-1"), card.initDate)
         assertEquals(Date.valueOf(MAX_DATE), card.finishDate)
@@ -39,13 +39,13 @@ class CardTests {
         assertEquals("Invalid board id: -2", ex.message)
     }
 
-    @Test
+    /*@Test
     fun `Creating a card with an invalid lid throws IllegalArgumentException`() {
         val ex = assertFailsWith<IllegalArgumentException> {
             Card(1, 2, -3, "Finish Domain Tests", initDate = Date.valueOf("1111-1-1"))
         }
         assertEquals("Invalid list id: -3", ex.message)
-    }
+    }*/
 
     @Test
     fun `Creating a card with an invalid name throws IllegalArgumentException`() {

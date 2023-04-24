@@ -3,6 +3,7 @@ package pt.isel.ls.unit.database.postgres
 import org.postgresql.ds.PGSimpleDataSource
 import pt.isel.ls.database.memory.BoardNotFoundException
 import pt.isel.ls.database.sql.TasksDataPostgres
+import pt.isel.ls.domain.toSimpleBoard
 import java.sql.SQLException
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -152,10 +153,10 @@ class BoardTests {
             "gods1@alunos.isel.pt"
         )
 
-        val newBoard = db.createBoard(newUser.id, boardName, boardDescription)
-        val newBoard2 = db.createBoard(newUser.id, boardName + 'a', boardDescription)
-        val newBoard3 = db.createBoard(newUser.id, boardName + 'b', boardDescription)
-        val newBoard4 = db.createBoard(newUser.id, boardName + 'c', boardDescription)
+        val newBoard = db.createBoard(newUser.id, boardName, boardDescription).toSimpleBoard()
+        val newBoard2 = db.createBoard(newUser.id, boardName + 'a', boardDescription).toSimpleBoard()
+        val newBoard3 = db.createBoard(newUser.id, boardName + 'b', boardDescription).toSimpleBoard()
+        val newBoard4 = db.createBoard(newUser.id, boardName + 'c', boardDescription).toSimpleBoard()
 
         val boardList = db.getBoardsFromUser(newUser.id)
 

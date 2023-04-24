@@ -11,7 +11,7 @@ class ListTests {
 
     @Test
     fun `Creates a valid tasklist`() {
-        val list = TaskList(1, 2, "TO-DO")
+        val list = TaskList(1, 2, "TO-DO", true, listOf())
 
         assertEquals(1, list.id)
         assertEquals(2, list.bid)
@@ -21,7 +21,7 @@ class ListTests {
     @Test
     fun `Creating a list with an invalid id throws IllegalArgumentException`() {
         val msg = assertFailsWith<IllegalArgumentException> {
-            TaskList(-1, 2, "TO-DO")
+            TaskList(-1, 2, "TO-DO", true, listOf())
         }
 
         assertEquals("Invalid task id: -1", msg.message)
@@ -30,7 +30,7 @@ class ListTests {
     @Test
     fun `Creating a list with an invalid board id throws IllegalArgumentException`() {
         val msg = assertFailsWith<IllegalArgumentException>("Invalid email: joe") {
-            TaskList(1, -2, "TO-DO")
+            TaskList(1, -2, "TO-DO", true, listOf())
         }
         assertEquals("Invalid board id: -2", msg.message)
     }
@@ -38,7 +38,7 @@ class ListTests {
     @Test
     fun `Creating a list with an invalid name throws IllegalArgumentException`() {
         val msg = assertFailsWith<IllegalArgumentException>("Invalid name: ") {
-            TaskList(1, 2, "")
+            TaskList(1, 2, "", true, listOf())
         }
 
         assertEquals("Invalid task name: ", msg.message)
