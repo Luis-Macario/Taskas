@@ -24,8 +24,6 @@ class TasksDataMem : AppDatabase {
     val taskLists: MutableMap<Int, SimpleList> = mutableMapOf()
     val cards: MutableMap<Int, Card> = mutableMapOf()
 
-    override fun getNextId() = userId + 1
-
     /**
      * Creates a new user
      *
@@ -36,8 +34,10 @@ class TasksDataMem : AppDatabase {
      * @return the created User()
      */
 
-    override fun createUser(user: User) {
-        users[user.id] = user
+    override fun createUser(token: String, name: String, email: String): Int {
+        val id = userId.also { userId += 1 }
+        users[id] = User(id, name, email, token)
+        return id
     }
 
     /**
@@ -75,17 +75,11 @@ class TasksDataMem : AppDatabase {
      * @throws BoardNameAlreadyExistsException if the board  name already exists
      * @return the created Board()
      */
-    override fun createBoard(uid: Int, name: String, description: String): Board {
+    override fun createBoard(uid: Int, name: String, description: String): Int {
         val id = boardId.also { boardId += 1 }
-        // val userId = tokenToId(uid)
-        if (!users.values.any { it.id == uid }) throw UserNotFoundException
-        if (boards.values.any { it.name == name }) throw BoardNameAlreadyExistsException
+        boards[id] = Board(id, name, description, emptyList())
 
-        val newBoard = Board(id, name, description, emptyList())
-        boards[id] = newBoard
-        addUserToBoard(uid, id)
-
-        return newBoard
+        return id
     }
 
     /**
@@ -131,6 +125,23 @@ class TasksDataMem : AppDatabase {
                 getBoardDetails(board.bId)
             }
 
+    override fun checkUserAlreadyExistsInBoard(uid: Int, bid: Int): Boolean {
+        return userBoard.values.any { it.bId == bid && it.uId == uid }
+    }
+
+    override fun checkUserTokenExistsInBoard(token: String, bid: Int): Boolean {
+        val uid = tokenToId(token)
+        return checkUserAlreadyExistsInBoard(uid,bid)
+    }
+
+    override fun checkBoardExists(bid: Int): Boolean {
+        return boards.values.any { it.id == bid }
+    }
+
+    override fun checkBoardNameAlreadyExists(name: String): Boolean {
+        return boards.values.any { it.name == name }
+    }
+
     /**
      * Creates a new List
      *
@@ -140,18 +151,11 @@ class TasksDataMem : AppDatabase {
      *  @throws BoardNotFoundException if the board was not found
      * @return the created TaskList()
      */
-    override fun createList(bid: Int, name: String): SimpleList {
+    override fun createList(bid: Int, name: String): Int {
         val id = listId.also { listId += 1 }
-        if (!boards.values.any { it.id == bid }) throw BoardNotFoundException
-        if (taskLists.values.any { it.bid == bid && it.name == name }) throw TaskListAlreadyExistsInBoardException
+        taskLists[id] = SimpleList(id, bid, name)
 
-        val newList = SimpleList(id, bid, name)
-        taskLists[id] = newList
-
-        val board = boards[bid]
-        if (board != null) board.lists += SimpleList(id, bid, name)
-
-        return newList
+        return id
     }
 
     /**
@@ -181,13 +185,15 @@ class TasksDataMem : AppDatabase {
      */
     override fun getListDetails(lid: Int): SimpleList = taskLists[lid] ?: throw ListNotFoundException
 
-    override fun checkListsFromSameBoard(l1: Int, l2: Int): Boolean {
-        TODO("Not yet implemented")
-    }
+
 
     override fun deleteList(lid: Int) {
         taskLists.values.filter { it.id != lid }
     }
+
+    override fun checkListAlreadyExistsInBoard(name: String, bid: Int): Boolean {
+        return taskLists.values.any { it.name == name  && it.bid == bid }
+     }
 
     /**
      * Creates a new Card

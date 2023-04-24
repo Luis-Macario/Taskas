@@ -2,11 +2,9 @@ package pt.isel.ls.database.sql
 
 import org.postgresql.ds.PGSimpleDataSource
 import pt.isel.ls.database.AppDatabase
-import pt.isel.ls.database.memory.BoardNotFoundException
 import pt.isel.ls.database.memory.CardNotFoundException
 import pt.isel.ls.database.memory.ListNotFoundException
 import pt.isel.ls.database.memory.UserNotFoundException
-import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.Card
 import pt.isel.ls.domain.SimpleBoard
 import pt.isel.ls.domain.SimpleList
@@ -20,23 +18,15 @@ class TasksDataPostgres(url: String) : AppDatabase {
         this.setUrl(url)
     }
 
-    override fun getNextId() = dataSource.connection.use {
-        val stm = it.prepareStatement(
-            " SELECT id+1 FROM  users ORDER BY id DESC LIMIT 1",
-            Statement.RETURN_GENERATED_KEYS
-        )
-        stm.executeQuery()
-    }.also { if(it.next()) return 1 }.getInt(1)
-
-    override fun createUser(user: User) {
+    override fun createUser(token: String, name: String, email: String): Int {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 " INSERT INTO  users(name, email, token) VALUES (?,?,?)",
                 Statement.RETURN_GENERATED_KEYS
             )
-            stm.setString(1, user.name)
-            stm.setString(2, user.email)
-            stm.setString(3, user.token)
+            stm.setString(1, name)
+            stm.setString(2, email)
+            stm.setString(3, token)
 
             val affectedRows: Int = stm.executeUpdate()
             if (affectedRows == 0) {
@@ -44,7 +34,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
             }
 
             val generatedKeys = stm.generatedKeys
-            val id = if (generatedKeys.next()) {
+            return if (generatedKeys.next()) {
                 generatedKeys.getInt(1)
             } else {
                 throw SQLException("Creating user failed, no ID obtained.")
@@ -120,7 +110,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
-    override fun createBoard(uid: Int, name: String, description: String): Board {
+    override fun createBoard(uid: Int, name: String, description: String): Int {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
@@ -139,15 +129,11 @@ class TasksDataPostgres(url: String) : AppDatabase {
             }
 
             val generatedKeys = stm.generatedKeys
-            val id = if (generatedKeys.next()) {
+            return if (generatedKeys.next()) {
                 generatedKeys.getInt(1)
             } else {
                 throw SQLException("Creating board failed, no ID obtained.")
             }
-
-            addUserToBoard(uid, id)
-
-            return Board(id, name, description, emptyList())
         }
     }
 
@@ -161,15 +147,13 @@ class TasksDataPostgres(url: String) : AppDatabase {
             stm.setInt(1, bid)
 
             val rs = stm.executeQuery()
-            if (rs.next()) {
-                return SimpleBoard(
-                    id = rs.getInt("id"),
-                    name = rs.getString("name"),
-                    description = rs.getString("description")
-                )
-            } else {
-                throw BoardNotFoundException
-            }
+            rs.next()
+
+            return SimpleBoard(
+                id = rs.getInt("id"),
+                name = rs.getString("name"),
+                description = rs.getString("description")
+            )
         }
     }
 
@@ -227,7 +211,74 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
-    override fun createList(bid: Int, name: String): SimpleList {
+    override fun checkUserAlreadyExistsInBoard(uid: Int, bid: Int): Boolean {
+        dataSource.connection.use {
+            val stm = it.prepareStatement(
+                """
+                SELECT EXISTS(SELECT 1 FROM userboards WHERE uid = ? and bid = ?)
+                """.trimIndent()
+            )
+            stm.setInt(1, uid)
+            stm.setInt(2, bid)
+
+            val rs = stm.executeQuery()
+            rs.next()
+            return rs.getBoolean(1)
+        }
+    }
+
+    override fun checkUserTokenExistsInBoard(token: String, bid: Int): Boolean {
+        dataSource.connection.use {
+            val stm = it.prepareStatement(
+                """
+                SELECT EXISTS(
+                    SELECT 1
+                    FROM userboards
+                    join users u on userboards.uid = u.id
+                    WHERE u.token = ? and bid = ?)
+                """.trimIndent()
+            )
+
+            stm.setString(1, token)
+            stm.setInt(2, bid)
+
+            val rs = stm.executeQuery()
+            rs.next()
+            return rs.getBoolean(1)
+        }
+    }
+
+    override fun checkBoardExists(bid: Int): Boolean {
+        dataSource.connection.use {
+            val stm = it.prepareStatement(
+                """
+                SELECT EXISTS(SELECT 1 FROM boards WHERE id = ?)
+                """.trimIndent()
+            )
+            stm.setInt(1, bid)
+
+            val rs = stm.executeQuery()
+            rs.next()
+            return rs.getBoolean(1)
+        }
+    }
+
+    override fun checkBoardNameAlreadyExists(name: String): Boolean {
+        dataSource.connection.use {
+            val stm = it.prepareStatement(
+                """
+                SELECT EXISTS(SELECT 1 FROM boards WHERE name = ?)
+                """.trimIndent()
+            )
+            stm.setString(1, name)
+
+            val rs = stm.executeQuery()
+            rs.next()
+            return rs.getBoolean(1)
+        }
+    }
+
+    override fun createList(bid: Int, name: String): Int {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
@@ -246,13 +297,11 @@ class TasksDataPostgres(url: String) : AppDatabase {
             }
 
             val generatedKeys = stm.generatedKeys
-            val id = if (generatedKeys.next()) {
+            return if (generatedKeys.next()) {
                 generatedKeys.getInt(1)
             } else {
                 throw SQLException("Creating taskList failed, no ID obtained.")
             }
-
-            return SimpleList(id, bid, name)
         }
     }
 
@@ -307,10 +356,6 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
-    override fun checkListsFromSameBoard(l1: Int, l2: Int): Boolean {
-        TODO("Not yet implemented")
-    }
-
     override fun deleteList(lid: Int) {
         dataSource.connection.use {
             val stm = it.prepareStatement(
@@ -327,6 +372,42 @@ class TasksDataPostgres(url: String) : AppDatabase {
             }
         }
     }
+
+    override fun checkListAlreadyExistsInBoard(name: String, bid: Int): Boolean {
+        dataSource.connection.use {
+            val stm = it.prepareStatement(
+                """
+                SELECT EXISTS(
+                    SELECT 1
+                    FROM tasklists t
+                    join boards b on t.bid = b.id
+                    WHERE t.name = ? and b.id = ?
+                    )
+                """.trimIndent()
+            )
+            stm.setString(1, name)
+            stm.setInt(2, bid)
+
+            val rs = stm.executeQuery()
+            rs.next()
+            return rs.getBoolean(1)
+        }
+    }
+    // Probably not necessary
+    /*override fun checkListExists(lid: Int): Boolean {
+        dataSource.connection.use {
+            val stm = it.prepareStatement(
+                """
+                SELECT EXISTS(SELECT 1 FROM tasklists WHERE id = ?)
+                """.trimIndent()
+            )
+            stm.setInt(1, lid)
+
+            val rs = stm.executeQuery()
+            rs.next()
+            return rs.getBoolean(1)
+        }
+    }*/
 
     override fun createCard(lid: Int, name: String, description: String, initDate: Date, dueDate: Date): Card {
         dataSource.connection.use {

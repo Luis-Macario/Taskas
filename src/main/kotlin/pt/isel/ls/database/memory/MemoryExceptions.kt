@@ -36,7 +36,7 @@ object CardNotFoundException : MemoryException() {
 
 object UserAlreadyExistsInBoardException : MemoryException() {
     override val code = 4006
-    override val description = "A user already exists in that board"
+    override val description = "The user already exists in that board"
 }
 
 object TaskListAlreadyExistsInBoardException : MemoryException() {

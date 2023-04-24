@@ -36,10 +36,8 @@ class CardServices(private val database: AppDatabase) {
     ): Card {
         checkToken(token)
         checkCardCredentials(name, description, initDate, dueDate)
-
         val list = database.getListDetails(lid)
-        val users = database.getUsersFromBoard(list.bid)
-        if (!users.any { it.token == token }) throw IllegalListAccessException
+        if (!database.checkUserTokenExistsInBoard(token, list.bid)) throw IllegalListAccessException
         val date = if (dueDate != null) Date.valueOf(dueDate) else Date.valueOf(MAX_DATE)
 
         return database.createCard(lid, name, description, Date.valueOf(initDate), date)
@@ -57,11 +55,8 @@ class CardServices(private val database: AppDatabase) {
      */
     fun getCardDetails(token: String, cid: Int): Card {
         checkToken(token)
-
         val card = database.getCardDetails(cid)
-        val users = database.getUsersFromBoard(card.bid)
-
-        if (!users.any { it.token == token }) throw IllegalCardAccessException
+        if (!database.checkUserTokenExistsInBoard(token, card.bid)) throw IllegalCardAccessException
 
         return card
     }
@@ -78,25 +73,19 @@ class CardServices(private val database: AppDatabase) {
      */
     fun moveCard(token: String, cid: Int, request: MoveCardRequest) {
         checkToken(token)
-
         val card = database.getCardDetails(cid)
-        val bid = card.bid
-        val users = database.getUsersFromBoard(bid)
+        if (!database.checkUserTokenExistsInBoard(token, card.bid)) throw IllegalCardAccessException
         val destList = database.getListDetails(request.listID)
 
         if (card.bid != destList.bid) throw IllegalMoveCardRequestException
-        if (!users.any { it.token == token }) throw IllegalCardAccessException
 
         database.moveCard(cid, request.listID, 0)
     }
 
     fun deleteCard(token: String, cid: Int) {
         checkToken(token)
-
         val card = database.getCardDetails(cid)
-        val bid = card.bid
-        val users = database.getUsersFromBoard(bid)
-        if (!users.any { it.token == token }) throw IllegalCardAccessException
+        if (!database.checkUserTokenExistsInBoard(token, card.bid)) throw IllegalCardAccessException
 
         database.deleteCard(cid)
     }

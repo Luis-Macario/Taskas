@@ -1,6 +1,9 @@
 package pt.isel.ls.services.boards
 
 import pt.isel.ls.database.AppDatabase
+import pt.isel.ls.database.memory.BoardNameAlreadyExistsException
+import pt.isel.ls.database.memory.BoardNotFoundException
+import pt.isel.ls.database.memory.UserAlreadyExistsInBoardException
 import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.SimpleList
 import pt.isel.ls.domain.User
@@ -10,7 +13,7 @@ import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
 
 class BoardServices(private val database: AppDatabase) {
     /**
-     * Creates a new board
+     * Creates a new board and adds the user to the board
      *
      * @param token token of the user creating the board
      * @param name project's name
@@ -21,8 +24,13 @@ class BoardServices(private val database: AppDatabase) {
     fun createBoard(token: String, name: String, description: String): Board {
         checkToken(token)
         checkBoardCredentials(name, description)
+        if (database.checkBoardNameAlreadyExists(name)) throw BoardNameAlreadyExistsException
+
         val uid = database.tokenToId(token)
-        return database.createBoard(uid, name, description)
+        val id = database.createBoard(uid, name, description)
+
+        database.addUserToBoard(uid, id)
+        return Board(id, name, description, listOf())
     }
 
     /**
@@ -36,8 +44,9 @@ class BoardServices(private val database: AppDatabase) {
      */
     fun addUserToBoard(token: String, uid: Int, bid: Int) {
         checkToken(token)
-        val users = getUsersFromBoard(token, bid)
-        if (!users.any { it.token == token }) throw IllegalBoardAccessException
+        if (!database.checkBoardExists(bid)) throw BoardNotFoundException
+        if (!database.checkUserTokenExistsInBoard(token, bid)) throw IllegalBoardAccessException   // User Access
+        if (database.checkUserAlreadyExistsInBoard(uid, bid)) throw UserAlreadyExistsInBoardException   // Check if User is already on the board
 
         database.addUserToBoard(uid, bid)
     }
@@ -54,8 +63,10 @@ class BoardServices(private val database: AppDatabase) {
      */
     fun getBoardDetails(token: String, bid: Int): Board {
         checkToken(token)
-        val users = getUsersFromBoard(token, bid)
-        if (!users.any { it.token == token }) throw IllegalBoardAccessException
+
+        if (!database.checkBoardExists(bid)) throw BoardNotFoundException
+        if (!database.checkUserTokenExistsInBoard(token, bid)) throw IllegalBoardAccessException
+
         val lists = getListsFromBoard(token, bid)
         val simpleBoard = database.getBoardDetails(bid)
 
@@ -74,11 +85,10 @@ class BoardServices(private val database: AppDatabase) {
      */
     fun getUsersFromBoard(token: String, bid: Int): List<User> {
         checkToken(token)
-        database.getBoardDetails(bid) // check if board exists
-        val users = database.getUsersFromBoard(bid)
-        if (!users.any { it.token == token }) throw IllegalBoardAccessException
+        if (!database.checkBoardExists(bid)) throw BoardNotFoundException
+        if (!database.checkUserTokenExistsInBoard(token, bid)) throw IllegalBoardAccessException
 
-        return users
+        return database.getUsersFromBoard(bid)
     }
 
     /**
@@ -93,8 +103,8 @@ class BoardServices(private val database: AppDatabase) {
      */
     fun getListsFromBoard(token: String, bid: Int): List<SimpleList> {
         checkToken(token)
-        val users = getUsersFromBoard(token, bid)
-        if (!users.any { it.token == token }) throw IllegalBoardAccessException
+        if (!database.checkUserTokenExistsInBoard(token, bid)) throw IllegalBoardAccessException
+
         return database.getListsFromBoard(bid)
     }
 }

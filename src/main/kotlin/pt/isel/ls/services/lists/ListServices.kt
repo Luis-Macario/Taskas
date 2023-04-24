@@ -1,6 +1,8 @@
 package pt.isel.ls.services.lists
 
 import pt.isel.ls.database.AppDatabase
+import pt.isel.ls.database.memory.BoardNotFoundException
+import pt.isel.ls.database.memory.TaskListAlreadyExistsInBoardException
 import pt.isel.ls.domain.Card
 import pt.isel.ls.domain.TaskList
 import pt.isel.ls.domain.checkListCredentials
@@ -23,15 +25,13 @@ class ListServices(private val database: AppDatabase) {
     fun createList(token: String, bid: Int, name: String): TaskList {
         checkToken(token)
         checkListCredentials(name)
-        database.getBoardDetails(bid)
+        if (!database.checkBoardExists(bid)) throw BoardNotFoundException
+        if (!database.checkUserTokenExistsInBoard(token, bid)) throw IllegalBoardAccessException
+        if (database.checkListAlreadyExistsInBoard(name, bid)) throw TaskListAlreadyExistsInBoardException
 
-        val users = database.getUsersFromBoard(bid)
-        if (!users.any { it.token == token }) throw IllegalBoardAccessException
+        val id = database.createList(bid, name)
 
-        val simpleList = database.createList(bid, name)
-        val cards = database.getCardsFromList(simpleList.id, bid)
-
-        return TaskList(simpleList.id, bid, name, false, cards)
+        return TaskList(id, bid, name, false, listOf())
     }
 
     /**
@@ -46,8 +46,7 @@ class ListServices(private val database: AppDatabase) {
     fun getList(token: String, lid: Int): TaskList {
         checkToken(token)
         val simpleList = database.getListDetails(lid)
-        val users = database.getUsersFromBoard(simpleList.bid)
-        if (!users.any { it.token == token }) throw IllegalListAccessException
+        if (!database.checkUserTokenExistsInBoard(token, simpleList.bid)) throw IllegalListAccessException
 
         val cards = database.getCardsFromList(simpleList.id, simpleList.bid)
 
@@ -72,8 +71,8 @@ class ListServices(private val database: AppDatabase) {
     fun getCardsFromList(token: String, lid: Int): List<Card> {
         checkToken(token)
         val list = database.getListDetails(lid)
-        val users = database.getUsersFromBoard(list.bid)
-        if (!users.any { it.token == token }) throw IllegalListAccessException
+        if (!database.checkUserTokenExistsInBoard(token, list.bid)) throw IllegalListAccessException
+
         return database.getCardsFromList(lid, list.bid)
     }
 }

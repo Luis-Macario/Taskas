@@ -106,6 +106,6 @@ class CardsRoutes(private val services: CardServices) {
             val bearerToken = request.getAuthorizationHeader()
 
             services.deleteCard(bearerToken, cardID)
-            Response(OK)
+            Response(OK).json("The Card id[$cardID] was succefully deleted")
         }
 }
