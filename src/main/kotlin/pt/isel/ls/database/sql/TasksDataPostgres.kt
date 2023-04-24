@@ -20,15 +20,23 @@ class TasksDataPostgres(url: String) : AppDatabase {
         this.setUrl(url)
     }
 
-    override fun createUser(token: String, name: String, email: String): User {
+    override fun getNextId() = dataSource.connection.use {
+        val stm = it.prepareStatement(
+            " SELECT id+1 FROM  users ORDER BY id DESC LIMIT 1",
+            Statement.RETURN_GENERATED_KEYS
+        )
+        stm.executeQuery()
+    }.also { if(it.next()) return 1 }.getInt(1)
+
+    override fun createUser(user: User) {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 " INSERT INTO  users(name, email, token) VALUES (?,?,?)",
                 Statement.RETURN_GENERATED_KEYS
             )
-            stm.setString(1, name)
-            stm.setString(2, email)
-            stm.setString(3, token)
+            stm.setString(1, user.name)
+            stm.setString(2, user.email)
+            stm.setString(3, user.token)
 
             val affectedRows: Int = stm.executeUpdate()
             if (affectedRows == 0) {
@@ -41,8 +49,6 @@ class TasksDataPostgres(url: String) : AppDatabase {
             } else {
                 throw SQLException("Creating user failed, no ID obtained.")
             }
-
-            return User(id, name, email, token)
         }
     }
 

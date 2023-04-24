@@ -24,6 +24,8 @@ class TasksDataMem : AppDatabase {
     val taskLists: MutableMap<Int, SimpleList> = mutableMapOf()
     val cards: MutableMap<Int, Card> = mutableMapOf()
 
+    override fun getNextId() = userId + 1
+
     /**
      * Creates a new user
      *
@@ -34,14 +36,8 @@ class TasksDataMem : AppDatabase {
      * @return the created User()
      */
 
-    override fun createUser(token: String, name: String, email: String): User {
-        val id = userId.also { userId += 1 }
-
-        if (users.values.any { it.email == email }) throw EmailAlreadyExistsException
-
-        val newUser = User(id, name, email, token)
-        users[id] = newUser
-        return newUser
+    override fun createUser(user: User) {
+        users[user.id] = user
     }
 
     /**

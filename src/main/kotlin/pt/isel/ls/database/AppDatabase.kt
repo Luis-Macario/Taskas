@@ -8,7 +8,8 @@ import pt.isel.ls.domain.User
 import java.sql.Date
 
 interface AppDatabase {
-    fun createUser(token: String, name: String, email: String): User
+    fun getNextId() : Int
+    fun createUser(user : User)
     fun getUserDetails(uid: Int): User
     fun getUsersFromBoard(bid: Int): List<User>
     fun checkEmailAlreadyExists(email: String): Boolean

@@ -20,13 +20,22 @@ class UserServices(private val database: AppDatabase) {
      * @return user object
      */
     fun createUser(name: String, email: String): User {
-        val token = UUID.randomUUID().toString()
-        checkUserCredentials(name, email)
         try {
-            return database.createUser(token, name, email)
-        } catch (sql: SQLException) {
+            database.checkEmailAlreadyExists(email)
+        } catch (sqlE: SQLException) {
             throw EmailAlreadyExistsException
         }
+
+        val id = database.getNextId()
+        val token = UUID.randomUUID().toString()
+        val user = User(id, name, email, token)
+
+        try {
+            database.createUser(user)
+        }catch (sqlE : SQLException){
+            throw sqlE
+        }
+        return user
     }
 
     /**
