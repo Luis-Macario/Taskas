@@ -209,13 +209,13 @@ function getList(mainContent, id) {
                         li(`Name: ${list.name}`),
                         li(`id: ${list.id}`),
                         ...cards.map(card => {
-                                return li(
-                                    a(`#cards/${card.id}`, "Card:" + card.name)
-                                )
-                            })
+                            return li(
+                                a(`#cards/${card.id}`, "Card:" + card.name)
+                            )
+                        })
                         //li(
                         //    a(`#lists/${id}/cards`, `Get Cards from List[${id}]`)  --next phase
-                       // )
+                        // )
                     )
                 )
             )
@@ -227,8 +227,8 @@ function getList(mainContent, id) {
 }
 
 function getCardsFromList(mainContent, id) {
-    const skip = 1
-    const limit = 3
+    const skip = 0
+    const limit = 10
     fetch(API_BASE_URL + `lists/${id}/cards?skip=${skip}&limit=${limit}`, {
         headers: {
             "Authorization": "Bearer " + hardCodedBearer
