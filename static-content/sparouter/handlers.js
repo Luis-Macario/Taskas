@@ -9,6 +9,22 @@ function createElement(tagName, ...stringsOrElements) {
     return element
 }
 
+function table(...tr) {
+    return createElement("table", ...tr)
+}
+
+function tr(...content) { //table row
+    return createElement("tr", ...content)
+}
+
+function th(tableHeader) { //table header
+    return createElement("th", tableHeader)
+}
+
+function td(data) { //table data
+    return createElement("td", data)
+}
+
 function h1(string) {
     return createElement("h1", string)
 }
@@ -83,18 +99,28 @@ async function getBoards(mainContent, id) {
             return res.json()
         })
         .then(boards => {
-            mainContent.replaceChildren(
-                div(
-                    h1("My Boards"),
-                    ...boards.boards.map(s => {
-                        return li(
-                            a("#boards/" + s.id, "Link Example to board" + s.id)
+                mainContent.replaceChildren(
+                    div(
+                        table(
+                            tr(
+                                th("My Boards")
+                            ),
+                            ...(boards.boards.length > 0 ? boards.boards.map(s => {
+                                        return tr(
+                                            td(a("#boards/" + s.id, "Board " + s.id))
+                                        )
+                                    }) :
+                                    [tr(
+                                        td(
+                                            p("You aren't a part of any board yet")
+                                        )
+                                    )]
+                            )
                         )
-
-                    })
+                    )
                 )
-            )
-        }).catch(e => {
+            }
+        ).catch(e => {
         return e
     }).then(error => {
         showErrorResponse(mainContent, error)
@@ -115,11 +141,29 @@ function getBoardDetails(mainContent, id) {
                 div(
                     h1(board.name),
                     p(board.description),
-                    ul(
-                        ...board.lists.map(l =>
-                            li(a("#lists/" + l.id, "Link Example to lists/" + l.id))
+                    table(
+                        tr(
+                            th("Lists")
                         ),
-                        li(a(`#boards/${id}/users`, "Get Board Users"))
+                        ...(board.lists.length > 0 ? board.lists.map(l => {
+                                return tr(
+                                    td(a("#lists/" + l.id, "Link Example to lists/" + l.id))
+                                )
+                            }) :
+                            [
+                                tr(
+                                    td(
+                                        p("Board has no lists")
+                                    )
+                                )
+                            ]
+                        ),
+                        tr(
+                            th("Users"),
+                        ),
+                        tr(
+                            a(`#boards/${id}/users`, "Board Users")
+                        )
                     )
                 )
             )
@@ -208,14 +252,25 @@ function getList(mainContent, id) {
                     ul(
                         li(`Name: ${list.name}`),
                         li(`id: ${list.id}`),
-                        ...cards.map(card => {
-                            return li(
-                                a(`#cards/${card.id}`, "Card:" + card.name)
-                            )
-                        })
-                        //li(
-                        //    a(`#lists/${id}/cards`, `Get Cards from List[${id}]`)  --next phase
-                        // )
+                    ),
+                    table(
+                        tr(
+                            th("Cards")
+                        ),
+                        ...(cards.length > 0 ? cards.map(card => {
+                                    return tr(
+                                        td(a(`#cards/${card.id}`, "Card:" + card.name))
+                                    )
+                                })
+                                :
+                                [tr(
+                                    td(p("List doesn't have any cards yet")) //fallback value to spread, hence the []
+                                )]
+
+                            //li(
+                            //    a(`#lists/${id}/cards`, `Get Cards from List[${id}]`)  --next phase
+                            // )
+                        )
                     )
                 )
             )
