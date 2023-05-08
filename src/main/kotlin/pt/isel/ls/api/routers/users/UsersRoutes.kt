@@ -8,11 +8,9 @@ import org.http4k.core.Status.Companion.CREATED
 import org.http4k.core.Status.Companion.OK
 import org.http4k.routing.bind
 import org.http4k.routing.routes
+import pt.isel.ls.api.dto.board.GetListsFromBoardResponse
 import pt.isel.ls.api.dto.board.toDTO
-import pt.isel.ls.api.dto.user.CreateUserRequest
-import pt.isel.ls.api.dto.user.CreateUserResponse
-import pt.isel.ls.api.dto.user.GetBoardsFromUserResponse
-import pt.isel.ls.api.dto.user.toDTO
+import pt.isel.ls.api.dto.user.*
 import pt.isel.ls.api.routers.utils.exceptions.runAndHandleExceptions
 import pt.isel.ls.api.routers.utils.getAuthorizationHeader
 import pt.isel.ls.api.routers.utils.getJsonBodyTo
@@ -31,7 +29,8 @@ class UsersRoutes(private val services: UserServices) {
     val routes = routes(
         "/" bind POST to ::createUser,
         "/{userID}" bind GET to ::getUserDetails,
-        "/{userID}/boards" bind GET to ::getBoardsFromUser
+        "/{userID}/boards" bind GET to ::getBoardsFromUser,
+        "/{userID}/boards/search" bind GET to ::searchBoard
     )
 
     /**
@@ -86,5 +85,21 @@ class UsersRoutes(private val services: UserServices) {
 
             val boardsResponse = GetBoardsFromUserResponse(boards.map { it.toDTO() })
             Response(OK).json(boardsResponse)
+        }
+
+    private fun searchBoard(request: Request): Response =
+        runAndHandleExceptions {
+            val uid = request.getUserID()
+            val bearerToken = request.getAuthorizationHeader()
+
+            val userRequest = request.getJsonBodyTo<GetSearchBoardsFromUserRequest>()
+            val lists = services.getBoardsFromUser(bearerToken, uid)
+
+            val getListsResponse = GetSearchBoardsFromUserResponse(
+                lists
+                    .map { it.toDTO() }
+                    .filter {it.name.lowercase().contains(userRequest.boardsName.lowercase())})
+
+            Response(OK).json(getListsResponse)
         }
 }

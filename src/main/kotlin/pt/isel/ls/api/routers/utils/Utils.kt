@@ -39,6 +39,7 @@ fun String.parseBearerToken(): String {
 fun Request.getAuthorizationHeader(): String =
     (header("Authorization") ?: throw NoAuthenticationException).parseBearerToken()
 
+
 /**
  * Attempts to get the string "skip" and "limit" located in the query parameters of the [Request]
  *

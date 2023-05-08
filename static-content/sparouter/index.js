@@ -8,6 +8,8 @@ function loadHandler() {
 
     router.addRouteHandler("home", handlers.getHome)
     router.addRouteHandler("users/{id}", handlers.getUser)
+    router.addRouteHandler("users/create", handlers.createUser)
+    router.addRouteHandler("users/{id}/boards", handlers.getBoards)
     router.addRouteHandler("users/{id}/boards", handlers.getBoards)
     router.addRouteHandler("boards/{id}", handlers.getBoardDetails)
     router.addRouteHandler("boards/{id}/users", handlers.getUsersFromBoard)

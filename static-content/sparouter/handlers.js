@@ -59,6 +59,61 @@ function getHome(mainContent) {
     )
 }
 
+function createUser(mainContent){
+    const form = document.createElement("form")
+
+    const labelName = document.createElement("label")
+    const textName = document.createTextNode("Name")
+    labelName.appendChild(textName)
+
+    const inputName = document.createElement("input")
+    inputName.type = "text"
+    inputName.id = "idName"
+
+    const labelEmail = document.createElement("label")
+    const textEmail = document.createTextNode("Email")
+    labelEmail.appendChild(textEmail)
+
+    const inputEmail = document.createElement("input")
+    inputEmail.type = "text"
+    inputEmail.id = "idEmail"
+
+    const inputSubmit = document.createElement("input")
+    inputSubmit.type = "submit"
+
+    form.appendChild(labelName)
+    form.appendChild(inputName)
+    form.appendChild(labelEmail)
+    form.appendChild(inputEmail)
+    form.appendChild(inputSubmit)
+
+    form.addEventListener('submit', handleSubmit)
+
+    function handleSubmit(e) {
+        e.preventDefault()
+        const inputName = document.querySelector("#idName")
+        const inputEmail = document.querySelector("#idEmail")
+        const options = {
+            method : "POST",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "application/json"
+            },
+            body : JSON.stringify({
+                name : inputName.value,
+                email : inputEmail.value
+            })
+        }
+        fetch(API_BASE_URL + "users/", options)
+            .then(res => res.json())
+            .then(student => {
+                console.log(student)
+                window.location.hash = "students"
+            })
+    }
+    mainContent.replaceChildren(form)
+}
+
 function getUser(mainContent, id) {
     fetch(API_BASE_URL + "users/" + id, {
         headers: {
@@ -125,6 +180,10 @@ async function getBoards(mainContent, id) {
     }).then(error => {
         showErrorResponse(mainContent, error)
     })
+}
+
+function searchBoard(mainContent, id){
+
 }
 
 function getBoardDetails(mainContent, id) {
@@ -355,6 +414,7 @@ function getCard(mainContent, id) {
 
 export const handlers = {
     getHome,
+    createUser,
     getUser,
     getBoards,
     getBoardDetails,

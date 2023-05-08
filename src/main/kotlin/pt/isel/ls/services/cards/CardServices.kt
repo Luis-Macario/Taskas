@@ -78,7 +78,6 @@ class CardServices(private val database: AppDatabase) {
         val destList = database.getListDetails(request.listID)
 
         if (card.bid != destList.bid) throw IllegalMoveCardRequestException
-
         database.moveCard(cid, request.listID, 0)
     }
 

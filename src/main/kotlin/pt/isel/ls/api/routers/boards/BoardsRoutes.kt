@@ -40,7 +40,7 @@ class BoardsRoutes(private val services: BoardServices) {
         "/{boardID}" bind GET to ::getBoardDetails,
         "/{boardID}/users" bind GET to ::getUsersFromBoard,
         "/{boardID}/users" bind POST to ::addUserToBoard,
-        "/{boardID}/lists" bind GET to ::getListsFromBoard
+        "/{boardID}/lists" bind GET to ::getListsFromBoard,
     )
 
     /**
