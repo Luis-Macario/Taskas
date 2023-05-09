@@ -59,49 +59,38 @@ function getHome(mainContent) {
     )
 }
 
-function createUser(mainContent){
-    const form = document.createElement("form")
+function form(...elements) {
+    return createElement("form", ...elements)
+}
 
-    const labelName = document.createElement("label")
-    const textName = document.createTextNode("Name")
-    labelName.appendChild(textName)
+function label(string) {
+    const label = createElement("label")
+    const text = document.createTextNode(string)
+    label.appendChild(text)
+    return label
+}
 
-    const inputName = document.createElement("input")
-    inputName.type = "text"
-    inputName.id = "idName"
+function input(type, id) {
+    const input = document.createElement("input")
+    input.type = type
+    if (id !== undefined) input.id = id
+    return input
+}
 
-    const labelEmail = document.createElement("label")
-    const textEmail = document.createTextNode("Email")
-    labelEmail.appendChild(textEmail)
-
-    const inputEmail = document.createElement("input")
-    inputEmail.type = "text"
-    inputEmail.id = "idEmail"
-
-    const inputSubmit = document.createElement("input")
-    inputSubmit.type = "submit"
-
-    form.appendChild(labelName)
-    form.appendChild(inputName)
-    form.appendChild(labelEmail)
-    form.appendChild(inputEmail)
-    form.appendChild(inputSubmit)
-
-    form.addEventListener('submit', handleSubmit)
-
+function createUser(mainContent) {
     function handleSubmit(e) {
         e.preventDefault()
         const inputName = document.querySelector("#idName")
         const inputEmail = document.querySelector("#idEmail")
         const options = {
-            method : "POST",
-            headers : {
-                "Content-Type" : "application/json",
-                "Accept" : "application/json"
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
             },
-            body : JSON.stringify({
-                name : inputName.value,
-                email : inputEmail.value
+            body: JSON.stringify({
+                name: inputName.value,
+                email: inputEmail.value
             })
         }
         fetch(API_BASE_URL + "users/", options)
@@ -111,7 +100,18 @@ function createUser(mainContent){
                 window.location.hash = "students"
             })
     }
-    mainContent.replaceChildren(form)
+
+    const myForm = form(
+        label("Name"),
+        input("text", "idName"),
+        label("Email"),
+        input("text", "idEmail"),
+        input("submit")
+    )
+    myForm.addEventListener('submit', handleSubmit)
+    mainContent.replaceChildren(
+        myForm
+    )
 }
 
 function getUser(mainContent, id) {
@@ -120,7 +120,7 @@ function getUser(mainContent, id) {
             "Authorization": "Bearer " + hardCodedBearer
         }
     }).then(res => {
-        if (res.status < 200 || res.status > 299) throw res.json()
+        if (res.status !== 200) throw res.json()
         return res.json()
     })
         .then(user => {
@@ -182,7 +182,7 @@ async function getBoards(mainContent, id) {
     })
 }
 
-function searchBoard(mainContent, id){
+function searchBoard(mainContent, id) {
 
 }
 
@@ -205,17 +205,17 @@ function getBoardDetails(mainContent, id) {
                             th("Lists")
                         ),
                         ...(board.lists.length > 0 ? board.lists.map(l => {
-                                return tr(
-                                    td(a("#lists/" + l.id, "Link Example to lists/" + l.id))
-                                )
-                            }) :
-                            [
-                                tr(
-                                    td(
-                                        p("Board has no lists")
+                                    return tr(
+                                        td(a("#lists/" + l.id, "Link Example to lists/" + l.id))
                                     )
-                                )
-                            ]
+                                }) :
+                                [
+                                    tr(
+                                        td(
+                                            p("Board has no lists")
+                                        )
+                                    )
+                                ]
                         ),
                         tr(
                             th("Users"),
