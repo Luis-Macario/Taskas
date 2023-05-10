@@ -1,3 +1,5 @@
+const API_BASE_URL = "http://localhost:8080/api/"
+
 const hardCodedBearer = "160ee838-150b-4ca1-a2ff-2e964383c315"
 
 function createElement(tagName, ...stringsOrElements) {
@@ -51,14 +53,6 @@ function a(href, string) {
     return a
 }
 
-const API_BASE_URL = "http://localhost:8080/api/"
-
-function getHome(mainContent) {
-    mainContent.replaceChildren(
-        h1("Home")
-    )
-}
-
 function form(...elements) {
     return createElement("form", ...elements)
 }
@@ -71,10 +65,16 @@ function label(string) {
 }
 
 function input(type, id) {
-    const input = document.createElement("input")
+    const input = createElement("input")
     input.type = type
     if (id !== undefined) input.id = id
     return input
+}
+
+function getHome(mainContent) {
+    mainContent.replaceChildren(
+        h1("Home")
+    )
 }
 
 function createUser(mainContent) {
@@ -95,9 +95,9 @@ function createUser(mainContent) {
         }
         fetch(API_BASE_URL + "users/", options)
             .then(res => res.json())
-            .then(student => {
-                console.log(student)
-                window.location.hash = "students"
+            .then(user => {
+                console.log(user)
+                window.location.hash = "users/" + user.id
             })
     }
 
@@ -122,19 +122,18 @@ function getUser(mainContent, id) {
     }).then(res => {
         if (res.status !== 200) throw res.json()
         return res.json()
-    })
-        .then(user => {
-            mainContent.replaceChildren(
-                div(
-                    h1("User Details"),
-                    ul(
-                        li(`Name: ${user.name}`),
-                        li(`Email: ${user.email}`),
-                        li(`id: ${user.id}`),
-                    )
+    }).then(user => {
+        mainContent.replaceChildren(
+            div(
+                h1("User Details"),
+                ul(
+                    li(`Name: ${user.name}`),
+                    li(`Email: ${user.email}`),
+                    li(`id: ${user.id}`),
                 )
             )
-        }).catch(e => {
+        )
+    }).catch(e => {
         return e
     }).then(error => {
         showErrorResponse(mainContent, error)
@@ -180,10 +179,6 @@ async function getBoards(mainContent, id) {
     }).then(error => {
         showErrorResponse(mainContent, error)
     })
-}
-
-function searchBoard(mainContent, id) {
-
 }
 
 function getBoardDetails(mainContent, id) {

@@ -120,6 +120,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
                 Statement.RETURN_GENERATED_KEYS
             )
 
+
             stm.setString(1, name)
             stm.setString(2, description)
 
@@ -129,11 +130,24 @@ class TasksDataPostgres(url: String) : AppDatabase {
             }
 
             val generatedKeys = stm.generatedKeys
-            return if (generatedKeys.next()) {
+            val boardID = if (generatedKeys.next()) {
                 generatedKeys.getInt(1)
             } else {
                 throw SQLException("Creating board failed, no ID obtained.")
             }
+
+            val stm2 = it.prepareStatement(
+                """
+                INSERT INTO userboards  (uid, bid)
+                VALUES (?,?)
+                """.trimIndent()
+            )
+
+            stm.setInt(1, uid)
+            stm.setInt(2, boardID)
+            stm.executeUpdate()
+            return boardID
+            //TODO: MAKE BOARD CREATING AND USER INSERTION ATOMIC
         }
     }
 

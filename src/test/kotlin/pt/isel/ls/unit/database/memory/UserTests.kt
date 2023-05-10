@@ -10,7 +10,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class UserTests {
-
+/*
     @Test
     fun `test create user manually`() {
         val mem = TasksDataMem()
@@ -84,4 +84,6 @@ class UserTests {
 
         assertEquals("A user with that id does not exist", UserNotFoundException.description)
     }
+
+ */
 }

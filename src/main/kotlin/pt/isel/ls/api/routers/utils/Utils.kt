@@ -20,7 +20,6 @@ private const val BEARER_REGEX: String = "^Bearer .+\$"
 /**
  * Parses Bearer Token
  *
- *
  * @return String without the "Bearer " part
  *
  * @throws InvalidAuthHeaderException if the token parameter isn't a valid Bearer Token
@@ -39,18 +38,22 @@ fun String.parseBearerToken(): String {
 fun Request.getAuthorizationHeader(): String =
     (header("Authorization") ?: throw NoAuthenticationException).parseBearerToken()
 
-
 /**
- * Attempts to get the string "skip" and "limit" located in the query parameters of the [Request]
+ * Attempts to get the string skip and limit queries of the [Request]
  *
- * @return the string located in the Query Parameters
+ * @return a pair of: the skip amount or null; the limit amount or null.
  */
-fun Request.getPagging(): Pair<Int, Int> {
-    val skip = query("skip")?.toIntOrNull() ?: 0
-    val limit = query("limit")?.toIntOrNull() ?: 100
+fun Request.getPaging(): Pair<Int?, Int?> {
+    // TODO: HANDLE INVALID QUERIES BETTER
+    var skip = query("skip")?.toIntOrNull()
+    var limit = query("limit")?.toIntOrNull()
 
-    if (skip < 0 || limit < 1) {
-        return Pair(0, 100)
+    if (skip != null && skip < 0) {
+        skip = null
+    }
+
+    if (limit != null && limit < 0) {
+        limit = null
     }
     return Pair(skip, limit)
 }

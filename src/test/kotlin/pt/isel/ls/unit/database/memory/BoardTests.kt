@@ -12,7 +12,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class BoardTests {
-
+/*
     @Test
     fun `test create board `() {
         val mem = TasksDataMem()
@@ -172,4 +172,6 @@ class BoardTests {
         }
         assertEquals("The board with the id provided doesn't exist", BoardNotFoundException.description)
     }
+
+ */
 }

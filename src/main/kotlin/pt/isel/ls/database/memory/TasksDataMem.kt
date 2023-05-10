@@ -78,7 +78,8 @@ class TasksDataMem : AppDatabase {
     override fun createBoard(uid: Int, name: String, description: String): Int {
         val id = boardId.also { boardId += 1 }
         boards[id] = Board(id, name, description, emptyList())
-
+        val ubID = userBoardId.also { userBoardId += 1 }
+        userBoard[ubID] = UserBoard(uid, id)
         return id
     }
 
@@ -131,7 +132,7 @@ class TasksDataMem : AppDatabase {
 
     override fun checkUserTokenExistsInBoard(token: String, bid: Int): Boolean {
         val uid = tokenToId(token)
-        return checkUserAlreadyExistsInBoard(uid,bid)
+        return checkUserAlreadyExistsInBoard(uid, bid)
     }
 
     override fun checkBoardExists(bid: Int): Boolean {
@@ -185,15 +186,13 @@ class TasksDataMem : AppDatabase {
      */
     override fun getListDetails(lid: Int): SimpleList = taskLists[lid] ?: throw ListNotFoundException
 
-
-
     override fun deleteList(lid: Int) {
         taskLists.values.filter { it.id != lid }
     }
 
     override fun checkListAlreadyExistsInBoard(name: String, bid: Int): Boolean {
-        return taskLists.values.any { it.name == name  && it.bid == bid }
-     }
+        return taskLists.values.any { it.name == name && it.bid == bid }
+    }
 
     /**
      * Creates a new Card

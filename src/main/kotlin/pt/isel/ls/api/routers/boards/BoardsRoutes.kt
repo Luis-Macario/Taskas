@@ -22,7 +22,7 @@ import pt.isel.ls.api.routers.utils.exceptions.runAndHandleExceptions
 import pt.isel.ls.api.routers.utils.getAuthorizationHeader
 import pt.isel.ls.api.routers.utils.getBoardID
 import pt.isel.ls.api.routers.utils.getJsonBodyTo
-import pt.isel.ls.api.routers.utils.getPagging
+import pt.isel.ls.api.routers.utils.getPaging
 import pt.isel.ls.api.routers.utils.json
 import pt.isel.ls.services.boards.BoardServices
 
@@ -40,7 +40,7 @@ class BoardsRoutes(private val services: BoardServices) {
         "/{boardID}" bind GET to ::getBoardDetails,
         "/{boardID}/users" bind GET to ::getUsersFromBoard,
         "/{boardID}/users" bind POST to ::addUserToBoard,
-        "/{boardID}/lists" bind GET to ::getListsFromBoard,
+        "/{boardID}/lists" bind GET to ::getListsFromBoard
     )
 
     /**
@@ -72,7 +72,7 @@ class BoardsRoutes(private val services: BoardServices) {
      * @param request The request information
      * @return the corresponding [Response]
      */
-    fun getBoardDetails(request: Request): Response =
+    private fun getBoardDetails(request: Request): Response =
         runAndHandleExceptions {
             val boardID = request.getBoardID()
             val bearerToken = request.getAuthorizationHeader()
@@ -93,11 +93,9 @@ class BoardsRoutes(private val services: BoardServices) {
         runAndHandleExceptions {
             val boardID = request.getBoardID()
             val bearerToken = request.getAuthorizationHeader()
-            val (skip, limit) = request.getPagging()
+            val (skip, limit) = request.getPaging()
 
-            val users = services.getUsersFromBoard(bearerToken, boardID)
-                .drop(skip)
-                .take(limit)
+            val users = services.getUsersFromBoard(bearerToken, boardID, skip, limit)
 
             val getUsersResponse = GetUsersFromBoardResponse(users.map { it.toDTO() })
 
@@ -131,11 +129,9 @@ class BoardsRoutes(private val services: BoardServices) {
         runAndHandleExceptions {
             val boardID = request.getBoardID()
             val bearerToken = request.getAuthorizationHeader()
-            val (skip, limit) = request.getPagging()
+            val (skip, limit) = request.getPaging()
 
-            val lists = services.getListsFromBoard(bearerToken, boardID)
-                .drop(skip)
-                .take(limit)
+            val lists = services.getListsFromBoard(bearerToken, boardID, skip, limit)
 
             val getListsResponse = GetListsFromBoardResponse(lists.map { it.toDTO() })
             Response(OK).json(getListsResponse)

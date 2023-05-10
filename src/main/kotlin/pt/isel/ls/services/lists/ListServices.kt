@@ -68,11 +68,13 @@ class ListServices(private val database: AppDatabase) {
      *
      * @return List of Card object
      */
-    fun getCardsFromList(token: String, lid: Int): List<Card> {
+    fun getCardsFromList(token: String, lid: Int, skip: Int? = null, limit: Int? = null): List<Card> {
         checkToken(token)
         val list = database.getListDetails(lid)
         if (!database.checkUserTokenExistsInBoard(token, list.bid)) throw IllegalListAccessException
 
-        return database.getCardsFromList(lid, list.bid)
+        val cards = database.getCardsFromList(lid, list.bid)
+        val droppedCards = if (skip != null) cards.drop(skip) else cards
+        return if (limit != null) droppedCards.take(limit) else droppedCards
     }
 }

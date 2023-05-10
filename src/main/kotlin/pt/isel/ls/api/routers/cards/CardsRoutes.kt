@@ -11,6 +11,7 @@ import org.http4k.core.Status.Companion.OK
 import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
 import org.http4k.routing.routes
+import pt.isel.ls.api.dto.DeletedResponse
 import pt.isel.ls.api.dto.card.CreateCardRequest
 import pt.isel.ls.api.dto.card.CreateCardResponse
 import pt.isel.ls.api.dto.card.MoveCardRequest
@@ -32,8 +33,8 @@ class CardsRoutes(private val services: CardServices) {
     val routes: RoutingHttpHandler = routes(
         "/" bind POST to ::createCard,
         "/{cardID}" bind GET to ::getCardDetails,
-        "/{cardID}/move" bind POST to ::moveCard,
-        "/{cardID}" bind DELETE to ::deleteCard
+        "/{cardID}" bind DELETE to ::deleteCard,
+        "/{cardID}/move" bind POST to ::moveCard
     )
 
     /**
@@ -106,6 +107,6 @@ class CardsRoutes(private val services: CardServices) {
             val bearerToken = request.getAuthorizationHeader()
 
             services.deleteCard(bearerToken, cardID)
-            Response(OK).json("The Card id[$cardID] was succefully deleted")
+            Response(OK).json(DeletedResponse(cardID))
         }
 }

@@ -7,7 +7,7 @@ import pt.isel.ls.domain.User
 import pt.isel.ls.domain.checkUserCredentials
 import pt.isel.ls.services.utils.checkToken
 import pt.isel.ls.services.utils.exceptions.IllegalUserAccessException
-import java.util.UUID
+import java.util.*
 
 class UserServices(private val database: AppDatabase) {
     /**
@@ -44,11 +44,29 @@ class UserServices(private val database: AppDatabase) {
      *
      * @return List of board objects
      */
-    fun getBoardsFromUser(token: String, uid: Int): List<SimpleBoard> {
+    fun getBoardsFromUser(token: String, uid: Int, skip: Int? = null, limit: Int? = null): List<SimpleBoard> {
         checkToken(token)
         val user = database.getUserDetails(uid)
         if (user.token != token) throw IllegalUserAccessException
 
-        return database.getBoardsFromUser(uid)
+        val boards = database.getBoardsFromUser(uid)
+        val droppedBoards = if (skip != null) boards.drop(skip) else boards
+        return if (limit != null) droppedBoards.take(limit) else droppedBoards
+        // TODO: MOVE PAGING TO SQL
+    }
+
+    fun searchBoardsFromUser(
+        token: String,
+        uid: Int,
+        searchQuery: String?,
+        skip: Int? = null,
+        limit: Int? = null
+    ): List<SimpleBoard> {
+        val boards = getBoardsFromUser(token, uid, skip, limit)
+        return if (searchQuery == null) {
+            boards
+        } else {
+            boards.filter { it.name.contains(searchQuery) }
+        }
     }
 }

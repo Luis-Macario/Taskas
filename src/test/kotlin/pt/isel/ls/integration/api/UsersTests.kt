@@ -20,6 +20,7 @@ import pt.isel.ls.api.routers.utils.exceptions.NoAuthenticationException
 import pt.isel.ls.database.memory.EmailAlreadyExistsException
 import pt.isel.ls.database.memory.TasksDataMem
 import pt.isel.ls.database.memory.UserNotFoundException
+import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.User
 import pt.isel.ls.services.TasksServices
 import pt.isel.ls.services.utils.exceptions.IllegalUserAccessException
@@ -33,11 +34,15 @@ class UsersTests {
     private val app = TasksWebApi(services).routes
     private val tokenA = "7d444840-9dc0-11d1-b245-5ffdce74fad2"
     private val authHeaderA = "Bearer $tokenA"
+    private val nameA = "Ricardo"
+    private val emailA = "A47673@alunos.isel.pt"
     private val tokenB = "7d444840-9dc0-11d1-b245-5ffdce74fad1"
     private val authHeaderB = "Bearer $tokenB"
+    private val nameB = "Luis"
+    private val emailB = "A47671@alunos.isel.pt"
 
-    private val userA: User = database.createUser(tokenA, "Ricardo", "A47673@alunos.isel.pt")
-    private val userB: User = database.createUser(tokenB, "Luis", "A47671@alunos.isel.pt")
+    private val userA: User = User(database.createUser(tokenA, nameA, emailA), nameA, emailA, tokenA)
+    private val userB: User = User(database.createUser(tokenB, nameB, emailB), nameB, emailB, tokenB)
 
     @Test
     fun `POST to users returns a 201 response with the correct response`() {

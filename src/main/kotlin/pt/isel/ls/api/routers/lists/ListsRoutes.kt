@@ -1,5 +1,6 @@
 package pt.isel.ls.api.routers.lists
 
+import org.http4k.core.Method
 import org.http4k.core.Method.GET
 import org.http4k.core.Method.POST
 import org.http4k.core.Request
@@ -9,6 +10,7 @@ import org.http4k.core.Status.Companion.OK
 import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
 import org.http4k.routing.routes
+import pt.isel.ls.api.dto.DeletedResponse
 import pt.isel.ls.api.dto.card.toDTO
 import pt.isel.ls.api.dto.list.CreateListRequest
 import pt.isel.ls.api.dto.list.CreateListResponse
@@ -18,7 +20,7 @@ import pt.isel.ls.api.routers.utils.exceptions.runAndHandleExceptions
 import pt.isel.ls.api.routers.utils.getAuthorizationHeader
 import pt.isel.ls.api.routers.utils.getJsonBodyTo
 import pt.isel.ls.api.routers.utils.getListID
-import pt.isel.ls.api.routers.utils.getPagging
+import pt.isel.ls.api.routers.utils.getPaging
 import pt.isel.ls.api.routers.utils.json
 import pt.isel.ls.services.lists.ListServices
 
@@ -32,6 +34,7 @@ class ListsRoutes(private val services: ListServices) {
     val routes: RoutingHttpHandler = routes(
         "/" bind POST to ::createList,
         "/{listID}" bind GET to ::getListDetails,
+        "/{listID}" bind Method.DELETE to ::deleteList,
         "/{listID}/cards" bind GET to ::getCardsFromList
     )
 
@@ -84,13 +87,27 @@ class ListsRoutes(private val services: ListServices) {
         runAndHandleExceptions {
             val listID = request.getListID()
             val bearerToken = request.getAuthorizationHeader()
-            val (skip, limit) = request.getPagging()
+            val (skip, limit) = request.getPaging()
 
-            val cards = services.getCardsFromList(bearerToken, listID)
-                .drop(skip)
-                .take(limit)
+            val cards = services.getCardsFromList(bearerToken, listID, skip, limit)
 
             val cardsResponse = GetCardFromListResponse(cards.map { it.toDTO() })
             Response(OK).json(cardsResponse)
+        }
+
+    /**
+     * Deletes a list
+     *
+     * @param request The request information
+     * @return the corresponding [Response]
+     */
+    private fun deleteList(request: Request): Response =
+        runAndHandleExceptions {
+            val listID = request.getListID()
+            val bearerToken = request.getAuthorizationHeader()
+
+            // val cards = services.deleteList(bearerToken, listID)
+
+            Response(OK).json(DeletedResponse(listID))
         }
 }

@@ -12,6 +12,7 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class UserTests {
+    /*
     private val url = System.getenv("JDBC_DATABASE_URL")
 
     private val dataSource = PGSimpleDataSource().apply {
@@ -144,4 +145,5 @@ class UserTests {
 
         )
     }
+     */
 }

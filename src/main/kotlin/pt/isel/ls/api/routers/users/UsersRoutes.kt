@@ -8,13 +8,16 @@ import org.http4k.core.Status.Companion.CREATED
 import org.http4k.core.Status.Companion.OK
 import org.http4k.routing.bind
 import org.http4k.routing.routes
-import pt.isel.ls.api.dto.board.GetListsFromBoardResponse
 import pt.isel.ls.api.dto.board.toDTO
-import pt.isel.ls.api.dto.user.*
+import pt.isel.ls.api.dto.user.CreateUserRequest
+import pt.isel.ls.api.dto.user.CreateUserResponse
+import pt.isel.ls.api.dto.user.GetBoardsFromUserResponse
+import pt.isel.ls.api.dto.user.GetSearchBoardsFromUserResponse
+import pt.isel.ls.api.dto.user.toDTO
 import pt.isel.ls.api.routers.utils.exceptions.runAndHandleExceptions
 import pt.isel.ls.api.routers.utils.getAuthorizationHeader
 import pt.isel.ls.api.routers.utils.getJsonBodyTo
-import pt.isel.ls.api.routers.utils.getPagging
+import pt.isel.ls.api.routers.utils.getPaging
 import pt.isel.ls.api.routers.utils.getUserID
 import pt.isel.ls.api.routers.utils.json
 import pt.isel.ls.services.users.UserServices
@@ -30,7 +33,7 @@ class UsersRoutes(private val services: UserServices) {
         "/" bind POST to ::createUser,
         "/{userID}" bind GET to ::getUserDetails,
         "/{userID}/boards" bind GET to ::getBoardsFromUser,
-        "/{userID}/boards/search" bind GET to ::searchBoard
+        "/{userID}/boards/search" bind GET to ::searchBoardsFromUser
     )
 
     /**
@@ -76,30 +79,32 @@ class UsersRoutes(private val services: UserServices) {
     private fun getBoardsFromUser(request: Request): Response =
         runAndHandleExceptions {
             val uid = request.getUserID()
+            val (skip, limit) = request.getPaging()
             val bearerToken = request.getAuthorizationHeader()
-            val (skip, limit) = request.getPagging()
 
-            val boards = services.getBoardsFromUser(bearerToken, uid)
-                .drop(skip)
-                .take(limit)
+            val boards = services.getBoardsFromUser(bearerToken, uid, skip, limit)
 
             val boardsResponse = GetBoardsFromUserResponse(boards.map { it.toDTO() })
             Response(OK).json(boardsResponse)
         }
 
-    private fun searchBoard(request: Request): Response =
+    /**
+     * Gets the list of Boards in a User that contain a certain string in their name. If no search query is provided,
+     * this operation is equivalent to [getBoardsFromUser].
+     *
+     * @param request The request information
+     * @return the corresponding [Response]
+     */
+    private fun searchBoardsFromUser(request: Request): Response =
         runAndHandleExceptions {
             val uid = request.getUserID()
+            val searchQuery = request.query("search_query")
+            val (skip, limit) = request.getPaging()
             val bearerToken = request.getAuthorizationHeader()
+            val lists = services.searchBoardsFromUser(bearerToken, uid, searchQuery, skip, limit)
 
-            val userRequest = request.getJsonBodyTo<GetSearchBoardsFromUserRequest>()
-            val lists = services.getBoardsFromUser(bearerToken, uid)
+            val boardsResponse = GetSearchBoardsFromUserResponse(lists.map { it.toDTO() })
 
-            val getListsResponse = GetSearchBoardsFromUserResponse(
-                lists
-                    .map { it.toDTO() }
-                    .filter {it.name.lowercase().contains(userRequest.boardsName.lowercase())})
-
-            Response(OK).json(getListsResponse)
+            Response(OK).json(boardsResponse)
         }
 }

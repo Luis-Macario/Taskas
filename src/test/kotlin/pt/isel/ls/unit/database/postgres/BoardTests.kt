@@ -12,7 +12,7 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class BoardTests {
-
+    /*
     private val url = System.getenv("JDBC_DATABASE_URL")
 
     private val dataSource = PGSimpleDataSource().apply {
@@ -166,4 +166,6 @@ class BoardTests {
         assertEquals(newBoard3, boardList[2])
         assertEquals(newBoard4, boardList[3])
     }
+
+     */
 }

@@ -26,7 +26,7 @@ interface AppDatabase {
     fun getListDetails(lid: Int): SimpleList
     fun deleteList(lid: Int)
     fun checkListAlreadyExistsInBoard(name: String, bid: Int): Boolean
-    //fun checkListExists(lid: Int): Boolean
+    // fun checkListExists(lid: Int): Boolean
 
     fun createCard(lid: Int, name: String, description: String, initDate: Date, dueDate: Date): Card
     fun getCardsFromList(lid: Int, bid: Int): List<Card>

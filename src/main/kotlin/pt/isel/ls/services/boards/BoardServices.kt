@@ -29,7 +29,6 @@ class BoardServices(private val database: AppDatabase) {
         val uid = database.tokenToId(token)
         val id = database.createBoard(uid, name, description)
 
-        database.addUserToBoard(uid, id)
         return Board(id, name, description, listOf())
     }
 
@@ -45,8 +44,14 @@ class BoardServices(private val database: AppDatabase) {
     fun addUserToBoard(token: String, uid: Int, bid: Int) {
         checkToken(token)
         if (!database.checkBoardExists(bid)) throw BoardNotFoundException
-        if (!database.checkUserTokenExistsInBoard(token, bid)) throw IllegalBoardAccessException   // User Access
-        if (database.checkUserAlreadyExistsInBoard(uid, bid)) throw UserAlreadyExistsInBoardException   // Check if User is already on the board
+        if (!database.checkUserTokenExistsInBoard(token, bid)) throw IllegalBoardAccessException // User Access
+        if (database.checkUserAlreadyExistsInBoard(
+                uid,
+                bid
+            )
+        ) {
+            throw UserAlreadyExistsInBoardException // Check if User is already on the board
+        }
 
         database.addUserToBoard(uid, bid)
     }
@@ -83,12 +88,14 @@ class BoardServices(private val database: AppDatabase) {
      *
      * @return List of User objects
      */
-    fun getUsersFromBoard(token: String, bid: Int): List<User> {
+    fun getUsersFromBoard(token: String, bid: Int, skip: Int? = null, limit: Int? = null): List<User> {
         checkToken(token)
         if (!database.checkBoardExists(bid)) throw BoardNotFoundException
         if (!database.checkUserTokenExistsInBoard(token, bid)) throw IllegalBoardAccessException
 
-        return database.getUsersFromBoard(bid)
+        val users = database.getUsersFromBoard(bid)
+        val droppedUsers = if (skip != null) users.drop(skip) else users
+        return if (limit != null) droppedUsers.take(limit) else droppedUsers
     }
 
     /**
@@ -101,10 +108,13 @@ class BoardServices(private val database: AppDatabase) {
      *
      * @return List of TaskList objects
      */
-    fun getListsFromBoard(token: String, bid: Int): List<SimpleList> {
+    fun getListsFromBoard(token: String, bid: Int, skip: Int? = null, limit: Int? = null): List<SimpleList> {
         checkToken(token)
+        //TODO: SE A BOARD NAO EXISTIR TEM DE DAR THROW A BoardDoesNotExistException, E NAO IllegalBoardAccessException
         if (!database.checkUserTokenExistsInBoard(token, bid)) throw IllegalBoardAccessException
 
-        return database.getListsFromBoard(bid)
+        val lists = database.getListsFromBoard(bid)
+        val droppedLists = if (skip != null) lists.drop(skip) else lists
+        return if (limit != null) droppedLists.take(limit) else droppedLists
     }
 }

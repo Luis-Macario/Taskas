@@ -24,6 +24,7 @@ import pt.isel.ls.database.memory.BoardNameAlreadyExistsException
 import pt.isel.ls.database.memory.BoardNotFoundException
 import pt.isel.ls.database.memory.TasksDataMem
 import pt.isel.ls.database.memory.UserAlreadyExistsInBoardException
+import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.User
 import pt.isel.ls.services.TasksServices
 import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
@@ -37,12 +38,19 @@ class BoardsTests {
     private val app = TasksWebApi(services).routes
     private val tokenA = "7d444840-9dc0-11d1-b245-5ffdce74fad2"
     private val authHeaderA = "Bearer $tokenA"
+    private val nameA = "Ricardo"
+    private val emailA = "A47673@alunos.isel.pt"
     private val tokenB = "7d444840-9dc0-11d1-b245-5ffdce74fad1"
     private val authHeaderB = "Bearer $tokenB"
+    private val nameB = "Luis"
+    private val emailB = "A47671@alunos.isel.pt"
+    private val boardName = "aName"
+    private val boardDescription = "aDescription"
 
-    private val userA: User = database.createUser(tokenA, "Ricardo", "A47673@alunos.isel.pt")
-    private val userB: User = database.createUser(tokenB, "Luis", "A47671@alunos.isel.pt")
-    private val board = database.createBoard(userA.id, "aName", "aDescription")
+    private val userA: User = User(database.createUser(tokenA, nameA, emailA), nameA, emailA, tokenA)
+    private val userB: User = User(database.createUser(tokenB, nameB, emailB), nameB, emailB, tokenB)
+    private val board =
+        Board(database.createBoard(userA.id, boardName, boardDescription), boardName, boardDescription, listOf())
 
     @Test
     fun `POST to boards returns a 201 response with the correct response`() {
@@ -652,7 +660,7 @@ class BoardsTests {
             Request(Method.GET, "http://localhost:8080/boards/0/lists")
                 .header("Authorization", authHeaderA)
         )
-
+        println(response)
         assertEquals(Status.OK, response.status)
         assertEquals("application/json", response.header("content-type"))
         val listsResponse = Json.decodeFromString<GetListsFromBoardResponse>(response.bodyString())

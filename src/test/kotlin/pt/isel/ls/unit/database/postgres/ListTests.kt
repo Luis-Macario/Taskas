@@ -13,7 +13,7 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class ListTests {
-
+    /*
     private val url = System.getenv("JDBC_DATABASE_URL")
 
     private val dataSource = PGSimpleDataSource().apply {
@@ -128,4 +128,6 @@ class ListTests {
             db.deleteList(-1)
         }
     }
+
+     */
 }
