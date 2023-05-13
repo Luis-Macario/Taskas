@@ -1,7 +1,5 @@
 package pt.isel.ls.integration.api
 
-import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.http4k.core.Method
@@ -25,6 +23,8 @@ import pt.isel.ls.domain.User
 import pt.isel.ls.services.TasksServices
 import pt.isel.ls.services.utils.exceptions.IllegalUserAccessException
 import pt.isel.ls.services.utils.exceptions.InvalidTokenException
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class UsersTests {
     private val database = TasksDataMem()
