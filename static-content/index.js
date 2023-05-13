@@ -9,6 +9,7 @@ function loadHandler() {
     router.addRouteHandler("home", handlers.getHome)
     router.addRouteHandler("users/{id}", handlers.getUser)
     router.addRouteHandler("users/create", handlers.createUser)
+    router.addRouteHandler("users/{id}/boards/search", handlers.searchBoard)
     router.addRouteHandler("users/{id}/boards", handlers.getBoards)
     router.addRouteHandler("users/{id}/boards", handlers.getBoards)
     router.addRouteHandler("boards/{id}", handlers.getBoardDetails)
@@ -17,7 +18,9 @@ function loadHandler() {
     router.addRouteHandler("lists/{id}", handlers.getList)
     router.addRouteHandler("lists/{id}/cards", handlers.getCardsFromList)
     router.addRouteHandler("cards/{id}", handlers.getCard)
-    router.addDefaultNotFoundRouteHandler(() => window.location.hash = "home")
+    router.addDefaultNotFoundRouteHandler(() =>
+        window.location.hash = "home"
+    )
 
     hashChangeHandler()
 }

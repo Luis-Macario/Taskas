@@ -66,7 +66,7 @@ class UserServices(private val database: AppDatabase) {
         return if (searchQuery == null) {
             boards
         } else {
-            boards.filter { it.name.contains(searchQuery) }
+            boards.filter { it.name.lowercase().contains(searchQuery.lowercase()) }
         }
     }
 }

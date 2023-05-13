@@ -103,6 +103,7 @@ class UsersRoutes(private val services: UserServices) {
             val bearerToken = request.getAuthorizationHeader()
             val lists = services.searchBoardsFromUser(bearerToken, uid, searchQuery, skip, limit)
 
+            kotlin.io.println(searchQuery)
             val boardsResponse = GetSearchBoardsFromUserResponse(lists.map { it.toDTO() })
 
             Response(OK).json(boardsResponse)

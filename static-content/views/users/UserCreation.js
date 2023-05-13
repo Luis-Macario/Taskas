@@ -1,5 +1,6 @@
 import {form, input, label} from "../../DSL/tags.js";
 import fetchAPI from "../../fetchAPI.js";
+import {API_BASE_URL} from "../../configs/configs.js";
 
 function createUser(mainContent) {
     function handleSubmit(event) {
@@ -34,7 +35,8 @@ function createUser(mainContent) {
                 email: email
             })
         }
-        fetchAPI("users/", options)
+        fetch(API_BASE_URL + "users/", options)
+            .then(res => res.json())
             .then(user => {
                 console.log(user)
                 window.location.hash = "users/" + user.id
