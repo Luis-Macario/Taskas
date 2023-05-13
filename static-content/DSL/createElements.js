@@ -1,7 +1,9 @@
 
-function createElement(tagName, ...stringsOrElements) {
+function createElement(tagName, options= {}, ...contents) {
     const element = document.createElement(tagName)
-    stringsOrElements.forEach(item => {
+    if (options.id) element.id = options.id;
+    if (options.class) element.className = options.class;
+    contents.forEach(item => {
         const content = (typeof item === "string") ? document.createTextNode(item) : item
         element.appendChild(content)
     })

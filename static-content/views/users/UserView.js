@@ -1,4 +1,3 @@
-import fetchAPI from "../../fetchAPI.js";
 import {div, h1, li, ul} from "../../DSL/tags.js";
 import showErrorResponse, {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
 
@@ -11,21 +10,26 @@ function getUser(mainContent, id) {
         if (res.status !== 200) throw res.json()
         return res.json()
     }).then(user => {
-        mainContent.replaceChildren(
-            div(
-                h1("User Details"),
-                ul(
-                    li(`Name: ${user.name}`),
-                    li(`Email: ${user.email}`),
-                    li(`id: ${user.id}`),
+            mainContent.replaceChildren(
+                div({ class: "container mt-5" },
+                    div({ class: "card border-primary mb-3" },
+                        div({ class: "card-header" },
+                            h1({ class: "h3 mb-0" }, "User Details")
+                        ),
+                        div({ class: "card-body text-primary" },
+                            ul({ class: "list-group" },
+                                li({ class: "list-group-item" }, `Name: ${user.name}`),
+                                li({ class: "list-group-item" }, `Email: ${user.email}`),
+                                li({ class: "list-group-item" }, `ID: ${user.id}`),
+                            )
+                        )
+                    )
                 )
-            )
-        )
-    }).catch(e => {
-        return e
-    }).then(error => {
-        showErrorResponse(mainContent, error)
-    })
+            );
+        })
+        .catch(error => {
+            showErrorResponse(mainContent, error);
+        });
 }
 
 export default getUser

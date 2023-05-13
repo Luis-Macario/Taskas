@@ -1,38 +1,39 @@
 import createElement from "./createElements.js";
-export function table(...tr) {
-    return createElement("table", ...tr)
+
+export function table(options = {}, ...tr) {
+    return createElement("table",options, ...tr)
 }
 
-export function tr(...content) { //table row
-    return createElement("tr", ...content)
+export function tr(options = {}, ...content) { //table row
+    return createElement("tr", options, ...content)
 }
 
-export function th(tableHeader) { //table header
-    return createElement("th", tableHeader)
+export function th(options = {}, tableHeader) { //table header
+    return createElement("th", options, tableHeader)
 }
 
-export function td(data) { //table data
-    return createElement("td", data)
+export function td(options = {}, data) { //table data
+    return createElement("td", options, data)
 }
 
-export function h1(string) {
-    return createElement("h1", string)
+export function h1(options = {}, string) {
+    return createElement("h1", options, string)
 }
 
-export function ul(...listItems) {
-    return createElement("ul", ...listItems)
+export function ul(options = {}, ...listItems) {
+    return createElement("ul", options, ...listItems)
 }
 
-export function li(stringOrElement) {
-    return createElement("li", stringOrElement)
+export function li(options = {}, stringOrElement) {
+    return createElement("li", options, stringOrElement)
 }
 
-export function p(stringOrElement) {
-    return createElement("p", stringOrElement)
+export function p(options = {}, stringOrElement) {
+    return createElement("p", options, stringOrElement)
 }
 
-export function div(...elements) {
-    return createElement("div", ...elements)
+export function div(options = {}, ...elements) {
+    return createElement("div", options, ...elements)
 }
 
 export function a(href, string) {
@@ -41,8 +42,8 @@ export function a(href, string) {
     return a
 }
 
-export function form(...elements) {
-    return createElement("form", ...elements)
+export function form(options = {}, ...elements) {
+    return createElement("form", options, ...elements)
 }
 
 export function label(string) {
@@ -61,6 +62,6 @@ export function input(type, id) {
 
 export function getHome(mainContent) {
     mainContent.replaceChildren(
-        h1("Home")
+        h1({class: "display-4 mt-5 mb-4 text-center"}, "Home")
     )
 }

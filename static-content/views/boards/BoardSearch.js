@@ -1,21 +1,22 @@
-import {a, div, h1, form, li, input, label, tr, td, p} from "../../DSL/tags.js";
+import {a, div, h1, form, li, input, label, p, ul} from "../../DSL/tags.js";
 import showErrorResponse, {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
 function renderResults(boards, searchQuery, resultsContainer) {
     resultsContainer.replaceChildren(
-        div(
-            h1(`Boards with name containing: "${searchQuery}"`),
-            ...boards.boards.length > 0 ? boards.boards.map(s => {
-                    return li(
-                        a("#boards/" + s.id, "Board " + s.id)
-                    )
-                }) :
-                [
-                    tr(
-                        td(
-                            p("No boards Found with that name")
-                        )
-                    )
-                ]
+        div({class: "container my-4"},
+            h1({class: "mb-3"}, `Boards with name containing: "${searchQuery}"`),
+            ul({class: "list-group"},
+                ...(boards.boards.length > 0 ? boards.boards.map(s => {
+                            return li({class: "list-group-item"},
+                                a({class: "text-decoration-none", href: "#boards/" + s.id}, "Board " + s.id)
+                            )
+                        }) :
+                        [
+                            li({class: "list-group-item"},
+                                p({class: "mb-0"}, "No boards found with that name")
+                            )
+                        ]
+                )
+            )
         )
     )
 }
@@ -24,13 +25,13 @@ async function searchBoard(mainContent, id) {
     mainContent.removeChild(mainContent.firstChild)  // Clears the previous mainContent from the other pages
 
     const myForm = form(
-        label("Board Search: "),
-        input("text", "nameBoard"),
-        input("submit")
+        label({class: "form-label"}, "Board Search: "),
+        input({class: "form-control", type: "text", id: "nameBoard"}),
+        input({class: "btn btn-primary mt-3", type: "submit"})
     )
 
     const resultsContainer = div()
-    mainContent.append(myForm, resultsContainer)
+    mainContent.append(div({class: "container my-4"}, myForm, resultsContainer))
     myForm.addEventListener('submit', handleSubmit)
 
     function handleSubmit(e) {
