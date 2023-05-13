@@ -1,17 +1,15 @@
 package pt.isel.ls.unit.database.memory
-/*
-import org.junit.Test
-import pt.isel.ls.database.memory.CardNotFoundException
+
 import pt.isel.ls.database.memory.ListNotFoundException
 import pt.isel.ls.database.memory.TasksDataMem
-import pt.isel.ls.domain.Card
 import java.sql.Date
-import java.util.*
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class CardTests {
-
+    // TODO: FIX THE COMMENTED TESTS
+    /*
     @Test
     fun `test create card and get details`() {
         val mem = TasksDataMem()
@@ -29,18 +27,25 @@ class CardTests {
         assertEquals(mem.cards[0]?.lid, sut.id)
         assertEquals(mem.cards[0]?.initDate, sut.initDate)
     }
-
+    */
     @Test
     fun `test create card with invalid list id throws ListNotFoundException`() {
         val mem = TasksDataMem()
         val invalidListId = 1
 
         val msg = assertFailsWith<ListNotFoundException> {
-            mem.createCard(invalidListId, "Team Workk", "some work ".repeat(1), Date.valueOf("2019-1-26"), Date.valueOf("2025-1-26"))
+            mem.createCard(
+                invalidListId,
+                "Team Workk",
+                "some work ".repeat(1),
+                Date.valueOf("2019-1-26"),
+                Date.valueOf("2025-1-26")
+            )
         }
         assertEquals(msg.description, ListNotFoundException.description)
     }
 
+    /*
     @Test
     fun `test getCardDetails given incorrect card id throws CardNotFoundException`() {
         val mem = TasksDataMem()
@@ -158,4 +163,5 @@ class CardTests {
         }
         assertEquals(msg.description, CardNotFoundException.description)
     }
-}*/
+    */
+}

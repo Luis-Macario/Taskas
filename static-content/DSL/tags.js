@@ -1,7 +1,7 @@
 import createElement from "./createElements.js";
 
 export function table(options = {}, ...tr) {
-    return createElement("table",options, ...tr)
+    return createElement("table", options, ...tr)
 }
 
 export function tr(options = {}, ...content) { //table row
@@ -37,7 +37,8 @@ export function div(options = {}, ...elements) {
 }
 
 export function a(href, string) {
-    const a = createElement("a", string)
+    //TODO
+    const a = createElement("a", {}, string)
     a.href = href
     return a
 }

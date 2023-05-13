@@ -110,7 +110,7 @@ class BoardServices(private val database: AppDatabase) {
      */
     fun getListsFromBoard(token: String, bid: Int, skip: Int? = null, limit: Int? = null): List<SimpleList> {
         checkToken(token)
-        //TODO: SE A BOARD NAO EXISTIR TEM DE DAR THROW A BoardDoesNotExistException, E NAO IllegalBoardAccessException
+        // TODO: SE A BOARD NAO EXISTIR TEM DE DAR THROW A BoardDoesNotExistException, E NAO IllegalBoardAccessException
         if (!database.checkUserTokenExistsInBoard(token, bid)) throw IllegalBoardAccessException
 
         val lists = database.getListsFromBoard(bid)

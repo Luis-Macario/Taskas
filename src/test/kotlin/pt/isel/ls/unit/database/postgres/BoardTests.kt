@@ -3,16 +3,13 @@ package pt.isel.ls.unit.database.postgres
 import org.postgresql.ds.PGSimpleDataSource
 import pt.isel.ls.database.memory.BoardNotFoundException
 import pt.isel.ls.database.sql.TasksDataPostgres
-import pt.isel.ls.domain.toSimpleBoard
 import java.sql.SQLException
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.test.assertTrue
 
 class BoardTests {
-    /*
+    // TODO: FIX COMMENTED TESTS
     private val url = System.getenv("JDBC_DATABASE_URL")
 
     private val dataSource = PGSimpleDataSource().apply {
@@ -24,6 +21,7 @@ class BoardTests {
         dropTableAndAddData(dataSource)
     }
 
+    /*
     @Test
     fun `createBoard creates a object board correctly`() {
         val db = TasksDataPostgres(url)
@@ -54,7 +52,7 @@ class BoardTests {
             assertEquals(boardDescription, rs.getString("description"))
         }
     }
-
+    */
     @Test
     fun `create board throws BoardNameAlreadyExistsException when creating a board with a repeated name`() {
         val db = TasksDataPostgres(url)
@@ -89,6 +87,7 @@ class BoardTests {
         }
     }
 
+    /*
     @Test
     fun `getBoard returns correct Board() after being created`() {
         val db = TasksDataPostgres(url)
@@ -104,7 +103,7 @@ class BoardTests {
         assertEquals(newBoard.name, getBoard.name)
         assertEquals(newBoard.description, getBoard.description)
     }
-
+    */
     @Test
     fun `getBoard throws BoardNotFoundException when used an invalid bid`() {
         val db = TasksDataPostgres(url)
@@ -113,7 +112,7 @@ class BoardTests {
             db.getBoardDetails(-1)
         }
     }
-
+    /*
     @Test
     fun `addUserToBoard successfully adds user to the board`() {
         val db = TasksDataPostgres(url)
@@ -166,6 +165,5 @@ class BoardTests {
         assertEquals(newBoard3, boardList[2])
         assertEquals(newBoard4, boardList[3])
     }
-
-     */
+    */
 }

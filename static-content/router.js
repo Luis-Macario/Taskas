@@ -1,14 +1,17 @@
 const routes = []
-let notFoundRouteHandler = (mainContent, id) => { throw "Route handler for unknown routes not defined" }
+let notFoundRouteHandler = (mainContent, id, query) => {
+    throw "Route handler for unknown routes not defined"
+}
 
-function addRouteHandler(path, handler){
+function addRouteHandler(path, handler) {
     routes.push({path, handler})
 }
+
 function addDefaultNotFoundRouteHandler(notFoundRH) {
     notFoundRouteHandler = notFoundRH
 }
 
-function getRouteHandler(path){
+function getRouteHandler(path) {
     const route = routes.find(r => r.path === path)
     return route ? route.handler : notFoundRouteHandler
 }

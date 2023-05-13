@@ -7,9 +7,9 @@ export const API_BASE_URL = "http://localhost:8080/api/"
 function showErrorResponse(mainContent, error) {
     console.log(error)
     mainContent.replaceChildren(
-        div(
-            h1(`${error.code} ${error.name}`),
-            p(`${error.description}`)
+        div({},
+            h1({}, `${error.code} ${error.name}`),
+            p({}, `${error.description}`)
         )
     )
 }

@@ -1,15 +1,15 @@
 package pt.isel.ls.unit.database.memory
-/*
-import org.junit.Test
+
 import pt.isel.ls.database.memory.BoardNotFoundException
 import pt.isel.ls.database.memory.ListNotFoundException
 import pt.isel.ls.database.memory.TasksDataMem
-import java.util.*
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class ListTests {
-
+    // TODO: FIX COMMENTED TESTS
+    /*
     @Test
     fun `test create taskList successfully`() {
         val mem = TasksDataMem()
@@ -21,7 +21,7 @@ class ListTests {
 
         assertEquals(mem.taskLists[0]?.id, sut.id)
     }
-
+    */
     @Test
     fun `test create taskList throws BoardNotFoundException`() {
         val mem = TasksDataMem()
@@ -33,6 +33,7 @@ class ListTests {
         assertEquals("The board with the id provided doesn't exist", BoardNotFoundException.description)
     }
 
+    /*
     @Test
     fun `test get tasklist details`() {
         val mem = TasksDataMem()
@@ -46,7 +47,7 @@ class ListTests {
         assertEquals(mem.taskLists[0]?.name, sut.name)
         assertEquals(mem.taskLists[0]?.bid, sut.bid)
     }
-
+    */
     @Test
     fun `test get taskList details throws ListNotFoundException`() {
         val mem = TasksDataMem()
@@ -57,6 +58,7 @@ class ListTests {
         assertEquals("The list with the id provided doesn't exist", ListNotFoundException.description)
     }
 
+    /*
     @Test
     fun `test getListsFromBoard giving the correct id`() {
         val mem = TasksDataMem()
@@ -72,7 +74,7 @@ class ListTests {
         // assertEquals(3, sut.size)
         assertEquals(listOf(l1, l2, l3), sut)
     }
-
+    */
     @Test
     fun `test getListsFromBoard giving wrong board id throws BoardNotFoundException`() {
         val mem = TasksDataMem()
@@ -83,4 +85,3 @@ class ListTests {
         assertEquals("The board with the id provided doesn't exist", BoardNotFoundException.description)
     }
 }
-*/

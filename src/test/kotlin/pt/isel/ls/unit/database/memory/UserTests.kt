@@ -4,13 +4,14 @@ import pt.isel.ls.database.memory.EmailAlreadyExistsException
 import pt.isel.ls.database.memory.TasksDataMem
 import pt.isel.ls.database.memory.UserNotFoundException
 import pt.isel.ls.domain.User
-import java.util.*
+import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class UserTests {
-/*
+    // TODO: FIX COMMENTED TESTS
+
     @Test
     fun `test create user manually`() {
         val mem = TasksDataMem()
@@ -25,6 +26,7 @@ class UserTests {
         assertEquals(mem.users[0]?.email, email)
     }
 
+    /*
     @Test
     fun `test create user`() {
         val mem = TasksDataMem()
@@ -40,7 +42,7 @@ class UserTests {
         assertEquals(mem.users[0]?.id, sut.id)
         assertEquals(mem.users[0]?.token, sut.token)
     }
-
+    */
     @Test
     fun `test create user with repeated email throws EmailAlreadyExistsException`() {
         val mem = TasksDataMem()
@@ -57,6 +59,7 @@ class UserTests {
         assertEquals("A user with that email already exists", EmailAlreadyExistsException.description)
     }
 
+    /*
     @Test
     fun `test get user details`() {
         val mem = TasksDataMem()
@@ -73,7 +76,7 @@ class UserTests {
 
         assertFailsWith<UserNotFoundException> { mem.getUserDetails(10) }
     }
-
+    */
     @Test
     fun `test get user details throws UserNotFoundException for a not created user`() {
         val mem = TasksDataMem()
@@ -84,6 +87,4 @@ class UserTests {
 
         assertEquals("A user with that id does not exist", UserNotFoundException.description)
     }
-
- */
 }

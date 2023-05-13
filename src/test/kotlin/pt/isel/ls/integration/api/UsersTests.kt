@@ -1,6 +1,7 @@
 package pt.isel.ls.integration.api
 
-import kotlinx.serialization.decodeFromString
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.http4k.core.Method
@@ -20,13 +21,10 @@ import pt.isel.ls.api.routers.utils.exceptions.NoAuthenticationException
 import pt.isel.ls.database.memory.EmailAlreadyExistsException
 import pt.isel.ls.database.memory.TasksDataMem
 import pt.isel.ls.database.memory.UserNotFoundException
-import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.User
 import pt.isel.ls.services.TasksServices
 import pt.isel.ls.services.utils.exceptions.IllegalUserAccessException
 import pt.isel.ls.services.utils.exceptions.InvalidTokenException
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class UsersTests {
     private val database = TasksDataMem()
@@ -42,7 +40,10 @@ class UsersTests {
     private val emailB = "A47671@alunos.isel.pt"
 
     private val userA: User = User(database.createUser(tokenA, nameA, emailA), nameA, emailA, tokenA)
-    private val userB: User = User(database.createUser(tokenB, nameB, emailB), nameB, emailB, tokenB)
+
+    init {
+        database.createUser(tokenB, nameB, emailB)
+    }
 
     @Test
     fun `POST to users returns a 201 response with the correct response`() {

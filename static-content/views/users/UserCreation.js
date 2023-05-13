@@ -1,5 +1,4 @@
 import {form, input, label} from "../../DSL/tags.js";
-import fetchAPI from "../../fetchAPI.js";
 import {API_BASE_URL} from "../../configs/configs.js";
 
 function createUser(mainContent) {

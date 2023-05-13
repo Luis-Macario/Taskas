@@ -10,10 +10,9 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.test.assertTrue
 
 class ListTests {
-    /*
+    // TODO: FIX COMMENTED TESTS
     private val url = System.getenv("JDBC_DATABASE_URL")
 
     private val dataSource = PGSimpleDataSource().apply {
@@ -25,6 +24,7 @@ class ListTests {
         dropTableAndAddData(dataSource)
     }
 
+    /*
     @Test
     fun `createList creates a new list with the given the name and board id`() {
         val db = TasksDataPostgres(url)
@@ -52,7 +52,7 @@ class ListTests {
             assertEquals(bid, rs.getInt("bid"))
         }
     }
-
+    */
     @Test
     fun `getListsFromBoard returns the correct list of TaskList`() {
         val db = TasksDataPostgres(url)
@@ -82,6 +82,7 @@ class ListTests {
         assertEquals(emptyList(), sut)
     }
 
+    /*
     @Test
     fun `getListDetails return correct list details`() {
         val db = TasksDataPostgres(url)
@@ -96,7 +97,7 @@ class ListTests {
         assertEquals(newList.bid, sut.bid)
         assertEquals(newList.name, sut.name)
     }
-
+    */
     @Test
     fun `getListDetails throws ListNotFoundException given wrong list id`() {
         val db = TasksDataPostgres(url)
@@ -108,6 +109,7 @@ class ListTests {
         assertEquals(ListNotFoundException.description, msg.description)
     }
 
+    /*
     @Test
     fun `deleteList should delete the list given the id`() {
         val db = TasksDataPostgres(url)
@@ -119,7 +121,7 @@ class ListTests {
             db.getListDetails(newList.id)
         }
     }
-
+    */
     @Test
     fun `deleteList should throw SQLException if given non-existent id`() {
         val db = TasksDataPostgres(url)
@@ -128,6 +130,4 @@ class ListTests {
             db.deleteList(-1)
         }
     }
-
-     */
 }

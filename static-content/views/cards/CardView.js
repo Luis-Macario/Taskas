@@ -1,33 +1,35 @@
 import {a, div, h1, li, p, ul} from "../../DSL/tags.js";
-import showErrorResponse, {hardCodedBearer, API_BASE_URL} from "../../configs/configs.js";
-import fetchAPI from "../../fetchAPI.js";
+import showErrorResponse, {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
 
-function getCard(mainContent, id) {
-    fetch(API_BASE_URL + `cards/${id}`, {
+async function getCard(mainContent, id) {
+    const res = await fetch(API_BASE_URL + `cards/${id}`, {
         headers: {
             "Authorization": "Bearer " + hardCodedBearer
         }
-    }).then(res => {
-        if (res.status < 200 || res.status > 299) throw res.json()
-        return res.json()
-    }).then(card => {
+    })
+    const body = await res.json()
+    if (res.status === 200) {
+        const card = body
+        console.log(card)
         mainContent.replaceChildren(
-            div(
-                p(a(`#lists/${card.lid}`, "Return to list")),
-                //p(a(`#lists/${card.lid}/cards`, "Return to cards")),  --next phase
-                h1("Card Info"),
-                ul(
-                    li(`Name: ${card.name}`),
-                    li(`Id: ${card.id}`),
-                    li(`Description: ${card.description}`),
+            div({},
+                p({},
+                    a(`#boards/${card.boardID}`, "Return to board")
+                ),
+                p({},
+                    a(`#lists/${card.listID}`, "Return to list")
+                ),
+                h1({}, "Card Info"),
+                ul({},
+                    li({}, `Name: ${card.name}`),
+                    li({}, `Id: ${card.id}`),
+                    li({}, `Description: ${card.description}`),
                 )
             )
         )
-    }).catch(e => {
-        return e
-    }).then(error => {
-        showErrorResponse(mainContent, error)
-    })
+        return
+    }
+    showErrorResponse(mainContent, body)
 }
 
 export default getCard

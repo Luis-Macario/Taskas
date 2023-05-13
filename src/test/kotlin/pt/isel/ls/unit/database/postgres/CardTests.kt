@@ -1,5 +1,5 @@
 package pt.isel.ls.unit.database.postgres
-/*
+
 import org.postgresql.ds.PGSimpleDataSource
 import pt.isel.ls.database.memory.CardNotFoundException
 import pt.isel.ls.database.memory.ListNotFoundException
@@ -11,6 +11,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class CardTests {
+    // TODO: FIX COMMENTED TESTS
     private val url = System.getenv("JDBC_DATABASE_URL")
 
     private val dataSource = PGSimpleDataSource().apply {
@@ -36,7 +37,7 @@ class CardTests {
             lid = lid,
             name = name,
             description = description,
-            initDate =  initDate,
+            initDate = initDate,
             dueDate = dueDate
         )
 
@@ -60,6 +61,7 @@ class CardTests {
         }
     }
 
+    /*
     @Test
     fun `getCardsFromList returns correct list of cards`() {
         val db = TasksDataPostgres(url)
@@ -107,7 +109,7 @@ class CardTests {
         assertEquals(card.description, sut.description)
         assertEquals(card.initDate, sut.initDate)
     }
-
+    */
     @Test
     fun `getCardDetails throws CardNotFoundException for non-existent card ID`() {
         val db = TasksDataPostgres(url)
@@ -138,6 +140,7 @@ class CardTests {
         assertEquals(4, moveToList.size)
     }
 
+    /*
     @Test
     fun `moveCard throws SQLException if given wrong card ID or list ID`() {
         val db = TasksDataPostgres(url)
@@ -169,7 +172,7 @@ class CardTests {
             db.getCardDetails(card.id)
         }
     }
-
+    */
     @Test
     fun `deleteCard should throw SQLException if given non-existent id`() {
         val db = TasksDataPostgres(url)
@@ -178,4 +181,4 @@ class CardTests {
         // db.deleteCard(-1)
         // }
     }
-}*/
+}

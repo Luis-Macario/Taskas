@@ -12,7 +12,7 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class UserTests {
-    /*
+    // TODO: FIX COMMENTED TESTS
     private val url = System.getenv("JDBC_DATABASE_URL")
 
     private val dataSource = PGSimpleDataSource().apply {
@@ -24,6 +24,7 @@ class UserTests {
         dropTableAndAddData(dataSource)
     }
 
+    /*
     @Test
     fun `createUser creates User successfully`() {
         val db = TasksDataPostgres(url)
@@ -67,7 +68,7 @@ class UserTests {
         assertEquals(newUser.email, getUser.email)
         assertEquals(newUser.token, getUser.token)
     }
-
+    */
     @Test
     fun `getUser throws UserNotFoundException if given wrong id`() {
         val db = TasksDataPostgres(url)
@@ -145,5 +146,4 @@ class UserTests {
 
         )
     }
-     */
 }

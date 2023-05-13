@@ -1,18 +1,16 @@
 package pt.isel.ls.unit.database.memory
 
-import org.junit.Test
-import pt.isel.ls.database.memory.BoardNameAlreadyExistsException
 import pt.isel.ls.database.memory.BoardNotFoundException
 import pt.isel.ls.database.memory.TasksDataMem
-import pt.isel.ls.database.memory.UserAlreadyExistsInBoardException
 import pt.isel.ls.database.memory.UserNotFoundException
-import pt.isel.ls.domain.UserBoard
-import java.util.*
+import java.util.UUID
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class BoardTests {
-/*
+    // TODO: FIX COMMENTED TESTS
+    /*
     @Test
     fun `test create board `() {
         val mem = TasksDataMem()
@@ -43,7 +41,7 @@ class BoardTests {
 
         assertEquals("A board with that name already exists", BoardNameAlreadyExistsException.description)
     }
-
+    */
     @Test
     fun `test create board throws UserNotFoundException when creating a board with a invalid user`() {
         val mem = TasksDataMem()
@@ -57,6 +55,7 @@ class BoardTests {
         assertEquals("A user with that id does not exist", UserNotFoundException.description)
     }
 
+    /*
     @Test
     fun `test add User to a board`() {
         val mem = TasksDataMem()
@@ -126,6 +125,7 @@ class BoardTests {
         assertEquals(mem.userBoard[0]?.uId, donkeyUser.id)
         assertEquals(mem.userBoard[0]?.bId, board.id)
     }
+    */
 
     @Test
     fun `test get board details throws BoardNotFoundException`() {
@@ -137,6 +137,7 @@ class BoardTests {
         assertEquals("The board with the id provided doesn't exist", BoardNotFoundException.description)
     }
 
+    /*
     @Test
     fun `test get user available boards`() {
         val mem = TasksDataMem()
@@ -172,6 +173,5 @@ class BoardTests {
         }
         assertEquals("The board with the id provided doesn't exist", BoardNotFoundException.description)
     }
-
- */
+    */
 }

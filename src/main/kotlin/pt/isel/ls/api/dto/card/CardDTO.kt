@@ -6,7 +6,6 @@ import pt.isel.ls.domain.Card
 @Serializable
 data class CardDTO(
     val id: Int,
-    val lid: Int,
     val name: String,
     val description: String,
     val initialDate: String,
@@ -15,4 +14,4 @@ data class CardDTO(
     val boardID: Int
 )
 
-fun Card.toDTO() = CardDTO(id, lid, name, description, initDate.toString(), finishDate.toString(), lid, bid)
+fun Card.toDTO() = CardDTO(id, name, description, initDate.toString(), finishDate.toString(), lid, bid)

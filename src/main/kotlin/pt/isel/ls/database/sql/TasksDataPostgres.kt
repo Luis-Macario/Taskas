@@ -112,31 +112,30 @@ class TasksDataPostgres(url: String) : AppDatabase {
 
     override fun createBoard(uid: Int, name: String, description: String): Int {
         dataSource.connection.use {
+            it.autoCommit = false
 
-                it.autoCommit = false
-
-                val stm = it.prepareStatement(
-                        """
+            val stm = it.prepareStatement(
+                """
                  SELECT "create_board"(?,?,?);
                 """.trimIndent()
-                )
-                stm.setInt(1, uid)
-                stm.setString(2, name)
-                stm.setString(3, description)
+            )
+            stm.setInt(1, uid)
+            stm.setString(2, name)
+            stm.setString(3, description)
 
-                try {
-                    val rs = stm.executeQuery()
+            try {
+                val rs = stm.executeQuery()
 
-                    // commit the transaction
-                    it.commit()
+                // commit the transaction
+                it.commit()
 
-                    rs.next()
-                    return rs.getInt(1)
-                } catch (e: Exception) {
-                    // rollback the transaction in case of an error
-                    it.rollback()
-                    throw e
-                }
+                rs.next()
+                return rs.getInt(1)
+            } catch (e: Exception) {
+                // rollback the transaction in case of an error
+                it.rollback()
+                throw e
+            }
         }
     }
 
