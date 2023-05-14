@@ -20,6 +20,10 @@ export function h1(options = {}, string) {
     return createElement("h1", options, string)
 }
 
+export function h2(options = {}, string) {
+    return createElement("h2", options, string)
+}
+
 export function ul(options = {}, ...listItems) {
     return createElement("ul", options, ...listItems)
 }
@@ -30,6 +34,10 @@ export function li(options = {}, stringOrElement) {
 
 export function p(options = {}, stringOrElement) {
     return createElement("p", options, stringOrElement)
+}
+
+export function span(options = {}, stringOrElement) {
+    return createElement("span", options, stringOrElement)
 }
 
 export function div(options = {}, ...elements) {

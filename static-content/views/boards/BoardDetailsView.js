@@ -1,4 +1,4 @@
-import {a, div, h1, p, table, td, th, tr} from "../../DSL/tags.js";
+import {a, br, button, div, h1, p, table, td, th, tr} from "../../DSL/tags.js";
 import showErrorResponse, {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
 
 async function getBoardDetails(mainContent, id) {
@@ -7,6 +7,12 @@ async function getBoardDetails(mainContent, id) {
             "Authorization": "Bearer " + hardCodedBearer
         }
     })
+
+    const createListButton = button({class: "btn btn-primary btn-sm"}, "Create List")
+    createListButton.addEventListener("click", () => {
+        window.location.hash = `boards/${id}/lists/create`
+    })
+
     const body = await res.json()
     if (res.status === 200) {
         const board = body
@@ -33,10 +39,8 @@ async function getBoardDetails(mainContent, id) {
                                     )
                                 )
                             ]
-                    ),
-                    //<a href="#users/1/boards/search" class="btn btn-primary" classNamerch Board </a>
-                    a(`#boards/${id}/lists/create`, "Create List"),
-                    //aV2({class: "btn btn-primary", href: `#boards/${id}/lists/create`}, "Create List"),
+                    ), br(),
+                    createListButton,
                     tr({},
                         th({}, "Users"),
                     ),

@@ -1,4 +1,4 @@
-import {a, div, h1, li, p, table, td, th, tr, ul} from "../../DSL/tags.js";
+import {a, br, button, div, h1, li, p, table, td, th, tr, ul} from "../../DSL/tags.js";
 import showErrorResponse, {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
 
 async function getList(mainContent, id) {
@@ -7,6 +7,12 @@ async function getList(mainContent, id) {
             "Authorization": "Bearer " + hardCodedBearer
         }
     })
+
+    const createCardButton = button({class: "btn btn-primary btn-sm"}, "Create Card")
+    createCardButton.addEventListener("click", () => {
+        window.location.hash = `lists/${id}/cards/create`
+    })
+
     const body = await res.json()
     if (res.status === 200) {
         const list = body
@@ -32,9 +38,8 @@ async function getList(mainContent, id) {
                             [tr({},
                                 td({}, p({}, "List doesn't have any cards yet")) //fallback value to spread, hence the []
                             )]
-                    ),
-                    //a(`#boards/${list.bid}/lists/${list.id}/cards/create`, "Create Card"),
-                    a(`#lists/${list.id}/cards/create`, "Create Card"),
+                    ), br(),
+                    createCardButton
                 )
             )
         )

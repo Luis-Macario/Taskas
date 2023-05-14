@@ -74,7 +74,7 @@ async function cardCreate(mainContent, id) {
             placeholder: "Enter the Card Due Date", minlength: "3", maxlength: "60",
             required: true
         })), br(),
-        button({type: "submit", class: "btn btn-primary w-100 btn-lg"}, "Create List")
+        button({type: "submit", class: "btn btn-primary w-100 btn-lg"}, "Create Card")
     )
 
     myForm.addEventListener('submit', handleSubmit)

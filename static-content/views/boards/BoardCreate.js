@@ -1,5 +1,5 @@
 import {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
-import {br, button, div, form, h1, inputV2,  labelV2} from "../../DSL/tags.js";
+import {br, button, div, form, h1, inputV2,  span} from "../../DSL/tags.js";
 
 async function boardCreate(mainContent) {
     function handleSubmit(event) {
@@ -51,20 +51,35 @@ async function boardCreate(mainContent) {
 
     const myForm = form(
         br(),
-        labelV2({for: "boardName", class: "col-form-label"}, "Name:"), br(),
-        inputV2(({
-            type: "text", id: "idName", name: "idName",
-            class: "form-control",
-            placeholder: "Enter the board name", minlength: "3", maxlength: "60",
-            required: true
-        })),
-        labelV2({for: "boardDescritpion", class: "col-form-label"}, "Description:"), br(),
+        div({class: "input-group mb-3"},
+            div({class: "input-group-prepend", style: "float:left; background: red; width:100px"},
+                span({class: "input-group-text", id: "inputGroup-sizing-default"}, "Name")),
+            inputV2(({
+                type: "text", id: "idName", name: "idName",
+                class: "form-control",
+                placeholder: "Enter the board name", minlength: "3", maxlength: "60",
+                required: true
+            }))
+        ),
+        div({class: "input-group mb-3"},
+            div({class: "input-group-prepend", style: "float:left; background: red; width:100px;"},
+                span({class: "input-group-text", id: "inputGroup-sizing-default"}, "Descritpion")),
+            inputV2(({
+                type: "text", id: "idDescritpion", name: "idDescritpion",
+                class: "form-control",
+                placeholder: "Enter the board description", minlength: "3", maxlength: "60",
+                required: true
+            }))
+        ),
+        // TODO Question -> Preferem como?
+        /*labelV2({for: "boardDescritpion", class: "col-form-label"}, "Description:"), br(),
         inputV2(({
             type: "text", id: "idDescritpion", name: "idDescritpion",
             class: "form-control",
             placeholder: "Enter the board description", minlength: "3", maxlength: "60",
             required: true
-        })), br(),
+        })),*/
+        br(),
         button({type: "submit", class: "btn btn-primary w-100 btn-lg"}, "Create Board")
     )
 
