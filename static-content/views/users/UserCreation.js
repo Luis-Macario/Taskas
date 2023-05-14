@@ -1,4 +1,4 @@
-import {br, button, div, form, h1, input, inputV2, label, labelV2} from "../../DSL/tags.js";
+import {br, button, div, form, h1, inputV2, labelV2} from "../../DSL/tags.js";
 import {API_BASE_URL} from "../../configs/configs.js";
 
 function createUser(mainContent) {
@@ -66,7 +66,9 @@ function createUser(mainContent) {
         div({class: "card-header"},
             h1({class: "card-title"}, "Register User")
         ),
-        myForm
+        div({class: "card-body w-50 center "},
+            myForm
+        )
     )
 }
 

@@ -1,5 +1,5 @@
 import {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
-import {br, button, div, form, h1, input, inputV2, label, labelV2, p} from "../../DSL/tags.js";
+import {br, button, div, form, h1,  inputV2,  labelV2} from "../../DSL/tags.js";
 
 async function cardCreate(mainContent, id) {
     function handleSubmit(event) {
@@ -82,7 +82,9 @@ async function cardCreate(mainContent, id) {
         div({class: "card-header"},
             h1({class: "card-title"}, "Create Card")
         ),
-        myForm
+        div({class: "card-body w-50 center"},
+            myForm
+        )
     )
 }
 
