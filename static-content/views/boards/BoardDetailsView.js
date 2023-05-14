@@ -34,6 +34,9 @@ async function getBoardDetails(mainContent, id) {
                                 )
                             ]
                     ),
+                    //<a href="#users/1/boards/search" class="btn btn-primary" classNamerch Board </a>
+                    a(`#boards/${id}/lists/create`, "Create List"),
+                    //aV2({class: "btn btn-primary", href: `#boards/${id}/lists/create`}, "Create List"),
                     tr({},
                         th({}, "Users"),
                     ),

@@ -37,10 +37,13 @@ export function div(options = {}, ...elements) {
 }
 
 export function a(href, string) {
-    //TODO
     const a = createElement("a", {}, string)
     a.href = href
     return a
+}
+
+export function aV2(options = {}, ...elements){
+    return createElement("a", options, ...elements)
 }
 
 export function form(options = {}, ...elements) {
@@ -54,10 +57,27 @@ export function label(string) {
     return label
 }
 
+export function labelV2( options = {}, ...elements){
+    return createElement("label",options, ...elements )
+}
 export function input(type, id) {
     const input = createElement("input")
     input.type = type
     if (id !== undefined) input.id = id
+    return input
+}
+
+export function inputV2(options = {}, ...elements) {
+    return createElement("input", options, ...elements);
+}
+
+export function button(options = {}, ...elements) {
+    return createElement("button", options, ...elements);
+}
+
+export function br() {
+    const input = createElement("br")
+    input.type = "br"
     return input
 }
 

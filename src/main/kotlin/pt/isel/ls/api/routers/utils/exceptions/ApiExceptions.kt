@@ -34,6 +34,16 @@ object InvalidBodyException : ApiException() {
     override val description = "Invalid Request Body"
 }
 
+/*object InvalidQuerySkipException : ApiException() {
+    override val code = 9000 // TODO: Figure out what codes to use
+    override val description = "Invalid Request Query - Skip"
+}
+
+object InvalidQueryLimitException : ApiException() {
+    override val code = 9000 // TODO: Figure out what codes to use
+    override val description = "Invalid Request Query - Limit"
+}*/
+
 object InvalidAuthHeaderException : ApiException() {
     override val code = 9000 // TODO: Figure out what code to use
     override val description = "Authorization header is not valid"

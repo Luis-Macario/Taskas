@@ -47,7 +47,7 @@ class CardsRoutes(private val services: CardServices) {
         runAndHandleExceptions {
             val cardRequest = request.getJsonBodyTo<CreateCardRequest>()
             val bearerToken = request.getAuthorizationHeader()
-
+            println(cardRequest)
             val card =
                 services.createCard(
                     bearerToken,
@@ -57,7 +57,9 @@ class CardsRoutes(private val services: CardServices) {
                     cardRequest.initDate,
                     cardRequest.dueDate
                 )
+            println(card)
             val cardResponse = CreateCardResponse(card.id)
+            println(cardResponse)
             Response(CREATED)
                 .header("Location", "/cards/${card.id}")
                 .json(cardResponse)

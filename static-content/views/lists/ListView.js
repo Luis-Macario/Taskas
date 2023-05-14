@@ -7,37 +7,39 @@ async function getList(mainContent, id) {
             "Authorization": "Bearer " + hardCodedBearer
         }
     })
-        const body = await res.json()
-            if(res.status === 200) {
-                const list = body
-                const cards = list.cards
-                mainContent.replaceChildren(
-                    div({},
-                        a(`#boards/${list.bid}`, "Return to board"),
-                        h1({},"List Info"),
-                        ul({},
-                            li({},`Name: ${list.name}`),
-                            li({},`id: ${list.id}`),
-                        ),
-                        table({},
-                            tr({},
-                                th({},"Cards")
-                            ),
-                            ...(cards.length > 0 ? cards.map(card => {
-                                        return tr({},
-                                            td({},a(`#cards/${card.id}`, "Card:" + card.name))
-                                        )
-                                    })
-                                    :
-                                    [tr({},
-                                        td({},p({},"List doesn't have any cards yet")) //fallback value to spread, hence the []
-                                    )]
-                            )
-                        )
-                    )
+    const body = await res.json()
+    if (res.status === 200) {
+        const list = body
+        const cards = list.cards
+        mainContent.replaceChildren(
+            div({},
+                a(`#boards/${list.bid}`, "Return to board"),
+                h1({}, "List Info"),
+                ul({},
+                    li({}, `Name: ${list.name}`),
+                    li({}, `id: ${list.id}`),
+                ),
+                table({},
+                    tr({},
+                        th({}, "Cards")
+                    ),
+                    ...(cards.length > 0 ? cards.map(card => {
+                                return tr({},
+                                    td({}, a(`#cards/${card.id}`, "Card:" + card.name))
+                                )
+                            })
+                            :
+                            [tr({},
+                                td({}, p({}, "List doesn't have any cards yet")) //fallback value to spread, hence the []
+                            )]
+                    ),
+                    //a(`#boards/${list.bid}/lists/${list.id}/cards/create`, "Create Card"),
+                    a(`#lists/${list.id}/cards/create`, "Create Card"),
                 )
-                return
-            }
+            )
+        )
+        return
+    }
     showErrorResponse(mainContent, body)
 }
 

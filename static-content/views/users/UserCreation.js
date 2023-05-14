@@ -1,4 +1,4 @@
-import {form, input, label} from "../../DSL/tags.js";
+import {br, button, div, form, h1, input, inputV2, label, labelV2} from "../../DSL/tags.js";
 import {API_BASE_URL} from "../../configs/configs.js";
 
 function createUser(mainContent) {
@@ -43,16 +43,30 @@ function createUser(mainContent) {
     }
 
     const myForm = form(
-        label("Name"),
-        input("text", "idName"),
-        label("Email"),
-        input("text", "idEmail"),
-        input("submit")
+        br(),
+        labelV2({for: "userName", class: "col-form-label"}, "Name:"), br(),
+        inputV2(({
+            type: "text", id: "idName", name: "idName",
+            class: "form-control",
+            placeholder: "Enter your name", minlength: "3", maxlength: "50",
+            required: true
+        })),
+        labelV2({for: "userEmail", class: "col-form-label"}, "Email:"), br(),
+        inputV2(({
+            type: "text", id: "idEmail", name: "idEmail",
+            class: "form-control",
+            placeholder: "Enter your email", minlength: "3", maxlength: "60",
+            required: true
+        })), br(),
+        button({type: "submit", class: "btn btn-primary w-100 btn-lg"}, "Register")
     )
 
     myForm.addEventListener('submit', handleSubmit)
     mainContent.replaceChildren(
-        myForm,
+        div({class: "card-header"},
+            h1({class: "card-title"}, "Register User")
+        ),
+        myForm
     )
 }
 
