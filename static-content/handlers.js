@@ -11,9 +11,20 @@ import getList from "./views/lists/ListView.js";
 import createCard from "./views/cards/CardCreate.js";
 import getCard from "./views/cards/CardView.js";
 import getHome from "./views/HomeView.js";
+import {div, h1} from "./DSL/tags.js";
 
-
+function login(mainContent){
+    mainContent.replaceChildren(
+        div({class: "card"},
+            div({class: "card-header"},
+                h1({class: "card-title"}, "You've been bamboozled!")
+            ),
+            h1({},"Not implemented yet")
+        )
+    )
+}
 export const handlers = {
+    login,
     getHome,
     createUser,
     getUser,

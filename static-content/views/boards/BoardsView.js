@@ -24,7 +24,7 @@ async function getBoards(mainContent, id) {
                             th({class: "text-center"}, "Boards")
                         ),
                         ...(boards.length > 0 ? boards.map(s => {
-                                    return tr({class: "table-light"},
+                                    return tr({},
                                         td({class: "text-center"},
                                             a("#boards/" + s.id, s.name)
                                         )
