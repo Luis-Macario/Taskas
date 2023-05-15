@@ -1,4 +1,4 @@
-import {br, button, div, form, h1, inputV2, labelV2} from "../../DSL/tags.js";
+import {br, button, div, form, h1, inputV2, span} from "../../DSL/tags.js";
 import {API_BASE_URL} from "../../configs/configs.js";
 
 function createUser(mainContent) {
@@ -44,30 +44,41 @@ function createUser(mainContent) {
 
     const myForm = form({},
         br(),
-        labelV2({ for: "userName", class: "col-form-label" }, "Name:"), br(),
-        inputV2({
-            type: "text", id: "idName", name: "idName",
-            class: "form-control",
-            placeholder: "Enter your name", minlength: "3", maxlength: "50",
-            required: true
-        }),
-        labelV2({ for: "userEmail", class: "col-form-label" }, "Email:"), br(),
-        inputV2({
-            type: "text", id: "idEmail", name: "idEmail",
-            class: "form-control",
-            placeholder: "Enter your email", minlength: "3", maxlength: "60",
-            required: true
-        }),br(),
-        button({ type: "submit", class: "btn btn-primary" }, "Register")
-    );
+        div({class: "input-group mb-3"},
+            div({class: "input-group-prepend", style: "float:left; width:100px"},
+                span({class: "input-group-text", id: "inputGroup-sizing-default"}, "Name")),
+            br(),
+            inputV2({
+                type: "text", id: "idName", name: "idName",
+                class: "form-control",
+                placeholder: "Enter your name", minlength: "3", maxlength: "50",
+                required: true
+            })
+        ),
+        div({class: "input-group mb-3"},
+            div({class: "input-group-prepend", style: "float:left; width:100px"},
+                span({class: "input-group-text", id: "inputGroup-sizing-default"}, "Email")),
+            br(),
+            inputV2({
+                type: "text", id: "idEmail", name: "idEmail",
+                class: "form-control",
+                placeholder: "Enter your email", minlength: "3", maxlength: "60",
+                required: true
+            })
+        ),
+        br(),
+        button({type: "submit", class: "btn btn-primary w-100 btn-lg"}, "Register")
+    )
 
     myForm.addEventListener('submit', handleSubmit);
     mainContent.replaceChildren(
-        div({ class: "card-header" },
-            h1({ class: "card-title" }, "Register User")
-        ),
-        div({ class: "card-body w-50 center" },
-            myForm
+        div({class: "card"},
+            div({class: "card-header"},
+                h1({class: "card-title"}, "Register User")
+            ),
+            div({class: "card-body w-50 center"},
+                myForm
+            )
         )
     )
 }

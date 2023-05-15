@@ -7,13 +7,13 @@ async function cardCreate(mainContent, id) {
 
         const name = document.querySelector("#idName").value
         const description = document.querySelector("#idDescription").value
-        const initDate = "2023-04-28" //document.querySelector("#idInitDate").value
-        const dueDate = "2025-04-30"//document.querySelector("#idDuetDate").value
+        const initDate = document.querySelector("#idInitDate").value
+        const dueDate = document.querySelector("#idDueDate").value
 
-        /*if (!name.match(/^[a-zA-Z0-9._-]{3,60}$/)) {
-            alert("Invalid List Name")
-            return;
-        }*/
+        if(initDate > dueDate){
+            alert("Due Date can't happen before Init Date")
+            return
+        }
 
         if (name.length < 5 || name.length > 100) {
             alert("Card Name must be between 5 and 100 letters long")
@@ -62,14 +62,14 @@ async function cardCreate(mainContent, id) {
         })), br(),
         labelV2({for: "cardInitDate", class: "col-form-label"}, "Init Date:"), br(),
         inputV2(({
-            type: "text", id: "idInitDate", name: "idInitDate",
+            type: "date", id: "idInitDate", name: "idInitDate",
             class: "form-control",
             placeholder: "Enter the Card Init Date", minlength: "3", maxlength: "60",
             required: true
         })), br(),
         labelV2({for: "cardDueDate", class: "col-form-label"}, "Due Date:"), br(),
         inputV2(({
-            type: "text", id: "idDueDate", name: "idDueDate",
+            type: "date", id: "idDueDate", name: "idDueDate",
             class: "form-control",
             placeholder: "Enter the Card Due Date", minlength: "3", maxlength: "60",
             required: true

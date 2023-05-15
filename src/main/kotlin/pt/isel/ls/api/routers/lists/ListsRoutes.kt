@@ -106,8 +106,7 @@ class ListsRoutes(private val services: ListServices) {
             val listID = request.getListID()
             val bearerToken = request.getAuthorizationHeader()
 
-            // val cards = services.deleteList(bearerToken, listID)
-
+            services.deleteList(bearerToken, listID)
             Response(OK).json(DeletedResponse(listID))
         }
 }

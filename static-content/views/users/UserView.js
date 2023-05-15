@@ -11,17 +11,19 @@ function getUser(mainContent, id) {
         return res.json()
     }).then(user => {
         mainContent.replaceChildren(
-            div({class: "card-header"},
-                h1({class: "card-title"}, "User Details")
-            ),
-            div({class: "card-body text-primary"},
-                ul({class: "list-group"},
-                    li({class: "list-group-item"}, `Name: ${user.name}`),
-                    li({class: "list-group-item"}, `Email: ${user.email}`),
-                    li({class: "list-group-item"}, `ID: ${user.id}`),
+            div({class: "card"},
+                div({class: "card-header"},
+                    h1({class: "card-title"}, "User Details")
+                ),
+                div({class: "card-body text-primary"},
+                    ul({class: "list-group"},
+                        li({class: "list-group-item"}, `Name: ${user.name}`),
+                        li({class: "list-group-item"}, `Email: ${user.email}`),
+                        li({class: "list-group-item"}, `ID: ${user.id}`),
+                    )
                 )
             )
-        );
+        )
     })
         .catch(error => {
             showErrorResponse(mainContent, error);

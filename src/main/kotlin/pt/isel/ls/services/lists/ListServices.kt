@@ -77,4 +77,12 @@ class ListServices(private val database: AppDatabase) {
         val droppedCards = if (skip != null) cards.drop(skip) else cards
         return if (limit != null) droppedCards.take(limit) else droppedCards
     }
+
+    fun deleteList(token: String, lid: Int) {
+        checkToken(token)
+        val list = database.getListDetails(lid)
+        if (!database.checkUserTokenExistsInBoard(token, list.bid)) throw IllegalListAccessException
+
+        database.deleteList(lid)
+    }
 }
