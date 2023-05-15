@@ -23,8 +23,10 @@ async function searchBoardResults(mainContent, id, query) {
         })
 
         mainContent.replaceChildren(
-            div({class: "card-header"},
-                h1({class: "card-title"}, `Boards with name: "${query}"    ${idx+1}/${boards.length}`)
+            div({class: "card"},
+                div({class: "card-header"},
+                    h1({class: "card-title"}, `Boards with name: "${query}"    ${idx + 1}/${boards.length}`)
+                )
             ),
             /*div({class: "card-body w-50 center", style: "width: 18rem"},
                 h2({}, board.name),
@@ -33,15 +35,17 @@ async function searchBoardResults(mainContent, id, query) {
                 nextButton
             )
         )*/
-            div({class: "card bg-light mb-3  w-25 center", style: "max-width: 18rem"},
-                div({class: "card-header"},board.name),
-                div({class: "card-body"},
-                    p({}, board.description),
-                    getDetailsButton
-                    )
+            div({class: "row justify-content-center"},
+                div({class: "card bg-light mb-3  w-25"},
+                    div({class: "card-header"}, board.name),
+                    div({class: "card-body"},
+                        p({}, board.description),
+                        getDetailsButton
+                    ),
+                    prevButton,
+                    nextButton
                 ),
-            prevButton,
-            nextButton
+            )
         )
     }
 

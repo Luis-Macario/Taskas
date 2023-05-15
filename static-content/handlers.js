@@ -1,4 +1,3 @@
-import {getHome} from "./DSL/tags.js";
 import getUser from "./views/users/UserView.js";
 import createUser from "./views/users/UserCreation.js";
 import searchBoard from "./views/boards/BoardSearch.js";
@@ -11,6 +10,7 @@ import createList from "./views/lists/ListCreate.js";
 import getList from "./views/lists/ListView.js";
 import createCard from "./views/cards/CardCreate.js";
 import getCard from "./views/cards/CardView.js";
+import getHome from "./views/HomeView.js";
 
 
 export const handlers = {

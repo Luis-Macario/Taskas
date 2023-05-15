@@ -58,7 +58,7 @@ function createUser(mainContent) {
             placeholder: "Enter your email", minlength: "3", maxlength: "60",
             required: true
         })), br(),
-        button({type: "submit", class: "btn btn-primary w-100 btn-lg"}, "Register")
+        button({type: "submit", class: "btn btn-primary"}, "Register")
     )
 
     myForm.addEventListener('submit', handleSubmit)

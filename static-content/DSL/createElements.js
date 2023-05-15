@@ -9,4 +9,5 @@ function createElement(tagName, options= {}, ...contents) {
     })
     return element
 }
+
 export default createElement

@@ -88,9 +88,3 @@ export function br() {
     input.type = "br"
     return input
 }
-
-export function getHome(mainContent) {
-    mainContent.replaceChildren(
-        h1({class: "display-4 mt-5 mb-4 text-center"}, "Home")
-    )
-}

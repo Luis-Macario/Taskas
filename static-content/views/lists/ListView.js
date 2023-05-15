@@ -18,9 +18,11 @@ async function getList(mainContent, id) {
         const list = body
         const cards = list.cards
         mainContent.replaceChildren(
-            div({},
+            div({class: "card"},
+                div({class: "card-header"},
+                    h1({class: "card-title"}, "List Info")
+                ),
                 a(`#boards/${list.bid}`, "Return to board"),
-                h1({}, "List Info"),
                 ul({},
                     li({}, `Name: ${list.name}`),
                     li({}, `id: ${list.id}`),

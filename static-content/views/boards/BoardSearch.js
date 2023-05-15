@@ -2,18 +2,6 @@ import {br, button, div, form, h1,  inputV2,  labelV2} from "../../DSL/tags.js";
 
 async function searchBoard(mainContent, id) {
 
-    /*const myForm = form(
-        label({class: "form-label"}, "Board Search: "),
-        input({class: "form-control", type: "text", id: "nameBoard"}),
-        input({class: "btn btn-primary mt-3", type: "submit"})
-    )*/
-
-    /*const myForm = form(
-        label("Board Search: "),
-        input("text", "nameBoard"),
-        input("submit")
-    )*/
-
     const myForm = form(
         br(),
         labelV2({for: "boardName", class: "col-form-label"}, "Name:"), br(),

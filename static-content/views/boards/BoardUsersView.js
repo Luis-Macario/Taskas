@@ -1,4 +1,4 @@
-import {a, div, h1, li, p} from "../../DSL/tags.js";
+import {a, div, h1, li} from "../../DSL/tags.js";
 import showErrorResponse, {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
 
 async function getUsersFromBoard(mainContent, id) {
@@ -13,13 +13,13 @@ async function getUsersFromBoard(mainContent, id) {
     if (res.status === 200) {
         const users = body.users
         mainContent.replaceChildren(
-            div(
-                p({},
-                    a(`#boards/${id}`, "Return to board")
+            div({class: "card"},
+                div({class: "card-header"},
+                    h1({class: "card-title"}, "Board Users")
                 ),
-                h1({},"Board Users"),
+                a(`#boards/${id}`,"Return to board"),
                 ...users.map(user => {
-                    return li({},`${user.name}[${user.id}] : ${user.email} `)
+                    return li({}, `${user.name}[${user.id}] : ${user.email} `)
                 })
             )
         )

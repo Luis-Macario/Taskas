@@ -12,7 +12,10 @@ async function getCard(mainContent, id) {
         const card = body
         console.log(card)
         mainContent.replaceChildren(
-            div({},
+            div({class: "card"},
+                div({class: "card-header"},
+                    h1({class: "card-title"}, "Card Info")
+                ),
                 p({},
                     a(`#boards/${card.boardID}`, "Return to board")
                 ),
