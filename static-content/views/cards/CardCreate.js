@@ -44,7 +44,7 @@ async function cardCreate(mainContent, id) {
             })
     }
 
-    const myForm = form(
+    const myForm = form({},
         br(),
         labelV2({for: "cardName", class: "col-form-label"}, "Name:"), br(),
         inputV2(({

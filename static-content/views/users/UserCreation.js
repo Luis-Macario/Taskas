@@ -42,31 +42,31 @@ function createUser(mainContent) {
             })
     }
 
-    const myForm = form(
+    const myForm = form({},
         br(),
-        labelV2({for: "userName", class: "col-form-label"}, "Name:"), br(),
-        inputV2(({
+        labelV2({ for: "userName", class: "col-form-label" }, "Name:"), br(),
+        inputV2({
             type: "text", id: "idName", name: "idName",
             class: "form-control",
             placeholder: "Enter your name", minlength: "3", maxlength: "50",
             required: true
-        })),
-        labelV2({for: "userEmail", class: "col-form-label"}, "Email:"), br(),
-        inputV2(({
+        }),
+        labelV2({ for: "userEmail", class: "col-form-label" }, "Email:"), br(),
+        inputV2({
             type: "text", id: "idEmail", name: "idEmail",
             class: "form-control",
             placeholder: "Enter your email", minlength: "3", maxlength: "60",
             required: true
-        })), br(),
-        button({type: "submit", class: "btn btn-primary"}, "Register")
-    )
+        }),br(),
+        button({ type: "submit", class: "btn btn-primary" }, "Register")
+    );
 
-    myForm.addEventListener('submit', handleSubmit)
+    myForm.addEventListener('submit', handleSubmit);
     mainContent.replaceChildren(
-        div({class: "card-header"},
-            h1({class: "card-title"}, "Register User")
+        div({ class: "card-header" },
+            h1({ class: "card-title" }, "Register User")
         ),
-        div({class: "card-body w-50 center "},
+        div({ class: "card-body w-50 center" },
             myForm
         )
     )

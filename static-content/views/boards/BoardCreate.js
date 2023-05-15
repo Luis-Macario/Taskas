@@ -49,7 +49,7 @@ async function boardCreate(mainContent) {
             })
     }
 
-    const myForm = form(
+    const myForm = form({},
         br(),
         div({class: "input-group mb-3"},
             div({class: "input-group-prepend", style: "float:left; background: red; width:100px"},

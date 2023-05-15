@@ -38,7 +38,7 @@ async function listcreate(mainContent, id) {
             })
     }
 
-    const myForm = form(
+    const myForm = form({},
         br(),
         labelV2({for: "listname", class: "col-form-label"}, "Name:"), br(),
         inputV2(({
