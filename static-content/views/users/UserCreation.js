@@ -1,5 +1,6 @@
-import {br, button, div, form, h1, inputV2, span} from "../../DSL/tags.js";
+import {div,h1} from "../../DSL/tags.js";
 import {API_BASE_URL} from "../../configs/configs.js";
+import UserForm from "./UserForm.js";
 
 function createUser(mainContent) {
     function handleSubmit(event) {
@@ -42,7 +43,7 @@ function createUser(mainContent) {
             })
     }
 
-    const myForm = form({},
+    /*const myForm = form({},
         br(),
         div({class: "input-group mb-3"},
             div({class: "input-group-prepend", style: "float:left; width:100px"},
@@ -69,7 +70,9 @@ function createUser(mainContent) {
         br(),
         button({type: "submit", class: "btn btn-primary w-100 btn-lg"}, "Register")
     )
+     */
 
+    const myForm = UserForm()
     myForm.addEventListener('submit', handleSubmit);
     mainContent.replaceChildren(
         div({class: "card"},

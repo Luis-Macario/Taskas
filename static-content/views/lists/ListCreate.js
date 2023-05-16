@@ -1,5 +1,6 @@
 import {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
-import {br, button, div, form, h1,  inputV2,  labelV2} from "../../DSL/tags.js";
+import {div, h1} from "../../DSL/tags.js";
+import ListForm from "./ListForm.js";
 
 async function listcreate(mainContent, id) {
     function handleSubmit(event) {
@@ -38,19 +39,9 @@ async function listcreate(mainContent, id) {
             })
     }
 
-    const myForm = form({},
-        br(),
-        labelV2({for: "listname", class: "col-form-label"}, "Name:"), br(),
-        inputV2(({
-            type: "text", id: "idName", name: "idName",
-            class: "form-control",
-            placeholder: "Enter the List name", minlength: "3", maxlength: "60",
-            required: true
-        })), br(),
-        button({type: "submit", class: "btn btn-primary w-100 btn-lg"}, "Create List")
-    )
-
+    const myForm = ListForm()
     myForm.addEventListener('submit', handleSubmit)
+
     mainContent.replaceChildren(
         div({class: "card-header"},
             h1({class: "card-title"}, "Create List")
@@ -60,5 +51,4 @@ async function listcreate(mainContent, id) {
         )
     )
 }
-
 export default listcreate

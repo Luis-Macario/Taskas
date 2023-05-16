@@ -1,6 +1,7 @@
-import {a, br, button, div, h1, li, p, span, table, td, th, tr, ul} from "../../DSL/tags.js";
+import {a, br, button, div, h1, li, p, table, td, th, tr, ul} from "../../DSL/tags.js";
 import showErrorResponse, {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
 import listDelete from "./ListDelete.js";
+import ListDeleteModal from "./ListDeleteModal.js";
 
 async function getList(mainContent, id) {
     const res = await fetch(API_BASE_URL + `lists/${id}`, {
@@ -35,14 +36,14 @@ async function getList(mainContent, id) {
     });
 
     const declineButton = button({type: "button", class: "btn btn-secondary", "data-dismiss": "modal"}, "Close")
-    const confirmeButton = button({type: "button", class: "btn btn-primary"}, "Confirm Delete")
+    const confirmButton = button({type: "button", class: "btn btn-primary"}, "Confirm Delete")
 
     declineButton.addEventListener("click", () => {
         mainContent.removeChild(modal);
     })
 
-    const modal =
-        div({
+    const modal = ListDeleteModal(declineButton, confirmButton)
+        /*div({
                 class: "modal-fade",
                 id: "exampleModal",
                 tabindex: "-1",
@@ -64,11 +65,11 @@ async function getList(mainContent, id) {
                     ),
                     div({class: "modal-footer"},
                         declineButton,
-                        confirmeButton
+                        confirmButton
                     )
                 )
             )
-        )
+        )*/
 
 
     const body = await res.json()
@@ -76,7 +77,7 @@ async function getList(mainContent, id) {
         const list = body
         const cards = list.cards
 
-        confirmeButton.addEventListener("click", () => {
+        confirmButton.addEventListener("click", () => {
             mainContent.removeChild(modal);
             listDelete(list.bid, list.id)
         })
