@@ -15,7 +15,13 @@ function setAttributes(element, options) {
         if (options[option] == null) continue;
         const val = options[option];
         if(val === null) continue
-        element.setAttribute(option, val);
+
+        /*if(option === "onClick"){
+            console.log(`${options}---- ${val}`)
+            element.addEventListener("click", val);
+        } else {*/
+            element.setAttribute(option, val);
+        //}
     }
 }
 

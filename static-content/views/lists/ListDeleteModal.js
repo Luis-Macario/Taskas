@@ -13,7 +13,7 @@ function ListDeleteModal(declineButton, confirmButton) {
         div({class: "modal-dialog", role: "document"},
             div({class: "modal-content"},
                 div({class: "modal-header"},
-                    h1({class: "modal-title", id: "exampleModalLabel"}, "Delete List?"),
+                    h1({class: "modal-title", id: "exampleModalLabel"}, "Delete List"),
                     button({type: "button", class: "close", "data-dismiss": "modal", "aria-label": "Close"},
                         span({"aria-hidden": "true"}, "")
                     )
