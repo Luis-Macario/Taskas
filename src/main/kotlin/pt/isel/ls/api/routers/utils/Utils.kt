@@ -7,7 +7,13 @@ import kotlinx.serialization.json.Json
 import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.routing.path
-import pt.isel.ls.api.routers.utils.exceptions.*
+import pt.isel.ls.api.routers.utils.exceptions.InvalidAuthHeaderException
+import pt.isel.ls.api.routers.utils.exceptions.InvalidBoardIDException
+import pt.isel.ls.api.routers.utils.exceptions.InvalidBodyException
+import pt.isel.ls.api.routers.utils.exceptions.InvalidCardIDException
+import pt.isel.ls.api.routers.utils.exceptions.InvalidListIDException
+import pt.isel.ls.api.routers.utils.exceptions.InvalidUserIDException
+import pt.isel.ls.api.routers.utils.exceptions.NoAuthenticationException
 
 private const val BEARER_REGEX: String = "^Bearer .+\$"
 
@@ -38,8 +44,8 @@ fun Request.getAuthorizationHeader(): String =
  * @return a pair of: the skip amount or null; the limit amount or null.
  */
 fun Request.getPaging(): Pair<Int?, Int?> {
-    val skip = query("skip")?.toIntOrNull()?.coerceAtLeast(0) //?: throw InvalidQuerySkipException
-    val limit = query("limit")?.toIntOrNull()?.coerceAtLeast(0) //?: throw InvalidQueryLimitException
+    val skip = query("skip")?.toIntOrNull()?.coerceAtLeast(0) // ?: throw InvalidQuerySkipException
+    val limit = query("limit")?.toIntOrNull()?.coerceAtLeast(0) // ?: throw InvalidQueryLimitException
     return Pair(skip, limit)
 }
 

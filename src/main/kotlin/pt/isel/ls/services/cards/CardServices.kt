@@ -40,6 +40,8 @@ class CardServices(private val database: AppDatabase) {
         if (!database.checkUserTokenExistsInBoard(token, list.bid)) throw IllegalListAccessException
         val date = if (dueDate != null) Date.valueOf(dueDate) else Date.valueOf(MAX_DATE)
 
+        println("Services: initDate = $initDate, valueOf = ${Date.valueOf(initDate)}")
+
         return database.createCard(lid, name, description, Date.valueOf(initDate), date)
     }
 

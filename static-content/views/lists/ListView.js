@@ -53,6 +53,7 @@ async function getList(mainContent, id) {
             mainContent.removeChild(modal);
             listDelete(list.bid, list.id)
         })
+        console.log(list)
         mainContent.replaceChildren(
             div({},
                 div({class: "card"},

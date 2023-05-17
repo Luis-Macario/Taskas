@@ -44,6 +44,8 @@ async function getCard(mainContent, id) {
                     li({}, `Name: ${card.name}`),
                     li({}, `Id: ${card.id}`),
                     li({}, `Description: ${card.description}`),
+                    li({}, `initial Date: ${card.initialDate}`),
+                    li({}, `due Date: ${card.dueDate}`),
                     br(),
                     moveCardButton
                 )

@@ -47,7 +47,7 @@ fun runAndHandleExceptions(block: () -> Response): Response =
  * @return the [Response] correspondent to the exception thrown
  */
 fun exceptionHandler(exception: Exception): Response =
-    /*if (exception is TaskException) {
+    if (exception is TaskException) {
         Response(exception.toStatus()).json(
             ErrorResponse(
                 code = exception.code,
@@ -55,7 +55,7 @@ fun exceptionHandler(exception: Exception): Response =
                 description = exception.description
             )
         )
-    } else {*/
+    } else {
         Response(Status.INTERNAL_SERVER_ERROR).json(
             ErrorResponse(
                 code = 9000, // TODO: Figure out what codes to use
@@ -63,7 +63,7 @@ fun exceptionHandler(exception: Exception): Response =
                 description = "An unknown error has occurred: " + exception.message
             )
         )
-   // }
+    }
 
 /**
  * Converts a [TaskException] to a [Status]
@@ -107,7 +107,6 @@ fun TaskException.toStatus() =
                 InvalidUserIDException -> Status.BAD_REQUEST
                 InvalidBodyException -> Status.BAD_REQUEST
                 NoAuthenticationException -> Status.UNAUTHORIZED
-                else -> {}
             }
 
         else -> Status.INTERNAL_SERVER_ERROR

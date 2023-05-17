@@ -6,14 +6,14 @@ async function boardCreate(mainContent) {
         event.preventDefault()
 
         const name = document.querySelector("#idName").value
-        const description = document.querySelector("#idDescritpion").value
+        const description = document.querySelector("#idDescription").value
 
-        if (name.length < 5 || name.length > 100) {
-            alert("Board Name must be between 5 and 100 letters long")
+        if (name.length <= 5 || name.length >= 100) {
+            alert("Board Name must be between 6 and 100 letters long")
             return;
         }
 
-        if (description.length < 0 || description.length > 1000) {
+        if (description.length <= 0 || description.length >= 1000) {
             alert("Description must be between 0 and 1000 letters long")
             return;
         }
@@ -30,6 +30,7 @@ async function boardCreate(mainContent) {
                 description: description
             })
         }
+        console.log(name + " " + description)
         fetch(API_BASE_URL + `boards/`, options)
             .then(res => res.json())
             .then(board => {
@@ -52,9 +53,9 @@ async function boardCreate(mainContent) {
         ),
         div({class: "input-group mb-3"},
             div({class: "input-group-prepend", style: "float:left; width:100px;"},
-                span({class: "input-group-text", id: "inputGroup-sizing-default"}, "Descritpion")),
+                span({class: "input-group-text", id: "inputGroup-sizing-default"}, "Description")),
             inputV2({
-                type: "text", id: "idDescritpion", name: "idDescritpion",
+                type: "text", id: "idDescription", name: "idDescription",
                 class: "form-control",
                 placeholder: "Enter the board description", minlength: "3", maxlength: "60",
                 required: true

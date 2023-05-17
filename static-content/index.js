@@ -31,8 +31,6 @@ function hashChangeHandler() {
     const mainContent = document.getElementById("mainContent")
     let path = window.location.hash.replace("#", "")
 
-    console.log(path)
-
     const idStr = path.split("/")
     const id = (idStr.length < 2) ? null : Number(idStr[1])
     const query = (idStr.length < 5) ? null : idStr[4]
@@ -40,10 +38,6 @@ function hashChangeHandler() {
     path = path.replace(RegExp("\/[0-9]+"), "/{id}")
     if (query !== null) path = path.replace(RegExp(`/${query}\$`), "/{query}")
 
-    console.log("idStr = " + idStr)
-    console.log("id = " + id)
-    console.log("query = " + query)
-    console.log("path = " + path)
     const handler = router.getRouteHandler(path)
     handler(mainContent, id, query)
 }

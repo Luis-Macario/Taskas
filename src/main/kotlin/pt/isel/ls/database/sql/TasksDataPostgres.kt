@@ -443,6 +443,8 @@ class TasksDataPostgres(url: String) : AppDatabase {
             stm.setDate(6, initDate)
             stm.setDate(7, dueDate)
 
+            println("PGSQL: $initDate")
+
             val affectedRows: Int = stm.executeUpdate()
             if (affectedRows == 0) {
                 throw SQLException("Creating card failed, no rows affected.")
@@ -455,7 +457,15 @@ class TasksDataPostgres(url: String) : AppDatabase {
                 throw SQLException("Creating card failed, no ID obtained.")
             }
 
-            return Card(id, bid, lid, name, description, dueDate)
+            return Card(
+                id = id,
+                bid = bid,
+                lid = lid,
+                name = name,
+                description = description,
+                initDate = initDate,
+                finishDate = dueDate
+            )
         }
     }
 
@@ -463,7 +473,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
-                SELECT c.id, c.bid,c.lid, c.name, c.description, c.initdate
+                SELECT c.id, c.bid,c.lid, c.name, c.description, c.initdate, c.finishdate
                 FROM cards as c
                 WHERE c.bid = ? and c.lid = ?
                 """.trimIndent()
@@ -482,7 +492,8 @@ class TasksDataPostgres(url: String) : AppDatabase {
                         lid = rs.getInt(3),
                         name = rs.getString(4),
                         description = rs.getString(5),
-                        initDate = rs.getDate(6)
+                        initDate = rs.getDate(6),
+                        finishDate = rs.getDate(7)
                     )
                 )
             }
@@ -508,7 +519,8 @@ class TasksDataPostgres(url: String) : AppDatabase {
                     lid = rs.getInt("lid"),
                     name = rs.getString("name"),
                     description = rs.getString("description"),
-                    initDate = rs.getDate("initDate")
+                    initDate = rs.getDate("initDate"),
+                    finishDate = rs.getDate("finishDate")
                 )
             } else {
                 throw CardNotFoundException

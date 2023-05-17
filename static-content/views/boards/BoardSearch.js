@@ -8,7 +8,9 @@ async function searchBoard(mainContent, id) {
             div({class: "input-group-prepend", style: "float:left; width:100px;"},
                 span({class: "input-group-text", id: "inputGroup-sizing-default"}, "Name")),
             inputV2({
-                type: "text", id: "nameBoard", name: "nameBoard",
+                type: "text",
+                id: "nameBoard",
+                name: "nameBoard",
                 class: "form-control",
                 placeholder: "Enter the board name you want to search", minlength: "3", maxlength: "60",
                 required: true
