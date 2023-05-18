@@ -132,7 +132,6 @@ class BoardsRoutes(private val services: BoardServices) {
             val (skip, limit) = request.getPaging()
 
             val lists = services.getListsFromBoard(bearerToken, boardID, skip, limit)
-
             val getListsResponse = GetListsFromBoardResponse(lists.map { it.toDTO() })
             Response(OK).json(getListsResponse)
         }

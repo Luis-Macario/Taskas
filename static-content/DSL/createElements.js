@@ -6,7 +6,6 @@ function createElement(tagName, options= {}, ...contents) {
         const content = (typeof item === "string") ? document.createTextNode(item) : item
         element.appendChild(content)
     })
-    console.log(element)
     return element
 }
 

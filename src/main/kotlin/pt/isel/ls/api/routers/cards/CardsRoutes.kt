@@ -92,7 +92,7 @@ class CardsRoutes(private val services: CardServices) {
             val cardID = request.getCardID()
             val bearerToken = request.getAuthorizationHeader()
             val moveCardRequest = request.getJsonBodyTo<MoveCardRequest>()
-
+            println(moveCardRequest)
             services.moveCard(bearerToken, cardID, moveCardRequest)
             Response(NO_CONTENT)
         }

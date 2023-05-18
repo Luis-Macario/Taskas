@@ -10,24 +10,35 @@ async function getCard(mainContent, id) {
     })
 
     let modalVisible = false
-    const modal = MoveCardModal()
-
     const moveCardButton = button({type: "button", class: "btn btn-primary btn-sm"}, "Move Card")
-    moveCardButton.addEventListener("click", () => {
-        if (modalVisible) {
-            mainContent.removeChild(modal);
-            modalVisible = false;
-        } else {
-            //const newModal = modal.cloneNode(true);
-            mainContent.appendChild(modal);
-            modalVisible = true;
-        }
-    })
+    const closeButton = button({type: "button", class: "btn btn-secondary", "data-dismiss": "modal"}, "Close")
 
     const body = await res.json()
     if (res.status === 200) {
         const card = body
         console.log(card)
+
+        let modal = null;
+        // Move Card Modal, button to Open it
+        moveCardButton.addEventListener("click", () => {
+            if (!modal) {
+                modal = MoveCardModal(mainContent, closeButton, card.boardID, card.id, card.listID);
+                mainContent.appendChild(modal);
+                modalVisible = true;
+            } else if (!modalVisible) {
+                mainContent.appendChild(modal);
+                modalVisible = true;
+            } else {
+                mainContent.removeChild(modal);
+                modalVisible = false;
+            }
+        });
+
+        closeButton.addEventListener("click", () => {
+            mainContent.removeChild(modal);
+            modalVisible = false;
+        });
+
         mainContent.replaceChildren(
             div({class: "card"},
                 div({class: "card-header"},
