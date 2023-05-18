@@ -1,4 +1,4 @@
-import {button, div, h1, inputV2, labelV2} from "../../DSL/tags.js";
+import {button, div, h1, input, label} from "../../DSL/tags.js";
 import {getAvailableLists, getCardsFromList, moveCard} from "./MoveCardApiRequests.js";
 
 function MoveCardModal(mainContent, closeButton, boardID, cardID, listID) {
@@ -7,7 +7,7 @@ function MoveCardModal(mainContent, closeButton, boardID, cardID, listID) {
     function selectIndex(resetButton = false) {
         const dropDownMenuIdx = div({class: "dropdown-menu", "aria-labelledby": "dropdownMenuButton"})
 
-        const checkboxInput = inputV2({
+        const checkboxInput = input({
             class: "form-check-input",
             type: "checkbox",
             id: "flexSwitchCheckDefault",
@@ -20,7 +20,7 @@ function MoveCardModal(mainContent, closeButton, boardID, cardID, listID) {
         const checkBox =
             div({class: "form-check form-switch"},
                 checkboxInput,
-                labelV2({class: "form-check-label", for: "flexSwitchCheckDefault"}, "Bellow or Above")
+                label({class: "form-check-label", for: "flexSwitchCheckDefault"}, "Bellow or Above")
             )
 
         let prevSelected = null

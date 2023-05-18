@@ -26,7 +26,7 @@ async function getBoards(mainContent, id) {
                         ...(boards.length > 0 ? boards.map(s => {
                                     return tr({},
                                         td({class: "text-center"},
-                                            a("#boards/" + s.id, s.name)
+                                            a({href:`#boards/${s.id}`}, s.name)
                                         )
                                     )
                                 }) :

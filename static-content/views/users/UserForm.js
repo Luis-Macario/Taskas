@@ -1,4 +1,4 @@
-import {br, button, div, form, inputV2, span} from "../../DSL/tags.js";
+import {br, button, div, form, input, span} from "../../DSL/tags.js";
 
 function UserForm() {
     return form({},
@@ -7,7 +7,7 @@ function UserForm() {
             div({class: "input-group-prepend", style: "float:left; width:100px"},
                 span({class: "input-group-text", id: "inputGroup-sizing-default"}, "Name")),
             br(),
-            inputV2({
+            input({
                 type: "text", id: "idName", name: "idName",
                 class: "form-control",
                 placeholder: "Enter your name", minlength: "3", maxlength: "50",
@@ -18,7 +18,7 @@ function UserForm() {
             div({class: "input-group-prepend", style: "float:left; width:100px"},
                 span({class: "input-group-text", id: "inputGroup-sizing-default"}, "Email")),
             br(),
-            inputV2({
+            input({
                 type: "text", id: "idEmail", name: "idEmail",
                 class: "form-control",
                 placeholder: "Enter your email", minlength: "3", maxlength: "60",

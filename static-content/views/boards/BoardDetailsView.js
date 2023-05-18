@@ -8,44 +8,50 @@ async function getBoardDetails(mainContent, id) {
         }
     })
 
-    const createListButton = button({class: "btn btn-primary btn-sm"}, "Create List")
-    createListButton.addEventListener("click", () => {
+    function redirectToListCreation() {
         window.location.hash = `boards/${id}/lists/create`
-    })
+    }
 
     const body = await res.json()
     if (res.status === 200) {
         const board = body
         console.log(board)
         mainContent.replaceChildren(
-            div({},
-                h1({}, board.name),
-                p({}, board.description),
-                table({},
-                    tr({},
-                        th({}, "Lists")
-                    ),
-                    ...(board.lists.length > 0 ? board.lists.map(l => {
-                                return tr({},
-                                    td({},
-                                        a("#lists/" + l.id, "Link Example to lists/" + l.id)
-                                    )
+            div({class: "card"},
+                div({class: "card-header"},
+                    h1({class: "card-title"}, `${board.name}`)
+                ),
+                div({class: "card-body"},
+                    p({}, board.description),
+                    table({},
+                        tr({},
+                            th({}, "Lists")
+                        ),
+                        div({class: "card-body"},
+                            div({class: "btn-group-vertical"},
+                                ...(board.lists.length > 0 ? board.lists.map(l => {
+                                            return a({class: "btn btn-secondary", href: `#lists/${l.id}`}, `${l.name}`)
+                                        }) :
+                                        [
+                                            tr({},
+                                                td({},
+                                                    p({}, "Board has no lists")
+                                                )
+                                            )
+                                        ]
                                 )
-                            }) :
-                            [
-                                tr({},
-                                    td({},
-                                        p({}, "Board has no lists")
-                                    )
-                                )
-                            ]
-                    ), br(),
-                    createListButton,
-                    tr({},
-                        th({}, "Users"),
-                    ),
-                    tr({},
-                        a(`#boards/${id}/users`, "Board Users")
+                            ),
+
+                            br(),
+                            br(),
+                            button({class: "btn btn-primary btn-sm", onClick: redirectToListCreation}, "Create List"),
+                        ),
+                        tr({},
+                            th({}, "Users"),
+                        ),
+                        div({class: "card-body"},
+                            a({class: "btn btn-secondary", href: `#boards/${id}/users`}, "Board Users")
+                        )
                     )
                 )
             )

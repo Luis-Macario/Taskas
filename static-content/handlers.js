@@ -13,6 +13,8 @@ import getCard from "./views/cards/CardView.js";
 import getHome from "./views/HomeView.js";
 import {div, h1} from "./DSL/tags.js";
 
+
+//TODO: "Implement login"
 function login(mainContent){
     mainContent.replaceChildren(
         div({class: "card"},

@@ -1,32 +1,32 @@
-import {br, button, form, inputV2, labelV2} from "../../DSL/tags.js";
+import {br, button, form, input, label} from "../../DSL/tags.js";
 
 
 function CardForm() {
     return form({},
         br(),
-        labelV2({for: "cardName", class: "col-form-label"}, "Name:"), br(),
-        inputV2(({
+        label({for: "cardName", class: "col-form-label"}, "Name:"), br(),
+        input(({
             type: "text", id: "idName", name: "idName",
             class: "form-control",
             placeholder: "Enter the Card name", minlength: "3", maxlength: "60",
             required: true
         })), br(),
-        labelV2({for: "cardName", class: "col-form-label"}, "Description:"), br(),
-        inputV2(({
+        label({for: "cardName", class: "col-form-label"}, "Description:"), br(),
+        input(({
             type: "text", id: "idDescription", name: "idDescription",
             class: "form-control",
             placeholder: "Enter the Card Description", minlength: "3", maxlength: "60",
             required: true
         })), br(),
-        labelV2({for: "cardInitDate", class: "col-form-label"}, "Init Date:"), br(),
-        inputV2(({
+        label({for: "cardInitDate", class: "col-form-label"}, "Init Date:"), br(),
+        input(({
             type: "date", id: "idInitDate", name: "idInitDate",
             class: "form-control",
             placeholder: "Enter the Card Init Date", minlength: "3", maxlength: "60",
             required: true
         })), br(),
-        labelV2({for: "cardDueDate", class: "col-form-label"}, "Due Date:"), br(),
-        inputV2(({
+        label({for: "cardDueDate", class: "col-form-label"}, "Due Date:"), br(),
+        input(({
             type: "date", id: "idDueDate", name: "idDueDate",
             class: "form-control",
             placeholder: "Enter the Card Due Date", minlength: "3", maxlength: "60",

@@ -1,9 +1,10 @@
 import {button, div, h1, p} from "../../DSL/tags.js";
 import showErrorResponse, {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
 
-let idx = 0
 
 async function searchBoardResults(mainContent, id, query) {
+
+    let idx = 0
 
     function showNoBoards() {
         mainContent.replaceChildren(
@@ -13,14 +14,14 @@ async function searchBoardResults(mainContent, id, query) {
         )
     }
 
-    function showBoard(boards, prevButton, nextButton) {
+
+    function showBoard(boards) {
         console.log()
         const board = boards[idx]
 
-        const getDetailsButton = button({class: "btn btn-primary btn-sm"}, "Get Board Details")
-        getDetailsButton.addEventListener("click", () => {
+        function getDetails(){
             window.location.hash = `boards/${board.id}`
-        })
+        }
 
         mainContent.replaceChildren(
             div({class: "card"},
@@ -28,22 +29,21 @@ async function searchBoardResults(mainContent, id, query) {
                     h1({class: "card-title"}, `Boards with name: "${query}"    ${idx + 1}/${boards.length}`)
                 )
             ),
-            /*div({class: "card-body w-50 center", style: "width: 18rem"},
-                h2({}, board.name),
-                p({}, board.description),
-                prevButton,
-                nextButton
-            )
-        )*/
             div({class: "row justify-content-center"},
                 div({class: "card bg-light mb-3  w-25"},
                     div({class: "card-header"}, board.name),
                     div({class: "card-body"},
                         p({}, board.description),
-                        getDetailsButton
+                        button({class: "btn btn-primary btn-sm", onClick:getDetails}, "Get Board Details")
                     ),
-                    prevButton,
-                    nextButton
+                    div({class:"row"},
+                        div({class: "col-6"},
+                            button({class: "btn btn-outline-primary w-100", onClick:getPreviousBoard}, "Prev")
+                        ),
+                        div({class: "col-6"},
+                            button({class: "btn btn-outline-primary w-100", onClick:getNextBoard}, "Next")
+                        )
+                    )
                 ),
             )
         )
@@ -58,27 +58,29 @@ async function searchBoardResults(mainContent, id, query) {
         }
     }
     const res = await fetch(API_BASE_URL + `users/${id}/boards/search?search_query=${query}`, options)
+    const boards = (await res.json()).boards
+
+    //TODO:'in every view subfolder, create a utils.js to store these functions'
+    function getNextBoard(){
+        idx++
+        idx = (idx > boards.length - 1) ? 0 : idx
+        showBoard(boards)
+    }
+
+    function getPreviousBoard(){
+        idx--
+        idx = (idx < 0) ? boards.length - 1 : idx
+        showBoard(boards)
+    }
+
     if (res.status === 200) {
         idx = 0
-        const boards = (await res.json()).boards
-        //TODO: MAKE BUTTON DSL AND TIDY UP CODE ----> DONE??
-        const nextButton = button({class: "btn btn-outline-primary"}, "Next")
-        nextButton.addEventListener("click", () => {
-            idx++
-            idx = (idx > boards.length - 1) ? 0 : idx
-            showBoard(boards, prevButton, nextButton)
-        })
-        const prevButton = button({class: "btn btn-outline-primary"}, "Prev")
-        prevButton.addEventListener("click", () => {
-            idx--
-            idx = (idx < 0) ? boards.length - 1 : idx
-            showBoard(boards, prevButton, nextButton)
-        })
-
         if (boards.length === 0) {
             showNoBoards()
         } else {
-            showBoard(boards, prevButton, nextButton)
+            showBoard(boards,
+
+            )
         }
         return
     }

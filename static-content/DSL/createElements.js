@@ -15,12 +15,13 @@ function setAttributes(element, options) {
         const val = options[option];
         if(val === null) continue
 
-        /*if(option === "onClick"){
-            console.log(`${options}---- ${val}`)
-            element.addEventListener("click", val);
-        } else {*/
-            element.setAttribute(option, val);
-        //}
+        switch (option) { //TODO:'Adicinonar mais casos'
+            case "onClick" :
+                element.addEventListener("click", val)
+                break
+            default:
+                element.setAttribute(option, val);
+        }
     }
 }
 

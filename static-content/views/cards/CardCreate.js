@@ -11,8 +11,8 @@ async function cardCreate(mainContent, id) {
         const initDate = document.querySelector("#idInitDate").value
         const dueDate = document.querySelector("#idDueDate").value
 
-        if(initDate > dueDate){
-            alert("Due Date can't happen before Init Date")
+        if(initDate >= dueDate){
+            alert("Due Date can't happen before, or be equal to, Init Date")
             return
         }
 

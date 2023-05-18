@@ -1,5 +1,5 @@
 import {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
-import {br, button, div, form, h1, inputV2, span} from "../../DSL/tags.js";
+import {br, button, div, form, h1, input, span} from "../../DSL/tags.js";
 
 async function boardCreate(mainContent) {
     function handleSubmit(event) {
@@ -44,7 +44,7 @@ async function boardCreate(mainContent) {
         div({class: "input-group mb-3"},
             div({class: "input-group-prepend", style: "float:left; width:100px"},
                 span({class: "input-group-text", id: "inputGroup-sizing-default"}, "Name")),
-            inputV2({
+            input({
                 type: "text", id: "idName", name: "idName",
                 class: "form-control",
                 placeholder: "Enter the board name", minlength: "3", maxlength: "60",
@@ -54,7 +54,7 @@ async function boardCreate(mainContent) {
         div({class: "input-group mb-3"},
             div({class: "input-group-prepend", style: "float:left; width:100px;"},
                 span({class: "input-group-text", id: "inputGroup-sizing-default"}, "Description")),
-            inputV2({
+            input({
                 type: "text", id: "idDescription", name: "idDescription",
                 class: "form-control",
                 placeholder: "Enter the board description", minlength: "3", maxlength: "60",

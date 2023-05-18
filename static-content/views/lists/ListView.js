@@ -55,33 +55,37 @@ async function getList(mainContent, id) {
         })
         console.log(list)
         mainContent.replaceChildren(
-            div({},
-                div({class: "card"},
-                    div({class: "card-header"},
-                        h1({class: "card-title"}, "List Info")
-                    ),
-                    a(`#boards/${list.bid}`, "Return to board"),
+            div({class: "card"},
+                div({class: "card-header"},
+                    h1({class: "card-title"}, `${list.name}`)
+                ),
+                div({class: "card-body"},
+                    a({class: "btn btn-secondary", href: `#boards/${list.bid}`}, "Return to board"),
                     ul({},
-                        li({}, `Name: ${list.name}`),
-                        li({}, `id: ${list.id}`),
+                        //li({}, `Name: ${list.name}`),
+                        li({}, `ID: ${list.id}`),
                     ),
                     table({},
-                        br(),
                         deleteListButton,
                         tr({},
                             th({}, "Cards")
                         ),
-                        ...(cards.length > 0 ? cards.map(card => {
-                                    return tr({},
-                                        td({}, a(`#cards/${card.id}`, "Card:" + card.name))
-                                    )
-                                })
-                                :
-                                [tr({},
-                                    td({}, p({}, "List doesn't have any cards yet")) //fallback value to spread, hence the []
-                                )]
-                        ), br(),
-                        createCardButton
+                        div({class: "card-body"},
+                            div({class: "btn-group-vertical"},
+                                ...(cards.length > 0 ? cards.map(card => {
+                                            return a({class: "btn btn-secondary", href: `#cards/${card.id}`},
+                                                "Card:" + card.name)
+                                        })
+                                        :
+                                        [tr({},
+                                            td({}, p({}, "List doesn't have any cards yet"))
+                                        )]
+                                )
+                            ),
+                            br(),
+                            br(),
+                            createCardButton
+                        )
                     )
                 )
             )

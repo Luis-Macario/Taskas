@@ -1,11 +1,11 @@
-import {br, button, form, inputV2, labelV2} from "../../DSL/tags.js";
+import {br, button, form, input, label} from "../../DSL/tags.js";
 
 
 function ListForm() {
     return form({},
         br(),
-        labelV2({for: "listname", class: "col-form-label"}, "Name:"), br(),
-        inputV2(({
+        label({for: "listname", class: "col-form-label"}, "Name:"), br(),
+        input(({
             type: "text", id: "idName", name: "idName",
             class: "form-control",
             placeholder: "Enter the List name", minlength: "3", maxlength: "60",

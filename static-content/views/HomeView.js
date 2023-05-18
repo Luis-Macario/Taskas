@@ -7,8 +7,8 @@ function getHome(mainContent) {
                 h1({class: "card-title"}, "Home")
             )
         ),
-        div({class: "row align-items-center"},
-            p({},"Developed for software laboratory course @ ISEL")
+        div({class: "card-body row align-items-center"},
+            p({},"Developed for software laboratory course @ ISEL"),
         )
     )
 }

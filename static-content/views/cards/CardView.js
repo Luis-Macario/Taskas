@@ -1,4 +1,4 @@
-import {a, br, button, div, h1, li, p, ul} from "../../DSL/tags.js";
+import {a, br, button, div, h1, li, ul} from "../../DSL/tags.js";
 import showErrorResponse, {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
 import MoveCardModal from "./MoveCardModal.js";
 
@@ -44,21 +44,21 @@ async function getCard(mainContent, id) {
                 div({class: "card-header"},
                     h1({class: "card-title"}, "Card Info")
                 ),
-                p({},
-                    a(`#boards/${card.boardID}`, "Return to board")
-                ),
-                p({},
-                    a(`#lists/${card.listID}`, "Return to list")
-                ),
-                h1({}, "Card Info"),
-                ul({},
-                    li({}, `Name: ${card.name}`),
-                    li({}, `Id: ${card.id}`),
-                    li({}, `Description: ${card.description}`),
-                    li({}, `initial Date: ${card.initialDate}`),
-                    li({}, `due Date: ${card.dueDate}`),
-                    br(),
-                    moveCardButton
+                div({class: "card-body"},
+                    div({class: "btn-group"},
+                        a({class:"btn btn-secondary", href:`#lists/${card.listID}`}, "Return to list"),
+                        a({class:"btn btn-secondary", href:`#boards/${card.boardID}`}, "Return to board")
+                    ),
+                    h1({}, "Card Info"),
+                    ul({},
+                        li({}, `Name: ${card.name}`),
+                        li({}, `Id: ${card.id}`),
+                        li({}, `Description: ${card.description}`),
+                        li({}, `initial Date: ${card.initialDate}`),
+                        li({}, `due Date: ${card.dueDate}`),
+                        br(),
+                        moveCardButton
+                    )
                 )
             )
         )

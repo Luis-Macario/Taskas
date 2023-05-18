@@ -17,10 +17,12 @@ async function getUsersFromBoard(mainContent, id) {
                 div({class: "card-header"},
                     h1({class: "card-title"}, "Board Users")
                 ),
-                a(`#boards/${id}`,"Return to board"),
-                ...users.map(user => {
-                    return li({}, `${user.name}[${user.id}] : ${user.email} `)
-                })
+                div({class: "card-body"},
+                    a({class: "btn btn-secondary", href: `#boards/${id}`}, "Return to board"),
+                    ...users.map(user => {
+                        return li({}, `${user.name}[${user.id}] : ${user.email} `)
+                    })
+                )
             )
         )
         return
