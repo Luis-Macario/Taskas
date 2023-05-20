@@ -46,7 +46,7 @@ export async function getCardsFromList(id) {
             "Authorization": "Bearer " + hardCodedBearer,
         }
     }
-    console.log("ENTROU GET")
+    console.log("ENTROU GET") //best console.log XD
 
     const res = await fetch(API_BASE_URL + `lists/${id}/cards`, options)
     if (res.status === 200) {

@@ -1,4 +1,4 @@
-import {a, br, button, div, form, h1, input, li, ul} from "../../DSL/tags.js";
+import {br, button, div, form, h1, input, li, ul} from "../../DSL/tags.js";
 
 async function searchBoard(mainContent, id) {
 
@@ -17,20 +17,24 @@ async function searchBoard(mainContent, id) {
                         'aria-expanded': "false"
                     }, "Select Parameter"),
                     ul({class: "dropdown-menu", 'aria-labelledby': "dropdownMenuButton1"},
-                        li({}, a({class: "dropdown-item", onClick: selectParameter}, "Name")),
-                        li({}, a({class: "dropdown-item", onClick: selectParameter}, "Number of Users"))
+                        li({}, button({class: "dropdown-item", onClick: selectParameter}, "Name")),
+                        li({}, button({class: "dropdown-item", disabled: true},
+                            "Parameter2")),
+                        li({}, button({class: "dropdown-item", disabled: true},
+                            "Parameter3")),
+                        li({}, button({class: "dropdown-item", disabled: true},
+                            "Parameter4"))
                     ),
 
                     input({
                         type: "text", id: "parameterValue", name: "nameBoard",
                         class: "form-control",
-                        placeholder: "Enter the board name you want to search", minlength: "3", maxlength: "60",
+                        placeholder: ` Select a Parameter `, minlength: "3", maxlength: "60",
                         required: true
                     })
                 )
             )
         ),
-        input({type: "hidden", id: "selectedParameter", name: "selectedParameter"}),
         br(),
         button({type: "submit", class: "btn btn-primary w-100 btn-lg", value: "Submit"}, "Search")
     )
@@ -39,15 +43,7 @@ async function searchBoard(mainContent, id) {
         //TODO:Review Implementations
         selectedParameter = this.innerText
         document.querySelector("#parameterButton").innerText = selectedParameter;
-        switch (selectedParameter) {
-            case 'Name':
-                document.querySelector("#selectedParameter").value = selectedParameter;
-                break
-            case 'Number of Users':
-                document.querySelector("#selectedParameter").value = 'NrUsers';
-                break
-        }
-
+        document.querySelector("#parameterValue").placeholder = `Insert desired ${selectedParameter}`;
     }
 
     const resultsContainer = div()
@@ -72,7 +68,7 @@ async function searchBoard(mainContent, id) {
             case 'id':
                 window.location.hash = undefined
                 break
-            case 'NrUsers': //TODO deviamos inserir o criterio de busca numa query string
+            case 'Number of Users': //TODO deviamos inserir o criterio de busca numa query string
                 window.location.hash = `users//boards/search/${inputValue}`;
                 break;
             default:

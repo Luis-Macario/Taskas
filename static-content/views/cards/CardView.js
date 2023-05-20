@@ -9,7 +9,6 @@ async function getCard(mainContent, id) {
         }
     })
 
-    let modalVisible = false
     const moveCardButton = button({type: "button", class: "btn btn-primary btn-sm"}, "Move Card")
     const closeButton = button({type: "button", class: "btn btn-secondary", "data-dismiss": "modal"}, "Close")
 
@@ -18,26 +17,16 @@ async function getCard(mainContent, id) {
         const card = body
         console.log(card)
 
-        let modal = null;
-        // Move Card Modal, button to Open it
+        let modal = MoveCardModal(mainContent, closeButton, card.boardID, card.id, card.listID)
+
+
         moveCardButton.addEventListener("click", () => {
-            if (!modal) {
-                modal = MoveCardModal(mainContent, closeButton, card.boardID, card.id, card.listID);
-                mainContent.appendChild(modal);
-                modalVisible = true;
-            } else if (!modalVisible) {
-                mainContent.appendChild(modal);
-                modalVisible = true;
-            } else {
-                mainContent.removeChild(modal);
-                modalVisible = false;
-            }
-        });
+            mainContent.appendChild(modal);
+        })
 
         closeButton.addEventListener("click", () => {
-            mainContent.removeChild(modal);
-            modalVisible = false;
-        });
+                mainContent.removeChild(modal);
+        })
 
         mainContent.replaceChildren(
             div({class: "card"},

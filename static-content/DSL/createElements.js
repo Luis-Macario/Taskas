@@ -15,10 +15,19 @@ function setAttributes(element, options) {
         const val = options[option];
         if(val === null) continue
 
-        switch (option) { //TODO:'Adicinonar mais casos'
-            case "onClick" :
-                element.addEventListener("click", val)
-                break
+        switch (option) {
+            case "onClick":
+                element.addEventListener("click", val);
+                break;
+            case "onChange":
+                element.addEventListener("change", val);
+                break;
+            case "onInput":
+                element.addEventListener("input", val);
+                break;
+            case "onSubmit":
+                element.addEventListener("submit", val);
+                break;
             default:
                 element.setAttribute(option, val);
         }
