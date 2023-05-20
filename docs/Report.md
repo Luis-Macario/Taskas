@@ -104,7 +104,18 @@ a board now contains all the list belonging to it and a list now contains all th
 Because of this we now have a SimpleList and a TaskList aswell as a Board and a SimpleBoard.
 SimpleList and SimpleBoard objects are stored within the data module and TaskLists and Boards are created in the services module.
 
+For phase 3 delivery the following navigation graph show the inter-page connetion:
+![Full Navegation Graph](FullGraphPhase3.png)
+
+In phase 3, we refactored the project to have dedicated directories for the DSL, views (the nodes in the graph), 
+and partials (repeating elements in each view).
+
 ## Critical Evaluation
 
-We need to upgrade our database connection to better support transactions. In the next phase, we will implement the necessary changes.
+We realized the need to upgrade our database connection to better support transactions. In the next phase, we will implement 
+the necessary changes.
+
+In hindsight, when starting to develop the SPA, we should have created a partials directory from the beginning to avoid 
+excessively cluttered code.
+Due to the time constraints for the delivery, we will implement this in the following phase.
 
