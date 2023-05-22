@@ -1,30 +1,5 @@
 package pt.isel.ls.integration.api
 
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import org.http4k.core.Method
-import org.http4k.core.Request
-import org.http4k.core.Status
-import pt.isel.ls.api.TasksWebApi
-import pt.isel.ls.api.dto.ErrorResponse
-import pt.isel.ls.api.dto.user.CreateUserRequest
-import pt.isel.ls.api.dto.user.CreateUserResponse
-import pt.isel.ls.api.dto.user.GetBoardsFromUserResponse
-import pt.isel.ls.api.dto.user.UserDTO
-import pt.isel.ls.api.dto.user.toDTO
-import pt.isel.ls.api.routers.utils.exceptions.InvalidAuthHeaderException
-import pt.isel.ls.api.routers.utils.exceptions.InvalidBodyException
-import pt.isel.ls.api.routers.utils.exceptions.InvalidUserIDException
-import pt.isel.ls.api.routers.utils.exceptions.NoAuthenticationException
-import pt.isel.ls.database.memory.EmailAlreadyExistsException
-import pt.isel.ls.database.memory.TasksDataMem
-import pt.isel.ls.database.memory.UserNotFoundException
-import pt.isel.ls.domain.User
-import pt.isel.ls.services.TasksServices
-import pt.isel.ls.services.utils.exceptions.IllegalUserAccessException
-import pt.isel.ls.services.utils.exceptions.InvalidTokenException
-import kotlin.test.Test
-import kotlin.test.assertEquals
 /*
 class UsersTests {
     private val database = TasksDataMem()

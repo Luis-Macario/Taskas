@@ -49,7 +49,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
             val stm = it.prepareStatement(
                 """
                 SELECT * FROM users where email = ?
-            """.trimIndent()
+                """.trimIndent()
             )
 
             stm.setString(1, email)
@@ -68,8 +68,9 @@ class TasksDataPostgres(url: String) : AppDatabase {
                         id = rs.getInt("id"),
                         name = rs.getString("name"),
                         email = rs.getString("email"),
-                        token = rs.getString("token"),
-                    ), password = rs.getString("password")
+                        token = rs.getString("token")
+                    ),
+                    password = rs.getString("password")
                 )
             } else {
                 throw UserNotFoundException

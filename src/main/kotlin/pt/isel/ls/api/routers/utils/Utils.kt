@@ -44,7 +44,7 @@ fun Request.getAuthorizationHeader(): String =
  * @return a pair of: the skip amount or null; the limit amount or null.
  */
 fun Request.getPaging(): Pair<Int?, Int?> {
-    val skip = query("skip")?.toIntOrNull()?.coerceAtLeast(0)  ?: 0 // ?: throw InvalidQuerySkipException
+    val skip = query("skip")?.toIntOrNull()?.coerceAtLeast(0) ?: 0 // ?: throw InvalidQuerySkipException
     val limit = query("limit")?.toIntOrNull()?.coerceAtLeast(0) ?: 100 // ?: throw InvalidQueryLimitException
     return Pair(skip, limit)
 }

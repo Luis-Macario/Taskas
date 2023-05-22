@@ -33,7 +33,7 @@ class UserServices(private val database: AppDatabase) {
     fun loginUser(email: String, password: String): User {
         println("login : $email $password")
         val user = database.loginUser(email)
-        if(hashPassword(password) != user.password) throw InvalidUserCredentialsException
+        if (hashPassword(password) != user.password) throw InvalidUserCredentialsException
 
         return user.user
     }
