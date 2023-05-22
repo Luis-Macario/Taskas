@@ -1,11 +1,15 @@
-import {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
+import {API_BASE_URL} from "../../configs/configs.js";
 
 async function listDelete(bid, lid) {
+
+    const user = getStoredUser()
+    const token = user.token
+
     console.log(`Bid: ${bid} -- Lid: ${lid}`)
     const options = {
         method: "DELETE",
         headers: {
-            "Authorization": "Bearer " + hardCodedBearer,
+            "Authorization": "Bearer " + token,
             "Content-Type": "application/json",
             "Accept": "application/json"
         }

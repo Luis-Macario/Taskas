@@ -1,36 +1,5 @@
 package pt.isel.ls.integration.api
 
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import org.http4k.core.Method
-import org.http4k.core.Request
-import org.http4k.core.Status
-import pt.isel.ls.api.TasksWebApi
-import pt.isel.ls.api.dto.ErrorResponse
-import pt.isel.ls.api.dto.board.AddUserRequest
-import pt.isel.ls.api.dto.board.BoardDTO
-import pt.isel.ls.api.dto.board.CreateBoardRequest
-import pt.isel.ls.api.dto.board.CreateBoardResponse
-import pt.isel.ls.api.dto.board.GetListsFromBoardResponse
-import pt.isel.ls.api.dto.board.GetUsersFromBoardResponse
-import pt.isel.ls.api.dto.board.toDTO
-import pt.isel.ls.api.dto.user.toDTO
-import pt.isel.ls.api.routers.utils.exceptions.InvalidAuthHeaderException
-import pt.isel.ls.api.routers.utils.exceptions.InvalidBoardIDException
-import pt.isel.ls.api.routers.utils.exceptions.InvalidBodyException
-import pt.isel.ls.api.routers.utils.exceptions.NoAuthenticationException
-import pt.isel.ls.database.memory.BoardNameAlreadyExistsException
-import pt.isel.ls.database.memory.BoardNotFoundException
-import pt.isel.ls.database.memory.TasksDataMem
-import pt.isel.ls.database.memory.UserAlreadyExistsInBoardException
-import pt.isel.ls.domain.Board
-import pt.isel.ls.domain.User
-import pt.isel.ls.services.TasksServices
-import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
-import pt.isel.ls.services.utils.exceptions.InvalidTokenException
-import kotlin.test.Test
-import kotlin.test.assertEquals
 /*
 class BoardsTests {
     private val database = TasksDataMem()

@@ -1,8 +1,9 @@
-import {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
+import {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 import { div, h1} from "../../DSL/tags.js";
 import CardForm from "./CardForm.js";
 
 async function cardCreate(mainContent, id) {
+
     function handleSubmit(event) {
         event.preventDefault()
 
@@ -22,10 +23,13 @@ async function cardCreate(mainContent, id) {
         }
         // TODO Verificar os dados e lançar os alerts
 
+        const user = getStoredUser()
+        const token = user.token
+
         const options = {
             method: "POST",
             headers: {
-                "Authorization": "Bearer " + hardCodedBearer,
+                "Authorization": "Bearer " + token,
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },

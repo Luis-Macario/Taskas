@@ -1,4 +1,6 @@
 package pt.isel.ls.api.dto.user
-import pt.isel.ls.domain.User
 
-data class LoginUserResponse(val user: User, val password: String)
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class LoginUserResponse(val id: Int, val token: String, val name: String)

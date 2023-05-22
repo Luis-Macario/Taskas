@@ -1,7 +1,6 @@
 package pt.isel.ls.api.routers.utils
 
 import kotlinx.serialization.SerializationException
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.http4k.core.Request
@@ -44,7 +43,7 @@ fun Request.getAuthorizationHeader(): String =
  * @return a pair of: the skip amount or null; the limit amount or null.
  */
 fun Request.getPaging(): Pair<Int?, Int?> {
-    val skip = query("skip")?.toIntOrNull()?.coerceAtLeast(0)  ?: 0 // ?: throw InvalidQuerySkipException
+    val skip = query("skip")?.toIntOrNull()?.coerceAtLeast(0) ?: 0 // ?: throw InvalidQuerySkipException
     val limit = query("limit")?.toIntOrNull()?.coerceAtLeast(0) ?: 100 // ?: throw InvalidQueryLimitException
     return Pair(skip, limit)
 }

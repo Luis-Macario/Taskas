@@ -1,10 +1,14 @@
-import showErrorResponse, {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
+import showErrorResponse, {API_BASE_URL, getStoredUser, hardCodedBearer} from "../../configs/configs.js";
 
 export async function moveCard(id, lId, cidx) {
+
+    const user = getStoredUser()
+    const token = user.token
+
     const options = {
         method: "POST",
         headers: {
-            "Authorization": "Bearer " + hardCodedBearer,
+            "Authorization": "Bearer " + token,
             "Content-Type": "application/json"
         },
         body: JSON.stringify({

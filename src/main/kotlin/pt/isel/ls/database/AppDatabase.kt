@@ -1,6 +1,6 @@
 package pt.isel.ls.database
 
-import pt.isel.ls.api.dto.user.LoginUserResponse
+import pt.isel.ls.api.dto.user.LoginUserResponseDb
 import pt.isel.ls.domain.Card
 import pt.isel.ls.domain.SimpleBoard
 import pt.isel.ls.domain.SimpleList
@@ -9,7 +9,7 @@ import java.sql.Date
 
 interface AppDatabase {
     fun createUser(token: String, name: String, email: String, password: String): Int
-    fun loginUser(email: String): LoginUserResponse
+    fun loginUser(email: String): LoginUserResponseDb
     fun getUserDetails(uid: Int): User
     fun getUsersFromBoard(bid: Int): List<User>
     fun checkEmailAlreadyExists(email: String): Boolean

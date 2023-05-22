@@ -1,8 +1,8 @@
 import {button, div, h1, p} from "../../DSL/tags.js";
-import showErrorResponse, {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
+import showErrorResponse, {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 
 
-async function searchBoardResults(mainContent, id, query) {
+async function searchBoardResults(mainContent, query) {
 
     let idx = 0
 
@@ -49,14 +49,19 @@ async function searchBoardResults(mainContent, id, query) {
         )
     }
 
+    const user = getStoredUser()
+    const id = user.id
+    const token = user.token
+
     const options = {
         method: "GET",
         headers: {
-            "Authorization": "Bearer " + hardCodedBearer,
+            "Authorization": "Bearer " + token,
             "Content-Type": "application/json",
             "Accept": "application/json",
         }
     }
+
     const res = await fetch(API_BASE_URL + `users/${id}/boards/search?search_query=${query}`, options)
     const boards = (await res.json()).boards
 

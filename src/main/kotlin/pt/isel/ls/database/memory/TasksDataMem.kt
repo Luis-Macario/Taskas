@@ -1,6 +1,6 @@
 package pt.isel.ls.database.memory
 
-import pt.isel.ls.api.dto.user.LoginUserResponse
+import pt.isel.ls.api.dto.user.LoginUserResponseDb
 import pt.isel.ls.database.AppDatabase
 import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.Card
@@ -41,7 +41,7 @@ class TasksDataMem : AppDatabase {
         return id
     }
 
-    override fun loginUser(email: String): LoginUserResponse {
+    override fun loginUser(email: String): LoginUserResponseDb {
         TODO("Not yet implemented")
     }
 

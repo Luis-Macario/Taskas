@@ -1,10 +1,13 @@
 import {a, br, button, div, h1, p, table, td, th, tr} from "../../DSL/tags.js";
-import showErrorResponse, {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
+import showErrorResponse, {getStoredUser, API_BASE_URL} from "../../configs/configs.js";
 
-async function getBoardDetails(mainContent, id) {
+async function getBoardDetails(mainContent) {
+    const user = getStoredUser()
+    const id = user.id
+    const token = user.token
     const res = await fetch(API_BASE_URL + `boards/${id}`, {
         headers: {
-            "Authorization": "Bearer " + hardCodedBearer
+            "Authorization": "Bearer " + token
         }
     })
 

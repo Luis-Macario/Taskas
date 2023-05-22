@@ -1,10 +1,13 @@
-import {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
+import {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 import {div, h1} from "../../DSL/tags.js";
 import ListForm from "./ListForm.js";
 
 async function listcreate(mainContent, id) {
     function handleSubmit(event) {
         event.preventDefault()
+
+        const user = getStoredUser()
+        const token = user.token
 
         const name = document.querySelector("#idName").value
 
@@ -22,7 +25,7 @@ async function listcreate(mainContent, id) {
         const options = {
             method: "POST",
             headers: {
-                "Authorization": "Bearer " + hardCodedBearer,
+                "Authorization": "Bearer " + token,
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },

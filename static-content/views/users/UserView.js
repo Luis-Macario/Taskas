@@ -1,10 +1,15 @@
 import {div, h1, li, ul} from "../../DSL/tags.js";
-import showErrorResponse, {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
+import showErrorResponse, {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 
-function getUser(mainContent, id) {
+function getUser(mainContent) {
+
+    const user = getStoredUser()
+    const id = user.id
+    const token = user.token
+
     fetch(API_BASE_URL + "users/" + id, {
         headers: {
-            "Authorization": "Bearer " + hardCodedBearer
+            "Authorization": "Bearer " + token
         }
     }).then(res => {
         if (res.status !== 200) throw res.json()

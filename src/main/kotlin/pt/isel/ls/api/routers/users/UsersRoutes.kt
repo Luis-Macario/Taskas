@@ -9,7 +9,13 @@ import org.http4k.core.Status.Companion.OK
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import pt.isel.ls.api.dto.board.toDTO
-import pt.isel.ls.api.dto.user.*
+import pt.isel.ls.api.dto.user.CreateUserRequest
+import pt.isel.ls.api.dto.user.CreateUserResponse
+import pt.isel.ls.api.dto.user.GetBoardsFromUserResponse
+import pt.isel.ls.api.dto.user.GetSearchBoardsFromUserResponse
+import pt.isel.ls.api.dto.user.LoginUserRequest
+import pt.isel.ls.api.dto.user.LoginUserResponse
+import pt.isel.ls.api.dto.user.toDTO
 import pt.isel.ls.api.routers.utils.exceptions.runAndHandleExceptions
 import pt.isel.ls.api.routers.utils.getAuthorizationHeader
 import pt.isel.ls.api.routers.utils.getJsonBodyTo
@@ -51,7 +57,6 @@ class UsersRoutes(private val services: UserServices) {
                 .json(userResponse)
         }
 
-
     /**
      * Logins a user
      *
@@ -60,17 +65,15 @@ class UsersRoutes(private val services: UserServices) {
      */
     private fun loginUser(request: Request): Response =
         runAndHandleExceptions {
-            //println("request : $request")
+            println("request : $request")
             val userRequest = request.getJsonBodyTo<LoginUserRequest>()
             println("userRequest : $userRequest")
             val user = services.loginUser(userRequest.email, userRequest.password)
             println("user $user")
             // Alterar para uma dto do login
-            val userResponse = user.toDTO()
+            val userResponse = LoginUserResponse(user.id, user.token, user.name)
 
-            Response(OK)
-                .header("Location", "/users/${user.id}")
-                .json(userResponse)
+            Response(OK).json(userResponse)
         }
 
     /**

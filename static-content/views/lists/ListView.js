@@ -1,12 +1,15 @@
 import {a, br, button, div, h1, li, p, table, td, th, tr, ul} from "../../DSL/tags.js";
-import showErrorResponse, {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
+import showErrorResponse, {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 import listDelete from "./ListDelete.js";
 import Modal from "../../partials/Modal.js";
 
 async function getList(mainContent, id) {
+
+    const user = getStoredUser()
+    const token = user.token
     const res = await fetch(API_BASE_URL + `lists/${id}`, {
         headers: {
-            "Authorization": "Bearer " + hardCodedBearer
+            "Authorization": "Bearer " + token
         }
     })
     let list = null

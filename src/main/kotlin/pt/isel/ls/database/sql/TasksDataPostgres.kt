@@ -1,7 +1,7 @@
 package pt.isel.ls.database.sql
 
 import org.postgresql.ds.PGSimpleDataSource
-import pt.isel.ls.api.dto.user.LoginUserResponse
+import pt.isel.ls.api.dto.user.LoginUserResponseDb
 import pt.isel.ls.database.AppDatabase
 import pt.isel.ls.database.memory.CardNotFoundException
 import pt.isel.ls.database.memory.ListNotFoundException
@@ -44,12 +44,12 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
-    override fun loginUser(email: String): LoginUserResponse {
+    override fun loginUser(email: String): LoginUserResponseDb {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
                 SELECT * FROM users where email = ?
-            """.trimIndent()
+                """.trimIndent()
             )
 
             stm.setString(1, email)
@@ -63,13 +63,14 @@ class TasksDataPostgres(url: String) : AppDatabase {
                      token = rs.getString("token"),
                      password = rs.getString("password")
                  )*/
-                return LoginUserResponse(
+                return LoginUserResponseDb(
                     User(
                         id = rs.getInt("id"),
                         name = rs.getString("name"),
                         email = rs.getString("email"),
-                        token = rs.getString("token"),
-                    ), password = rs.getString("password")
+                        token = rs.getString("token")
+                    ),
+                    password = rs.getString("password")
                 )
             } else {
                 throw UserNotFoundException

@@ -1,5 +1,5 @@
 import {div,h1} from "../../DSL/tags.js";
-import {API_BASE_URL} from "../../configs/configs.js";
+import {API_BASE_URL, storeUser} from "../../configs/configs.js";
 import UserLoginForm from "./UserLoginForm.js";
 
 function loginUser(mainContent) {
@@ -8,7 +8,7 @@ function loginUser(mainContent) {
 
         const email = document.querySelector("#idEmail").value
         const password = document.querySelector("#idPassword").value
-
+        console.log(`${email}: ${password}`)
 
         if (!email.match(/^[A-Za-z\d+_.-]+@(.+)$/)) {
             alert("Invalid email")
@@ -37,6 +37,7 @@ function loginUser(mainContent) {
             .then(res => res.json())
             .then(user => {
                 console.log(user)
+                storeUser(user)
                 window.location.hash = "users/" + user.id
             })
     }

@@ -30,7 +30,7 @@ function UserCreateForm() {
                 span({class: "input-group-text", id: "inputGroup-sizing-default"}, "Password")),
             br(),
             input({
-                type: "text", id: "idPassword", name: "idPassword",
+                type: "password", id: "idPassword", name: "idPassword",
                 class: "form-control",
                 placeholder: "Enter your password", minlength: "5", maxlength: "30",
                 required: true

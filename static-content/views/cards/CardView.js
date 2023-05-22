@@ -1,11 +1,15 @@
 import {a, br, button, div, h1, li, ul} from "../../DSL/tags.js";
-import showErrorResponse, {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
+import showErrorResponse, {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 import MoveCardModal from "./MoveCardModal.js";
 
 async function getCard(mainContent, id) {
+
+    const user = getStoredUser()
+    const token = user.token
+
     const res = await fetch(API_BASE_URL + `cards/${id}`, {
         headers: {
-            "Authorization": "Bearer " + hardCodedBearer
+            "Authorization": "Bearer " + token
         }
     })
 
