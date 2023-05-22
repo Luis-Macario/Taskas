@@ -1,9 +1,9 @@
 import {div,h1} from "../../DSL/tags.js";
-import {API_BASE_URL, storeUser} from "../../configs/configs.js";
+import showErrorResponse, {API_BASE_URL, storeUser} from "../../configs/configs.js";
 import UserLoginForm from "../../partials/users/UserLoginForm.js";
 
 function loginUser(mainContent) {
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault()
 
         const email = document.querySelector("#idEmail").value
@@ -33,13 +33,16 @@ function loginUser(mainContent) {
         }
 
 
-        fetch(API_BASE_URL + "users/login", options)
-            .then(res => res.json())
-            .then(user => {
-                console.log(user)
-                storeUser(user)
-                window.location.hash = "users/" + user.id
-            })
+        const res = await fetch(API_BASE_URL + "users/login", options)
+        const body = await res.json()
+        if(res.status === 200) {
+            const user = body
+            console.log(user)
+            storeUser(user)
+            window.location.hash = "users/" + user.id
+            return
+        }
+        showErrorResponse(mainContent, body)
     }
 
     mainContent.replaceChildren(
