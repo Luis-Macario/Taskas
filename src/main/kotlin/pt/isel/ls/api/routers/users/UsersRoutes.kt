@@ -57,7 +57,6 @@ class UsersRoutes(private val services: UserServices) {
                 .json(userResponse)
         }
 
-
     /**
      * Logins a user
      *
