@@ -43,7 +43,7 @@ export function navBar(navContent) {
     }
 
     navContent.replaceChildren(div({class: "col-6"},
-            a({href: "#users/boards/create", class: "btn btn-primary"}, "Home"),
+            a({href: "#home", class: "btn btn-primary"}, "Home"),
             user != null ?
                 div({},
                     div({},

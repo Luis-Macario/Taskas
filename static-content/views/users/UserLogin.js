@@ -1,6 +1,6 @@
 import {div,h1} from "../../DSL/tags.js";
 import {API_BASE_URL, storeUser} from "../../configs/configs.js";
-import UserLoginForm from "./UserLoginForm.js";
+import UserLoginForm from "../../partials/users/UserLoginForm.js";
 
 function loginUser(mainContent) {
     function handleSubmit(event) {
