@@ -42,7 +42,7 @@ class UserTests {
         assertEquals(mem.users[0]?.id, sut.id)
         assertEquals(mem.users[0]?.token, sut.token)
     }
-    */
+
     @Test
     fun `test create user with repeated email throws EmailAlreadyExistsException`() {
         val mem = TasksDataMem()
@@ -59,7 +59,7 @@ class UserTests {
         assertEquals("A user with that email already exists", EmailAlreadyExistsException.description)
     }
 
-    /*
+
     @Test
     fun `test get user details`() {
         val mem = TasksDataMem()

@@ -1,6 +1,5 @@
 package pt.isel.ls.services.utils.exceptions
 
-import pt.isel.ls.database.memory.MemoryException
 import pt.isel.ls.domain.TaskException
 
 sealed class ServicesException : TaskException()

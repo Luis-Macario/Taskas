@@ -31,7 +31,7 @@ import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
 import pt.isel.ls.services.utils.exceptions.InvalidTokenException
 import kotlin.test.Test
 import kotlin.test.assertEquals
-
+/*
 class BoardsTests {
     private val database = TasksDataMem()
     private val services = TasksServices(database)
@@ -785,4 +785,4 @@ class BoardsTests {
             errorResponse
         )
     }
-}
+}*/

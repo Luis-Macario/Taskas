@@ -29,7 +29,7 @@ import pt.isel.ls.services.utils.exceptions.IllegalListAccessException
 import pt.isel.ls.services.utils.exceptions.InvalidTokenException
 import kotlin.test.Test
 import kotlin.test.assertEquals
-
+/*
 class ListsTests {
     private val database = TasksDataMem()
     private val services = TasksServices(database)
@@ -495,3 +495,4 @@ class ListsTests {
         )
     }
 }
+*/

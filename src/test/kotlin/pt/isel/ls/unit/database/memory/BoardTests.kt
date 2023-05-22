@@ -41,7 +41,7 @@ class BoardTests {
 
         assertEquals("A board with that name already exists", BoardNameAlreadyExistsException.description)
     }
-    */
+
     @Test
     fun `test create board throws UserNotFoundException when creating a board with a invalid user`() {
         val mem = TasksDataMem()
@@ -55,7 +55,7 @@ class BoardTests {
         assertEquals("A user with that id does not exist", UserNotFoundException.description)
     }
 
-    /*
+
     @Test
     fun `test add User to a board`() {
         val mem = TasksDataMem()

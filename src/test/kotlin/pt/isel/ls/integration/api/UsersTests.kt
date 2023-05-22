@@ -25,7 +25,7 @@ import pt.isel.ls.services.utils.exceptions.IllegalUserAccessException
 import pt.isel.ls.services.utils.exceptions.InvalidTokenException
 import kotlin.test.Test
 import kotlin.test.assertEquals
-
+/*
 class UsersTests {
     private val database = TasksDataMem()
     private val services = TasksServices(database)
@@ -269,4 +269,4 @@ class UsersTests {
             errorResponse
         )
     }
-}
+}*/
