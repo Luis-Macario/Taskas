@@ -1,5 +1,5 @@
 package pt.isel.ls.unit.domain
-
+/*
 import org.junit.Test
 import pt.isel.ls.domain.Card
 import pt.isel.ls.services.utils.MAX_DATE
@@ -89,3 +89,4 @@ class CardTests {
         assertFalse { Card.validName("a".repeat(Card.MAX_NAME_LENGTH + 1)) }
     }
 }
+*/

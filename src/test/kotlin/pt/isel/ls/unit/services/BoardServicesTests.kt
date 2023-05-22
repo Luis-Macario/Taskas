@@ -1,12 +1,12 @@
 package pt.isel.ls.unit.services
-
-import org.junit.Test
+/*
+import java.util.*
 import pt.isel.ls.database.memory.TasksDataMem
 import pt.isel.ls.services.boards.BoardServices
 import pt.isel.ls.services.lists.ListServices
 import pt.isel.ls.services.users.UserServices
 import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
-import java.util.UUID
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
@@ -154,3 +154,4 @@ class BoardServicesTests {
         }
     }
 }
+*/

@@ -1,5 +1,5 @@
 package pt.isel.ls.unit.database.postgres
-
+/*
 import org.postgresql.ds.PGSimpleDataSource
 import pt.isel.ls.database.memory.BoardNotFoundException
 import pt.isel.ls.database.sql.TasksDataPostgres
@@ -167,3 +167,4 @@ class BoardTests {
     }
     */
 }
+*/

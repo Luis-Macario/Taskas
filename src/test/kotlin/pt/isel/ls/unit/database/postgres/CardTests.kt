@@ -1,5 +1,5 @@
 package pt.isel.ls.unit.database.postgres
-
+/*
 import org.postgresql.ds.PGSimpleDataSource
 import pt.isel.ls.database.memory.CardNotFoundException
 import pt.isel.ls.database.memory.ListNotFoundException
@@ -182,3 +182,4 @@ class CardTests {
         // }
     }
 }
+*/

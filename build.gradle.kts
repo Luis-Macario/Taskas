@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     kotlin("jvm") version "1.8.10"
     kotlin("plugin.serialization") version "1.8.10"
@@ -19,15 +21,23 @@ dependencies {
     testImplementation(kotlin("test"))
 }
 
-tasks.register<Copy>("copyRuntimeDependencies") {
-    into("build/libs")
-    from(configurations.runtimeClasspath)
+tasks.test {
+    useJUnitPlatform()
 }
 
 tasks.named<Jar>("jar") {
     dependsOn("copyRuntimeDependencies")
     manifest {
-        attributes["Main-Class"] = "pt.isel.ls.http.TaskLaunchKt"
+        attributes["Main-Class"] = "pt.isel.ls.TasksLaunchKt"
         attributes["Class-Path"] = configurations.runtimeClasspath.get().joinToString(" ") { it.name }
     }
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "17"
+}
+
+tasks.register<Copy>("copyRuntimeDependencies") {
+    into("build/libs")
+    from(configurations.runtimeClasspath)
 }
