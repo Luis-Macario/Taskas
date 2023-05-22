@@ -1,6 +1,6 @@
 import {div,h1} from "../../DSL/tags.js";
 import {API_BASE_URL} from "../../configs/configs.js";
-import UserLoginForm from "./UserLoginForm.js";
+import UserLoginForm from "../../partials/users/UserLoginForm.js";
 
 function loginUser(mainContent) {
     function handleSubmit(event) {
@@ -41,15 +41,13 @@ function loginUser(mainContent) {
             })
     }
 
-    const myForm = UserLoginForm()
-    myForm.addEventListener('submit', handleSubmit);
     mainContent.replaceChildren(
         div({class: "card"},
             div({class: "card-header"},
                 h1({class: "card-title"}, "Login User")
             ),
             div({class: "card-body w-50 center"},
-                myForm
+                UserLoginForm(handleSubmit)
             )
         )
     )

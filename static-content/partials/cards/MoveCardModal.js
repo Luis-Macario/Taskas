@@ -1,5 +1,5 @@
 import {button, div, h1, input, label} from "../../DSL/tags.js";
-import {getAvailableLists, getCardsFromList, moveCard} from "./MoveCardApiRequests.js";
+import {getAvailableLists, getCardsFromList, moveCard} from "../../views/cards/MoveCardApiRequests.js";
 
 function MoveCardModal(mainContent, closeButton, boardID, cardID, listID) {
 
