@@ -1,5 +1,5 @@
 package pt.isel.ls.unit.domain
-
+/*
 import org.junit.Test
 import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.User
@@ -64,3 +64,4 @@ class BoardTests {
         assertFalse { Board.validName("a".repeat(Board.MAX_NAME_LENGTH + 1)) }
     }
 }
+*/

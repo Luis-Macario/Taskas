@@ -1,7 +1,7 @@
 import {div, h1, p} from "../DSL/tags.js";
 
 export const hardCodedBearer = "160ee838-150b-4ca1-a2ff-2e964383c315"
-export const API_BASE_URL = "http://localhost:8080/api/"
+export const API_BASE_URL = window.location.protocol + '//' + window.location.host + '/api/'
 
 //TODO stashing this here until I decide where to put it
 function showErrorResponse(mainContent, error) {

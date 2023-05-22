@@ -1,6 +1,6 @@
 import {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 import { div, h1} from "../../DSL/tags.js";
-import CardForm from "./CardForm.js";
+import CardForm from "../../partials/cards/CardForm.js";
 
 async function cardCreate(mainContent, id) {
 
@@ -49,15 +49,12 @@ async function cardCreate(mainContent, id) {
             })
     }
 
-    const myForm = CardForm()
-    myForm.addEventListener('submit', handleSubmit)
-
     mainContent.replaceChildren(
         div({class: "card-header"},
             h1({class: "card-title"}, "Create Card")
         ),
         div({class: "card-body w-50 center"},
-            myForm
+            CardForm(handleSubmit)
         )
     )
 }

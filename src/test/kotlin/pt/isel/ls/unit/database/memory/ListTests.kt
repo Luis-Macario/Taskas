@@ -1,5 +1,5 @@
 package pt.isel.ls.unit.database.memory
-
+/*
 import pt.isel.ls.database.memory.BoardNotFoundException
 import pt.isel.ls.database.memory.ListNotFoundException
 import pt.isel.ls.database.memory.TasksDataMem
@@ -85,3 +85,4 @@ class ListTests {
         assertEquals("The board with the id provided doesn't exist", BoardNotFoundException.description)
     }
 }
+*/

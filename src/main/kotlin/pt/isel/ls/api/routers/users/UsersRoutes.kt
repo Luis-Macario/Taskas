@@ -57,6 +57,7 @@ class UsersRoutes(private val services: UserServices) {
                 .json(userResponse)
         }
 
+
     /**
      * Logins a user
      *
@@ -65,7 +66,6 @@ class UsersRoutes(private val services: UserServices) {
      */
     private fun loginUser(request: Request): Response =
         runAndHandleExceptions {
-            println("request : $request")
             val userRequest = request.getJsonBodyTo<LoginUserRequest>()
             println("userRequest : $userRequest")
             val user = services.loginUser(userRequest.email, userRequest.password)

@@ -1,8 +1,8 @@
 import {br, button, form, input, label} from "../../DSL/tags.js";
 
 
-function ListForm() {
-    return form({},
+function ListForm( handler) {
+    return form({onSubmit:handler},
         br(),
         label({for: "listname", class: "col-form-label"}, "Name:"), br(),
         input(({

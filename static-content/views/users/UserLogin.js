@@ -8,7 +8,7 @@ function loginUser(mainContent) {
 
         const email = document.querySelector("#idEmail").value
         const password = document.querySelector("#idPassword").value
-        console.log(`${email}: ${password}`)
+
 
         if (!email.match(/^[A-Za-z\d+_.-]+@(.+)$/)) {
             alert("Invalid email")
@@ -42,15 +42,13 @@ function loginUser(mainContent) {
             })
     }
 
-    const myForm = UserLoginForm()
-    myForm.addEventListener('submit', handleSubmit);
     mainContent.replaceChildren(
         div({class: "card"},
             div({class: "card-header"},
                 h1({class: "card-title"}, "Login User")
             ),
             div({class: "card-body w-50 center"},
-                myForm
+                UserLoginForm(handleSubmit)
             )
         )
     )

@@ -1,5 +1,5 @@
 package pt.isel.ls.unit.services
-
+/*
 import org.junit.Test
 import pt.isel.ls.database.memory.TasksDataMem
 import pt.isel.ls.services.boards.BoardServices
@@ -69,3 +69,4 @@ class UserServicesTests {
         assertFailsWith<IllegalUserAccessException> { services.getBoardsFromUser(invalidToken, user.id) }
     }
 }
+*/

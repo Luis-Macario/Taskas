@@ -1,7 +1,7 @@
 import {br, button, div, form, input, span} from "../../DSL/tags.js";
 
-function UserLoginForm() {
-    return form({},
+function UserLoginForm(handler) {
+    return form({onSubmit:handler},
         br(),
         div({class: "input-group mb-3"},
             div({class: "input-group-prepend", style: "float:left; width:100px"},

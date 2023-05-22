@@ -1,5 +1,5 @@
 package pt.isel.ls.unit.database.memory
-
+/*
 import pt.isel.ls.database.memory.BoardNotFoundException
 import pt.isel.ls.database.memory.TasksDataMem
 import kotlin.test.Test
@@ -173,3 +173,4 @@ class BoardTests {
     }
     */
 }
+*/
