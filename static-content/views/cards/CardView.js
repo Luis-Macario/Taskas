@@ -1,6 +1,6 @@
 import {a, br, button, div, h1, li, ul} from "../../DSL/tags.js";
 import showErrorResponse, {API_BASE_URL, hardCodedBearer} from "../../configs/configs.js";
-import MoveCardModal from "./MoveCardModal.js";
+import MoveCardModal from "../../partials/cards/MoveCardModal.js";
 
 async function getCard(mainContent, id) {
     const res = await fetch(API_BASE_URL + `cards/${id}`, {
