@@ -39,10 +39,10 @@ class UsersTests {
     private val nameB = "Luis"
     private val emailB = "A47671@alunos.isel.pt"
 
-    private val userA: User = User(database.createUser(tokenA, nameA, emailA), nameA, emailA, tokenA)
+    private val userA: User = User(database.createUser(tokenA, nameA, emailA,), nameA, emailA, tokenA)
 
     init {
-        database.createUser(tokenB, nameB, emailB)
+        database.createUser(tokenB, nameB, emailB,)
     }
 
     @Test

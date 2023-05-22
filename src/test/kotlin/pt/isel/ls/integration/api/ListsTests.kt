@@ -46,13 +46,13 @@ class ListsTests {
     private val boardDescription = "aDescription"
     private val listName = "aName"
 
-    private val userA = User(database.createUser(tokenA, nameA, emailA), nameA, emailA, tokenA)
+    private val userA = User(database.createUser(tokenA, nameA, emailA,), nameA, emailA, tokenA)
     private val board =
         Board(database.createBoard(userA.id, boardName, boardDescription), boardName, boardDescription, listOf())
     private val list = TaskList(database.createList(board.id, listName), board.id, listName, false, listOf())
 
     init {
-        database.createUser(tokenB, nameB, emailB)
+        database.createUser(tokenB, nameB, emailB,)
     }
 
     @Test

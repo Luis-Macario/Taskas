@@ -47,8 +47,8 @@ class BoardsTests {
     private val boardName = "aName"
     private val boardDescription = "aDescription"
 
-    private val userA: User = User(database.createUser(tokenA, nameA, emailA), nameA, emailA, tokenA)
-    private val userB: User = User(database.createUser(tokenB, nameB, emailB), nameB, emailB, tokenB)
+    private val userA: User = User(database.createUser(tokenA, nameA, emailA,), nameA, emailA, tokenA)
+    private val userB: User = User(database.createUser(tokenB, nameB, emailB,), nameB, emailB, tokenB)
     private val board =
         Board(database.createBoard(userA.id, boardName, boardDescription), boardName, boardDescription, listOf())
 

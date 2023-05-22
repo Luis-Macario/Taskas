@@ -4,27 +4,9 @@ import org.http4k.core.Response
 import org.http4k.core.Status
 import pt.isel.ls.api.dto.ErrorResponse
 import pt.isel.ls.api.routers.utils.json
-import pt.isel.ls.database.memory.BoardNameAlreadyExistsException
-import pt.isel.ls.database.memory.BoardNotFoundException
-import pt.isel.ls.database.memory.BoardsUserDoesNotExistException
-import pt.isel.ls.database.memory.CardNameAlreadyExistsException
-import pt.isel.ls.database.memory.CardNotFoundException
-import pt.isel.ls.database.memory.EmailAlreadyExistsException
-import pt.isel.ls.database.memory.ListNotFoundException
-import pt.isel.ls.database.memory.MemoryException
-import pt.isel.ls.database.memory.TaskListAlreadyExistsInBoardException
-import pt.isel.ls.database.memory.UserAlreadyExistsInBoardException
-import pt.isel.ls.database.memory.UserNotFoundException
-import pt.isel.ls.database.memory.UsersBoardDoesNotExistException
+import pt.isel.ls.database.memory.*
 import pt.isel.ls.domain.TaskException
-import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
-import pt.isel.ls.services.utils.exceptions.IllegalCardAccessException
-import pt.isel.ls.services.utils.exceptions.IllegalListAccessException
-import pt.isel.ls.services.utils.exceptions.IllegalMoveCardRequestException
-import pt.isel.ls.services.utils.exceptions.IllegalUserAccessException
-import pt.isel.ls.services.utils.exceptions.InvalidTokenException
-import pt.isel.ls.services.utils.exceptions.NoSuchBoardException
-import pt.isel.ls.services.utils.exceptions.ServicesException
+import pt.isel.ls.services.utils.exceptions.*
 
 /**
  * Runs the given block, and if an exception is thrown, runs [exceptionHandler]
@@ -96,7 +78,7 @@ fun TaskException.toStatus() =
                 IllegalUserAccessException -> Status.FORBIDDEN
                 IllegalMoveCardRequestException -> Status.UNPROCESSABLE_ENTITY
                 NoSuchBoardException -> Status.UNPROCESSABLE_ENTITY
-            }
+                InvalidUserCredentialsException -> Status.BAD_REQUEST            }
 
         is ApiException ->
             when (this) {

@@ -1,5 +1,6 @@
 package pt.isel.ls.database.memory
 
+import pt.isel.ls.api.dto.user.LoginUserResponse
 import pt.isel.ls.database.AppDatabase
 import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.Card
@@ -34,10 +35,14 @@ class TasksDataMem : AppDatabase {
      * @return the created User()
      */
 
-    override fun createUser(token: String, name: String, email: String): Int {
+    override fun createUser(token: String, name: String, email: String, password: String): Int {
         val id = userId.also { userId += 1 }
         users[id] = User(id, name, email, token)
         return id
+    }
+
+    override fun loginUser(email: String): LoginUserResponse {
+        TODO("Not yet implemented")
     }
 
     /**

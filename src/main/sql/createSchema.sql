@@ -9,7 +9,8 @@ CREATE TABLE users
     id SERIAL PRIMARY KEY ,
     name VARCHAR(50) NOT NULL ,
     email varchar(60) NOT NULL CHECK (email SIMILAR TO '_%@_%')  UNIQUE,
-    token CHAR(36) NOT NULL CHECK ( char_length(token) = 36 )
+    token CHAR(36) NOT NULL CHECK ( char_length(token) = 36 ),
+    password CHAR(64) NOT NULL CHECK ( char_length(password) = 64 )
 );
 
 CREATE TABLE boards

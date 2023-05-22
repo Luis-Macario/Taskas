@@ -1,6 +1,7 @@
 package pt.isel.ls.database.sql
 
 import org.postgresql.ds.PGSimpleDataSource
+import pt.isel.ls.api.dto.user.LoginUserResponse
 import pt.isel.ls.database.AppDatabase
 import pt.isel.ls.database.memory.CardNotFoundException
 import pt.isel.ls.database.memory.ListNotFoundException
@@ -18,15 +19,16 @@ class TasksDataPostgres(url: String) : AppDatabase {
         this.setUrl(url)
     }
 
-    override fun createUser(token: String, name: String, email: String): Int {
+    override fun createUser(token: String, name: String, email: String, password: String): Int {
         dataSource.connection.use {
             val stm = it.prepareStatement(
-                " INSERT INTO  users(name, email, token) VALUES (?,?,?)",
+                " INSERT INTO  users(name, email, token, password) VALUES (?,?,?,?)",
                 Statement.RETURN_GENERATED_KEYS
             )
             stm.setString(1, name)
             stm.setString(2, email)
             stm.setString(3, token)
+            stm.setString(4, password)
 
             val affectedRows: Int = stm.executeUpdate()
             if (affectedRows == 0) {
@@ -38,6 +40,39 @@ class TasksDataPostgres(url: String) : AppDatabase {
                 generatedKeys.getInt(1)
             } else {
                 throw SQLException("Creating user failed, no ID obtained.")
+            }
+        }
+    }
+
+    override fun loginUser(email: String): LoginUserResponse {
+        dataSource.connection.use {
+            val stm = it.prepareStatement(
+                """
+                SELECT * FROM users where email = ?
+            """.trimIndent()
+            )
+
+            stm.setString(1, email)
+
+            val rs = stm.executeQuery()
+            if (rs.next()) {
+                /*return User(
+                     id = rs.getInt("id"),
+                     name = rs.getString("name"),
+                     email = rs.getString("email"),
+                     token = rs.getString("token"),
+                     password = rs.getString("password")
+                 )*/
+                return LoginUserResponse(
+                    User(
+                        id = rs.getInt("id"),
+                        name = rs.getString("name"),
+                        email = rs.getString("email"),
+                        token = rs.getString("token"),
+                    ), password = rs.getString("password")
+                )
+            } else {
+                throw UserNotFoundException
             }
         }
     }

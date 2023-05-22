@@ -50,10 +50,10 @@ class UserTests {
         val email = "honorStudent@gmail.com"
         val token = UUID.randomUUID().toString()
 
-        mem.createUser(token, name, email)
+        mem.createUser(token, name, email,)
 
         val msg = assertFailsWith<EmailAlreadyExistsException> {
-            mem.createUser(UUID.randomUUID().toString(), "Ricky", email)
+            mem.createUser(UUID.randomUUID().toString(), "Ricky", email,)
         }
 
         assertEquals("A user with that email already exists", EmailAlreadyExistsException.description)

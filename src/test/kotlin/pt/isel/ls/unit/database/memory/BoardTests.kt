@@ -45,7 +45,7 @@ class BoardTests {
     @Test
     fun `test create board throws UserNotFoundException when creating a board with a invalid user`() {
         val mem = TasksDataMem()
-        val user = mem.createUser(UUID.randomUUID().toString(), "Francisco M", "francisco@isel.pt")
+        val user = mem.createUser(UUID.randomUUID().toString(), "Francisco M", "francisco@isel.pt",)
         val boardName = "To Do".repeat(4)
 
         val msg = assertFailsWith<UserNotFoundException> {

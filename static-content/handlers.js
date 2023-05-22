@@ -1,5 +1,6 @@
 import getUser from "./views/users/UserView.js";
 import createUser from "./views/users/UserCreation.js";
+import loginUser from "./views/users/UserLogin.js";
 import searchBoard from "./views/boards/BoardSearch.js";
 import searchBoardResults from "./views/boards/BoardSearchResults.js";
 import createBoard from "./views/boards/BoardCreate.js";
@@ -13,7 +14,7 @@ import getCard from "./views/cards/CardView.js";
 import getHome from "./views/HomeView.js";
 import {div, h1} from "./DSL/tags.js";
 
-
+/*
 //TODO: "Implement login"
 function login(mainContent){
     mainContent.replaceChildren(
@@ -24,11 +25,11 @@ function login(mainContent){
             h1({},"Not implemented yet")
         )
     )
-}
+}*/
 export const handlers = {
-    login,
     getHome,
     createUser,
+    loginUser,
     getUser,
     searchBoard,
     searchBoardResults,

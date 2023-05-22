@@ -9,11 +9,7 @@ import org.http4k.core.Status.Companion.OK
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import pt.isel.ls.api.dto.board.toDTO
-import pt.isel.ls.api.dto.user.CreateUserRequest
-import pt.isel.ls.api.dto.user.CreateUserResponse
-import pt.isel.ls.api.dto.user.GetBoardsFromUserResponse
-import pt.isel.ls.api.dto.user.GetSearchBoardsFromUserResponse
-import pt.isel.ls.api.dto.user.toDTO
+import pt.isel.ls.api.dto.user.*
 import pt.isel.ls.api.routers.utils.exceptions.runAndHandleExceptions
 import pt.isel.ls.api.routers.utils.getAuthorizationHeader
 import pt.isel.ls.api.routers.utils.getJsonBodyTo
@@ -31,6 +27,7 @@ import pt.isel.ls.services.users.UserServices
 class UsersRoutes(private val services: UserServices) {
     val routes = routes(
         "/" bind POST to ::createUser,
+        "/login" bind POST to ::loginUser,
         "/{userID}" bind GET to ::getUserDetails,
         "/{userID}/boards" bind GET to ::getBoardsFromUser,
         "/{userID}/boards/search" bind GET to ::searchBoardsFromUser
@@ -46,10 +43,32 @@ class UsersRoutes(private val services: UserServices) {
         runAndHandleExceptions {
             val userRequest = request.getJsonBodyTo<CreateUserRequest>()
 
-            val user = services.createUser(userRequest.name, userRequest.email)
+            val user = services.createUser(userRequest.name, userRequest.email, userRequest.password)
             val userResponse = CreateUserResponse(user.id, user.token)
 
             Response(CREATED)
+                .header("Location", "/users/${user.id}")
+                .json(userResponse)
+        }
+
+
+    /**
+     * Logins a user
+     *
+     * @param request The request information
+     * @return the corresponding [Response]
+     */
+    private fun loginUser(request: Request): Response =
+        runAndHandleExceptions {
+            //println("request : $request")
+            val userRequest = request.getJsonBodyTo<LoginUserRequest>()
+            println("userRequest : $userRequest")
+            val user = services.loginUser(userRequest.email, userRequest.password)
+            println("user $user")
+            // Alterar para uma dto do login
+            val userResponse = user.toDTO()
+
+            Response(OK)
                 .header("Location", "/users/${user.id}")
                 .json(userResponse)
         }

@@ -1,6 +1,8 @@
 package pt.isel.ls.domain
 
 import pt.isel.ls.services.utils.validId
+import java.security.MessageDigest
+import java.nio.charset.StandardCharsets
 
 /**
  * User representation
@@ -14,7 +16,8 @@ data class User(
     val id: Int,
     val name: String,
     val email: String,
-    val token: String
+    val token: String,
+    //val password: String
 ) {
     companion object {
         private const val EMAIL_REGEX = "^(.+)@(.+)$"
@@ -45,6 +48,24 @@ data class User(
         require(validEmail(email)) { "Invalid email: $email" }
         require(validId(id)) { "Invalid user id: $id" }
     }
+}
+
+
+fun hashPassword(password: String): String {
+    val messageDigest = MessageDigest.getInstance("SHA-256")
+    val hashedBytes = messageDigest.digest(password.toByteArray(StandardCharsets.UTF_8))
+    return bytesToHex(hashedBytes)
+}
+
+fun bytesToHex(bytes: ByteArray): String {
+    val hexChars = "0123456789ABCDEF"
+    val hex = StringBuilder(2 * bytes.size)
+    for (i in bytes.indices) {
+        val b = bytes[i].toInt() and 0xFF
+        hex.append(hexChars[b.ushr(4)])
+        hex.append(hexChars[b and 0x0F])
+    }
+    return hex.toString()
 }
 
 fun checkUserCredentials(name: String, email: String) {
