@@ -12,7 +12,7 @@
  *         </div>
  */
 
-import {a, button, div} from "../DSL/tags.js";
+import {a, button, div, nav} from "../DSL/tags.js";
 import {getStoredUser, storeUser} from "../configs/configs.js";
 import Modal from "../partials/Modal.js";
 
@@ -21,7 +21,24 @@ export function navBar(navContent) {
 
     const signOutButton = button({class: "btn btn-primary btn-sm", onClick: showDeleteModal}, "Sign Out")
     const declineButton = button({type: "button", class: "btn btn-secondary", onClick: closeModal}, "Cancel")
-    const confirmButton = button({type: "button", class: "btn btn-primary", onClick:signOut}, "Confirm")
+    const confirmButton = button({type: "button", class: "btn btn-primary", onClick: signOut}, "Confirm")
+
+    const navElements =
+        user != null ?
+            [
+                a({href: "#users/boards/create", class: "nav-item nav-link"}, "Create Board"),
+                a({href: "#users/boards/search", class: "nav-item nav-link"}, "Search Board"),
+                a({href: "#users/boards", class: "nav-item nav-link"}, "My Boards"),
+                a({href: `#users/${user.id}`, class: "nav-item nav-link"}, "My Details"),
+                div({class: "nav ms-auto me-5"},
+                    signOutButton
+                )
+            ]
+            :
+            [div({class: "nav ms-auto me-5"},
+                a({href: "#users/login", class: "nav-item nav-link"}, "Login"),
+                a({href: "#users/create", class: "nav-item nav-link"}, "Sign Up"),
+            )]
 
     const modal = Modal(navContent,
         {
@@ -37,30 +54,18 @@ export function navBar(navContent) {
     function closeModal() {
         navContent.removeChild(modal)
     }
-    function signOut(){
+
+    function signOut() {
         storeUser(null)
         window.location.hash = "#"
     }
 
-    navContent.replaceChildren(div({class: "col-6"},
-            a({href: "#home", class: "btn btn-primary"}, "Home"),
-            user != null ?
-                div({},
-                    div({},
-                        a({href: "#users/boards/create", class: "btn btn-primary"}, "Create Board"),
-                        a({href: "#users/boards/search", class: "btn btn-primary"}, "Search Board"),
-                        a({href: "#users/boards", class: "btn btn-primary"}, "My Boards"),
-                        a({href: `#users/${user.id}`, class: "btn btn-primary"}, "My Details"),
-                    ),
-                    div({class: "col-md-2 offset-md-2"},
-                        //a({href: "#users/signout", class: "btn btn-primary"}, "Sign Out"),
-                        signOutButton
-                    ))
-                :
-                div({class: "col-md-2 offset-md-2"},
-                    a({href: "#users/login", class: "btn btn-primary"}, "Login"),
-                    a({href: "#users/create", class: "btn btn-primary"}, "Sign Up"),
-                )
+    navContent.replaceChildren(
+        div({},
+            nav({class: "nav nav-pills"},
+                a({href: "#home", class: "nav-link"}, "Home"),
+                ...navElements
+            )
         )
     )
 }

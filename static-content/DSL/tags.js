@@ -44,6 +44,10 @@ export function li(options = {}, stringOrElement) {
     return createElement("li", options, stringOrElement);
 }
 
+export function nav(options = {}, ...elements) {
+    return createElement("nav", options, ...elements);
+}
+
 export function option(options = {}, ...elements) {
     return createElement("option", options, ...elements);
 }

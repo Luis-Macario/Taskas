@@ -1,5 +1,5 @@
 import {a, br, button, div, h1, li, ul} from "../../DSL/tags.js";
-import showErrorResponse, {API_BASE_URL} from "../../configs/configs.js";
+import showErrorResponse, {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 import MoveCardModal from "../../partials/cards/MoveCardModal.js";
 
 async function getCard(mainContent, id) {
