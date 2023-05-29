@@ -27,10 +27,13 @@ export async function moveCard(mainContent, id, lId, cidx) {
 
 export async function getAvailableLists(mainContent, id) {
 
+    const user = getStoredUser()
+    const token = user.token
+
     const options = {
         method: "GET",
         headers: {
-            "Authorization": "Bearer " + token,
+            "Authorization": "Bearer " + token
         }
     }
     console.log("ENTROU GET")
