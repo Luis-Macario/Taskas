@@ -6,8 +6,8 @@ window.addEventListener('load', loadHandler)
 window.addEventListener('hashchange', hashChangeHandler)
 
 function loadHandler() {
-    router.addRouteHandler("home", handlers.getHome)
-    router.addRouteHandler("users/{id}", handlers.getUser)
+    router.addRouteHandler("", handlers.getHome)
+    router.addRouteHandler("users/me", handlers.getUser)
     router.addRouteHandler("users/create", handlers.createUser)
     router.addRouteHandler("users/login", handlers.loginUser)
     router.addRouteHandler("users/boards/search", handlers.searchBoard)
@@ -20,9 +20,7 @@ function loadHandler() {
     router.addRouteHandler("lists/{id}", handlers.getList)
     router.addRouteHandler("lists/{id}/cards/create", handlers.createCard)
     router.addRouteHandler("cards/{id}", handlers.getCard)
-    router.addDefaultNotFoundRouteHandler(() =>
-        window.location.hash = "home"
-    )
+    router.addDefaultNotFoundRouteHandler(handlers.getNotFound)
 
     hashChangeHandler()
 }
@@ -34,10 +32,16 @@ function hashChangeHandler() {
 
     const idStr = path.split("/")
     const id = (idStr.length < 2) ? null : Number(idStr[1])
-    const query = (idStr.length < 5) ? null : idStr[4]
+    const isSearch = (idStr.length < 3) ? false : (idStr[2] === "search")
+    const query = (idStr.length < 4) ? null : idStr[3]
 
-    path = path.replace(RegExp("\/[0-9]+"), "/{id}")
-    if (query !== null) path = path.replace(RegExp(`/${query}\$`), "/{query}")
+    console.log(`>> ${query}`)
+
+    path = (id !== null && !isNaN(id)) ? path.replace(RegExp("\/[0-9]+"), "/{id}") : path
+    if (isSearch && query !== null) path = path.replace(RegExp(`/${query}\$`), "/{query}")
+
+    console.log(`>> ${id}`)
+    console.log(`FINAL PATH >> ${path}`)
 
     const handler = router.getRouteHandler(path)
     const navContent = document.getElementById("navContent")

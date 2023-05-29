@@ -1,9 +1,8 @@
 import {a, br, button, div, h1, p, table, td, th, tr} from "../../DSL/tags.js";
 import showErrorResponse, {getStoredUser, API_BASE_URL} from "../../configs/configs.js";
 
-async function getBoardDetails(mainContent) {
+async function getBoardDetails(mainContent, id) {
     const user = getStoredUser()
-    const id = user.id
     const token = user.token
     const res = await fetch(API_BASE_URL + `boards/${id}`, {
         headers: {

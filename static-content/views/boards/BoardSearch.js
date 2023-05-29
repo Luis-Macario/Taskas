@@ -1,7 +1,6 @@
 import {br, button, div, form, h1, input, li, ul} from "../../DSL/tags.js";
 
-async function searchBoard(mainContent, id) {
-
+async function searchBoard(mainContent) {
     let selectedParameter = null
 
     const myForm = form({},
@@ -63,13 +62,14 @@ async function searchBoard(mainContent, id) {
 
         switch (selectedParameter) {
             case 'Name':
-                window.location.hash = `users/${id}/boards/search/${inputValue}`
+                window.location.hash = `users/boards/search/${inputValue}`
                 break
             case 'id':
                 window.location.hash = undefined
                 break
             case 'Number of Users': //TODO deviamos inserir o criterio de busca numa query string
-                window.location.hash = `users//boards/search/${inputValue}`;
+                // Queries vêm antes de um hash, nao faz muito sentido ter 8080/?q=123#users/etc/etc
+                window.location.hash = `users/boards/search/${inputValue}`;
                 break;
             default:
                 alert("Invalid Parameter");

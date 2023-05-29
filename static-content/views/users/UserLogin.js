@@ -16,7 +16,7 @@ function loginUser(mainContent) {
         }
 
         if (password.length < 4 || password.length > 30) {
-            alert("Password must be between 6 and 30 letters long")
+            alert("Password must be between 5 and 29 letters long")
             return;
         }
 
@@ -39,7 +39,7 @@ function loginUser(mainContent) {
             const user = body
             console.log(user)
             storeUser(user)
-            window.location.hash = "users/" + user.id
+            window.location.hash = "users/me"
             return
         }
         showErrorResponse(mainContent, body)

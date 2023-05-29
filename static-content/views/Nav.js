@@ -29,7 +29,7 @@ export function navBar(navContent) {
                 a({href: "#users/boards/create", class: "nav-item nav-link"}, "Create Board"),
                 a({href: "#users/boards/search", class: "nav-item nav-link"}, "Search Board"),
                 a({href: "#users/boards", class: "nav-item nav-link"}, "My Boards"),
-                a({href: `#users/${user.id}`, class: "nav-item nav-link"}, "My Details"),
+                a({href: `#users/me`, class: "nav-item nav-link"}, "My Details"),
                 div({class: "nav ms-auto me-5"},
                     signOutButton
                 )
@@ -63,7 +63,7 @@ export function navBar(navContent) {
     navContent.replaceChildren(
         div({},
             nav({class: "nav nav-pills"},
-                a({href: "#home", class: "nav-link"}, "Home"),
+                a({href: "#", class: "nav-link"}, "Home"),
                 ...navElements
             )
         )

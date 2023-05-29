@@ -1,6 +1,6 @@
 import showErrorResponse, {API_BASE_URL, getStoredUser, hardCodedBearer} from "../../configs/configs.js";
 
-export async function moveCard(id, lId, cidx) {
+export async function moveCard(mainContent, id, lId, cidx) {
 
     const user = getStoredUser()
     const token = user.token
@@ -25,12 +25,12 @@ export async function moveCard(id, lId, cidx) {
     }
 }
 
-export async function getAvailableLists(id) {
+export async function getAvailableLists(mainContent, id) {
 
     const options = {
         method: "GET",
         headers: {
-            "Authorization": "Bearer " + hardCodedBearer,
+            "Authorization": "Bearer " + token,
         }
     }
     console.log("ENTROU GET")

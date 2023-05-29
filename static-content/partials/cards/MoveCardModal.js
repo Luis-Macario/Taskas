@@ -81,7 +81,7 @@ function MoveCardModal(mainContent, closeButton, boardID, cardID, listID) {
     const confirmButton = button({type: "button", class: "btn btn-primary", disabled: "true"}, "Confirm Move")
     confirmButton.addEventListener("click", async () => {
         if (selectedButton != null) {
-            await moveCard(cardID, selectedButton, selectedIdx + checkBoxIdx)
+            await moveCard(mainContent, cardID, selectedButton, selectedIdx + checkBoxIdx)
                 .then(() => window.location.hash = `lists/${selectedButton}`)
         }
     })
@@ -99,7 +99,7 @@ function MoveCardModal(mainContent, closeButton, boardID, cardID, listID) {
     }, `${buttonText}`)
     buttonDropDown.addEventListener("click", () => {
         if (!buttonDropDownClicked) {           // Para n estar sempre a fzr pedidos à API
-            getAvailableLists(boardID)
+            getAvailableLists(mainContent, boardID)
                 .then(lists => {
                     buttonDropDownClicked = true
                     lists.forEach(list => {

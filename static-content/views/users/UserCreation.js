@@ -41,7 +41,7 @@ function createUser(mainContent) {
             .then(res => res.json())
             .then(user => {
                 console.log(user)
-                window.location.hash = "users/" + user.id
+                window.location.hash = "users/me"
             })
     }
 

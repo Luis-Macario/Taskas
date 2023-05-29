@@ -12,9 +12,11 @@ import getList from "./views/lists/ListView.js";
 import createCard from "./views/cards/CardCreate.js";
 import getCard from "./views/cards/CardView.js";
 import getHome from "./views/HomeView.js";
+import getNotFound from "./views/NotFoundView.js";
 
 export const handlers = {
     getHome,
+    getNotFound,
     createUser,
     loginUser,
     getUser,
