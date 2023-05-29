@@ -1,8 +1,6 @@
-import {div, h1} from "../../DSL/tags.js";
 import {API_BASE_URL} from "../../configs/configs.js";
-import UserCreateForm from "../../partials/users/UserCreateForm.js";
 
-function createUser(mainContent) {
+/*function createUser() {
     function handleSubmit(event) {
         event.preventDefault()
 
@@ -45,16 +43,7 @@ function createUser(mainContent) {
             })
     }
 
-    mainContent.replaceChildren(
-        div({class: "card"},
-            div({class: "card-header"},
-                h1({class: "card-title"}, "Register User")
-            ),
-            div({class: "card-body w-50 center"},
-                UserCreateForm(handleSubmit)
-            )
-        )
-    )
+    return handleSubmit()
 }
 
-export default createUser
+export default createUser*/

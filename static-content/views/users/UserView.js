@@ -1,6 +1,6 @@
 import {div, h1, li, ul} from "../../DSL/tags.js";
 import showErrorResponse, {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
-
+/*
 function getUser(mainContent) {
 
     const user = getStoredUser()
@@ -35,4 +35,4 @@ function getUser(mainContent) {
         });
 }
 
-export default getUser
+export default getUser*/

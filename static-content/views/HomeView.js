@@ -1,7 +1,7 @@
 import {div, h1, p} from "../DSL/tags.js";
 
-function getHome(mainContent) {
-    mainContent.replaceChildren(
+function getHome() {
+    return div({},
         div({class: "card"},
             div({class: "card-header"},
                 h1({class: "card-title"}, "Home")

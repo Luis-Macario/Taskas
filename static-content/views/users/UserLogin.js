@@ -1,6 +1,4 @@
-import {div,h1} from "../../DSL/tags.js";
-import showErrorResponse, {API_BASE_URL, storeUser} from "../../configs/configs.js";
-import UserLoginForm from "../../partials/users/UserLoginForm.js";
+/*import showErrorResponse, {API_BASE_URL, storeUser} from "../../configs/configs.js";
 
 function loginUser(mainContent) {
     async function handleSubmit(event) {
@@ -44,17 +42,7 @@ function loginUser(mainContent) {
         }
         showErrorResponse(mainContent, body)
     }
-
-    mainContent.replaceChildren(
-        div({class: "card"},
-            div({class: "card-header"},
-                h1({class: "card-title"}, "Login User")
-            ),
-            div({class: "card-body w-50 center"},
-                UserLoginForm(handleSubmit)
-            )
-        )
-    )
+    return handleSubmit()
 }
 
-export default loginUser
+export default loginUser*/
