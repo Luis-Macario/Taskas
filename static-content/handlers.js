@@ -39,3 +39,11 @@ export const handlers = {
 }
 
 export default handlers
+
+/*
+boardDetailsHandler(mainContent, id) {
+    const board = getBoardDetails(id)
+    const view = getBoardDetailsView()
+    mainContent.replaceChildren(view)
+}
+*/

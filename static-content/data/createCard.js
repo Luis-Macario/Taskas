@@ -1,9 +1,6 @@
-import {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
-import { div, h1} from "../../DSL/tags.js";
-import CardForm from "../../partials/cards/CardForm.js";
+import {API_BASE_URL, getStoredUser} from "../configs/configs.js";
 
-async function cardCreate(mainContent, id) {
-
+function createCard(listID) {
     function handleSubmit(event) {
         event.preventDefault()
 
@@ -34,7 +31,7 @@ async function cardCreate(mainContent, id) {
                 "Accept": "application/json"
             },
             body: JSON.stringify({
-                listID: id,
+                listID: listID,
                 name: name,
                 description: description,
                 initDate: initDate,
@@ -49,14 +46,7 @@ async function cardCreate(mainContent, id) {
             })
     }
 
-    mainContent.replaceChildren(
-        div({class: "card-header"},
-            h1({class: "card-title"}, "Create Card")
-        ),
-        div({class: "card-body w-50 center"},
-            CardForm(handleSubmit)
-        )
-    )
+    return handleSubmit
 }
 
-export default cardCreate
+export default createCard

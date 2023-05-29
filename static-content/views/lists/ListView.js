@@ -1,31 +1,10 @@
 import {a, br, button, div, h1, li, p, table, td, th, tr, ul} from "../../DSL/tags.js";
-import showErrorResponse, {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 import listDelete from "./ListDelete.js";
 import Modal from "../../partials/Modal.js";
 
-async function getList(mainContent, id) {
-
-    const user = getStoredUser()
-    const token = user.token
-    const res = await fetch(API_BASE_URL + `lists/${id}`, {
-        headers: {
-            "Authorization": "Bearer " + token
-        }
-    })
-    let list = null
-    let cards = null
-    const body = await res.json()
-    if (res.status === 200) {
-        list = body
-        cards = list.cards
-        console.log(list)
-    } else {
-        showErrorResponse(mainContent, body)
-    }
-
-    //TODO:'Maybe create a seperate directory for handlers'
+function listView(mainContent, list) {
     function createCard() {
-        window.location.hash = `lists/${id}/cards/create`
+        window.location.hash = `lists/${list.id}/cards/create`
     }
 
     function showDeleteModal() {
@@ -72,7 +51,7 @@ async function getList(mainContent, id) {
                     ),
                     div({class: "card-body"},
                         div({class: "btn-group-vertical"},
-                            ...(cards.length > 0 ? cards.map(card => {
+                            ...(list.cards.length > 0 ? list.cards.map(card => {
                                         return a({class: "btn btn-secondary", href: `#cards/${card.id}`},
                                             "Card:" + card.name)
                                     })
@@ -92,4 +71,4 @@ async function getList(mainContent, id) {
     )
 }
 
-export default getList
+export default listView

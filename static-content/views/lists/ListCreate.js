@@ -1,42 +1,8 @@
-import {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 import {div, h1} from "../../DSL/tags.js";
 import ListForm from "../../partials/lists/ListForm.js";
 
-async function listcreate(mainContent, id) {
-    function handleSubmit(event) {
-        event.preventDefault()
-
-        const user = getStoredUser()
-        const token = user.token
-
-        const name = document.querySelector("#idName").value
-
-        if (name.length < 5 || name.length > 100) {
-            alert("List Name must be between 5 and 100 letters long")
-            return;
-        }
-
-        const options = {
-            method: "POST",
-            headers: {
-                "Authorization": "Bearer " + token,
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify({
-                boardID: id,
-                name: name,
-            })
-        }
-        fetch(API_BASE_URL + `lists/`, options)
-            .then(res => res.json())
-            .then(list => {
-                console.log(list)
-                window.location.hash = `lists/` + list.id
-            })
-    }
-
-    mainContent.replaceChildren(
+function createListView(handleSubmit) {
+    return div(
         div({class: "card-header"},
             h1({class: "card-title"}, "Create List")
         ),
@@ -45,4 +11,4 @@ async function listcreate(mainContent, id) {
         )
     )
 }
-export default listcreate
+export default createListView

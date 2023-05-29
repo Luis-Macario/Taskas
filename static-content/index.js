@@ -6,27 +6,27 @@ window.addEventListener('load', loadHandler)
 window.addEventListener('hashchange', hashChangeHandler)
 
 function loadHandler() {
-    router.addRouteHandler("", handlers.getHome)
-    router.addRouteHandler("users/me", handlers.getUser)
-    router.addRouteHandler("users/create", handlers.createUser)
-    router.addRouteHandler("users/login", handlers.loginUser)
-    router.addRouteHandler("users/boards/search", handlers.searchBoard)
-    router.addRouteHandler("users/boards/search/{query}", handlers.searchBoardResults)
-    router.addRouteHandler("users/boards/create", handlers.createBoard)
-    router.addRouteHandler("users/boards", handlers.getBoards)
-    router.addRouteHandler("boards/{id}", handlers.getBoardDetails)
-    router.addRouteHandler("boards/{id}/users", handlers.getUsersFromBoard)
-    router.addRouteHandler("boards/{id}/lists/create", handlers.createList)
-    router.addRouteHandler("lists/{id}", handlers.getList)
-    router.addRouteHandler("lists/{id}/cards/create", handlers.createCard)
-    router.addRouteHandler("cards/{id}", handlers.getCard)
-    router.addDefaultNotFoundRouteHandler(handlers.getNotFound)
+    router.addRouteHandler("", handlers.getHomeHandler)
+    router.addRouteHandler("users/me", handlers.userDetailsHandler)
+    router.addRouteHandler("users/create", handlers.createUserHandler)
+    router.addRouteHandler("users/login", handlers.loginUserHandler)
+    //router.addRouteHandler("users/boards/search", handlers.searchBoard)
+    //router.addRouteHandler("users/boards/search/{query}", handlers.searchBoardResults)
+    router.addRouteHandler("users/boards/create", handlers.createBoardHandler)
+    router.addRouteHandler("users/boards", handlers.getBoardsHandler)
+    router.addRouteHandler("boards/{id}", handlers.getBoardDetailsHandler)
+    //router.addRouteHandler("boards/{id}/users", handlers.getUsersFromBoard)
+    router.addRouteHandler("boards/{id}/lists/create", handlers.createListHandler)
+    router.addRouteHandler("lists/{id}", handlers.listDetailsHandler)
+    router.addRouteHandler("lists/{id}/cards/create", handlers.createCardHandler)
+    router.addRouteHandler("cards/{id}", handlers.cardDetailsHandler)
+    router.addDefaultNotFoundRouteHandler(handlers.getNotFoundHandler)
 
     hashChangeHandler()
 }
 
 function hashChangeHandler() {
-
+    console.log("HASH HAS CHANGED")
     const mainContent = document.getElementById("mainContent")
     let path = window.location.hash.replace("#", "")
 
