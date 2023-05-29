@@ -57,7 +57,7 @@ export function navBar(navContent) {
 
     function signOut() {
         storeUser(null)
-        window.location.hash = "#"
+        window.location.hash = "#users/login"
     }
 
     navContent.replaceChildren(
