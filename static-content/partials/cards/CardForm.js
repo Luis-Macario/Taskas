@@ -2,7 +2,7 @@ import {br, button, form, input, label} from "../../DSL/tags.js";
 
 
 function CardForm(handler) {
-    return form({onSubmit:handler},
+    return form({onSubmit: handler},
         br(),
         label({for: "cardName", class: "col-form-label"}, "Name:"), br(),
         input(({

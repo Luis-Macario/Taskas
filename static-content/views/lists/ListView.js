@@ -36,16 +36,16 @@ async function getList(mainContent, id) {
         mainContent.removeChild(modal)
     }
 
-    function deleteList() {
+    async function deleteList() {
         mainContent.removeChild(modal);
-        listDelete(list.bid, list.id)
+        await listDelete(list.bid, list.id)
     }
 
     const createCardButton = button({class: "btn btn-primary btn-sm", onClick: createCard}, "Create Card")
     const deleteListButton = button({class: "btn btn-primary btn-sm", onClick: showDeleteModal}, "Delete List")
 
     const declineButton = button({type: "button", class: "btn btn-secondary", onClick: closeModal}, "Close")
-    const confirmButton = button({type: "button", class: "btn btn-primary", onClick:deleteList}, "Confirm Delete")
+    const confirmButton = button({type: "button", class: "btn btn-primary", onClick: deleteList}, "Confirm Delete")
 
     const modal = Modal(mainContent,
         {

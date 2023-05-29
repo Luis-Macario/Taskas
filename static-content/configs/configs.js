@@ -4,14 +4,12 @@ export const hardCodedBearer = "160ee838-150b-4ca1-a2ff-2e964383c315"
 export const API_BASE_URL = window.location.protocol + '//' + window.location.host + '/api/'
 
 //TODO stashing this here until I decide where to put it
-function showErrorResponse(mainContent, error) {
+function showErrorResponse(error) {
     console.log(error)
-    mainContent.replaceChildren(
-        div({},
+    return div({},
             h1({}, `${error.code} ${error.name}`),
             p({}, `${error.description}`)
         )
-    )
 }
 
 export function getStoredUser() {

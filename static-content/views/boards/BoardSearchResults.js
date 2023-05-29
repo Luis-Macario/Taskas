@@ -2,7 +2,7 @@ import {button, div, h1, p} from "../../DSL/tags.js";
 import showErrorResponse, {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 
 
-async function searchBoardResults(mainContent, _, query) {
+async function searchBoardResults(mainContent, query) {
 
     let idx = 0
 

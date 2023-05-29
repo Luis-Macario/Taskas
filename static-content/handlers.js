@@ -1,35 +1,41 @@
-import getUser from "./views/users/UserView.js";
-import createUser from "./views/users/UserCreation.js";
-import loginUser from "./views/users/UserLogin.js";
-import searchBoard from "./views/boards/BoardSearch.js";
-import searchBoardResults from "./views/boards/BoardSearchResults.js";
-import createBoard from "./views/boards/BoardCreate.js";
-import getBoards from "./views/boards/BoardsView.js";
-import getBoardDetails from "./views/boards/BoardDetailsView.js";
-import getUsersFromBoard from "./views/boards/BoardUsersView.js";
-import createList from "./views/lists/ListCreate.js";
-import getList from "./views/lists/ListView.js";
-import createCard from "./views/cards/CardCreate.js";
-import getCard from "./views/cards/CardView.js";
-import getHome from "./views/HomeView.js";
-import getNotFound from "./views/NotFoundView.js";
+import getHomeHandler from "./handlers/getHomeHandler.js";
+import getNotFoundHandler from "./handlers/getNotFoundHandler.js";
+import createUserHandler from "./handlers/createUserHandler.js";
+import loginUserHandler from "./handlers/userLoginHandler.js";
+import userDetailsHandler from "./handlers/userDetailsHandler.js"
+
+import searchBoardResultsHandler from "./handlers/boards/searchBoardResultsHandler.js";
+import getBoardsHandler from "./handlers/boards/getBoardsHandler.js";
+import createBoardHandler from "./handlers/boards/createBoardHandler.js";
+import getBoardDetailsHandler from "./handlers/boards/getBoardDetailsHandler.js";
+
+import createListHandler from "./handlers/createListHandler.js";
+import listDetailsHandler from "./handlers/listDetailsHandler.js";
+import createCardHandler from "./handlers/createCardHandler.js";
+import cardDetailsHandler from "./handlers/cardDetailsHandler.js";
 
 export const handlers = {
-    getHome,
-    getNotFound,
-    createUser,
-    loginUser,
-    getUser,
-    searchBoard,
-    searchBoardResults,
-    createBoard,
-    getBoards,
-    getBoardDetails,
-    getUsersFromBoard,
-    createList,
-    getList,
-    createCard,
-    getCard
+    getHomeHandler,
+    getNotFoundHandler,
+    createUserHandler,
+    loginUserHandler,
+    userDetailsHandler,
+    /*
+    searchBoardHandler,
+    */
+    //------ Wolfie 17
+    searchBoardResultsHandler,
+    createBoardHandler,
+    getBoardsHandler,
+    getBoardDetailsHandler,
+    /*
+    getUsersFromBoardHandler,
+    */
+    // ---------- RICHIE 95
+    createListHandler,
+    listDetailsHandler,
+    createCardHandler,
+    cardDetailsHandler,
 }
 
 export default handlers

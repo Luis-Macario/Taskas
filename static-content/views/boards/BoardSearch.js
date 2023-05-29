@@ -1,6 +1,6 @@
 import {br, button, div, form, h1, input, li, ul} from "../../DSL/tags.js";
 
-async function searchBoard(mainContent) {
+function searchBoard() {
     let selectedParameter = null
 
     const myForm = form({},
@@ -46,16 +46,7 @@ async function searchBoard(mainContent) {
     }
 
     const resultsContainer = div()
-    mainContent.replaceChildren(
-        div({class: "card"},
-            div({class: "card-header"},
-                h1({class: "card-title"}, "Search Board")
-            ),
-            div({class: "card-body w-50 center"},
-                myForm, resultsContainer
-            )
-        )
-    )
+
     myForm.addEventListener('submit', (event) => {
         event.preventDefault(); // Prevent form submission
         const inputValue = document.querySelector("#parameterValue").value;
@@ -75,6 +66,15 @@ async function searchBoard(mainContent) {
                 alert("Invalid Parameter");
         }
     });
+
+    return div({class: "card"},
+            div({class: "card-header"},
+                h1({class: "card-title"}, "Search Board")
+            ),
+            div({class: "card-body w-50 center"},
+                myForm, resultsContainer
+            )
+        )
 
 }
 
