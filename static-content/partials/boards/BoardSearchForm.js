@@ -1,6 +1,6 @@
 import {br, button, div, form, input, li, ul} from "../../DSL/tags.js";
 
-export default  function boardSearchForm() {
+export default  function boardSearchForm(submitHandler, changeParameter) {
     return form({},
         br(),
         div({class: "input-group mb-3 d-flex align-items-center"},
@@ -14,7 +14,7 @@ export default  function boardSearchForm() {
                         'aria-expanded': "false"
                     }, "Select Parameter"),
                     ul({class: "dropdown-menu", 'aria-labelledby': "dropdownMenuButton1"},
-                        li({}, button({class: "dropdown-item", onClick: selectParameter}, "Name")),
+                        li({}, button({class: "dropdown-item", onClick: changeParameter}, "Name")),
                         li({}, button({class: "dropdown-item", disabled: true},
                             "Parameter2")),
                         li({}, button({class: "dropdown-item", disabled: true},
@@ -33,6 +33,6 @@ export default  function boardSearchForm() {
             )
         ),
         br(),
-        button({type: "submit", class: "btn btn-primary w-100 btn-lg", value: "Submit"}, "Search")
+        button({type: "submit", class: "btn btn-primary w-100 btn-lg", onSubmit:submitHandler}, "Search")
     )
 }

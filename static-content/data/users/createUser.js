@@ -1,4 +1,4 @@
-import {API_BASE_URL} from "../configs/configs.js";
+import {API_BASE_URL} from "../../configs/configs.js";
 
 function createUser() {
     async function handleSubmit(event) {

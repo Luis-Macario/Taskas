@@ -1,4 +1,4 @@
-import {API_BASE_URL, getStoredUser} from "../configs/configs.js";
+import {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 
 async function getUser() {
     const user = getStoredUser()

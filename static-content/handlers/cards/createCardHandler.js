@@ -1,5 +1,5 @@
-import createCard from "../data/createCard.js";
-import createCardView from "../views/lists/createCardView.js";
+import createCard from "../../data/cards/createCard.js";
+import createCardView from "../../views/lists/createCardView.js";
 
 function createCardHandler(mainContent, listID) {
     const createCardFunction = createCard(listID)

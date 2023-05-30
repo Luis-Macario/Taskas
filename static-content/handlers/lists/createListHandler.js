@@ -1,5 +1,5 @@
-import createList from "../data/createList.js";
-import createListView from "../views/lists/ListCreate.js";
+import createList from "../../data/lists/createList.js";
+import createListView from "../../views/lists/ListCreate.js";
 
 
 function createListHandler(mainContent, boardID) {

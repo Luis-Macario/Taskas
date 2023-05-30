@@ -1,6 +1,6 @@
-import getCard from "../data/getCard.js";
-import cardView from "../views/lists/cardView.js";
-import showErrorResponse from "../configs/configs.js";
+import getCard from "../../data/cards/getCard.js";
+import cardView from "../../views/lists/cardView.js";
+import showErrorResponse from "../../configs/configs.js";
 
 async function cardDetailsHandler(mainContent, cardID) {
     try {

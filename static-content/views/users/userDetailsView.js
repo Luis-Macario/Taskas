@@ -1,6 +1,6 @@
 import {div, h1, li, ul} from "../../DSL/tags.js";
 
-function userDetailsView(mainContent,user){
+function UserDetailsView(mainContent, user){
     return  mainContent.replaceChildren(
         div({class: "card"},
         div({class: "card-header"},
@@ -17,4 +17,4 @@ function userDetailsView(mainContent,user){
     )
 }
 
-export  default userDetailsView
+export  default UserDetailsView

@@ -1,8 +1,11 @@
-import {API_BASE_URL, storeUser} from "../configs/configs.js";
+import UserLoginForm from "../../partials/users/UserLoginForm.js";
+import errorModal from "../../partials/errorModal.js";
+import {API_BASE_URL, storeUser} from "../../configs/configs.js";
 
-function loginUser() {
+export default function loginUser() {
     async function handleSubmit(event) {
         event.preventDefault()
+        const form = event.target
 
         const email = document.querySelector("#idEmail").value
         const password = document.querySelector("#idPassword").value
@@ -33,15 +36,16 @@ function loginUser() {
 
         const res = await fetch(API_BASE_URL + "users/login", options)
         const body = await res.json()
+
         if(res.status === 200) {
             storeUser(body)
             window.location.hash = "users/me"
         }
-        else {
-            throw body
+        else{
+            errorModal(form,body)
         }
-    }
-    return handleSubmit()
-}
 
-export default loginUser
+    }
+
+    return UserLoginForm(handleSubmit)
+}

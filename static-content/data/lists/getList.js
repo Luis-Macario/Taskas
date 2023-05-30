@@ -1,11 +1,11 @@
-import {API_BASE_URL, getStoredUser} from "../configs/configs.js";
+import {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 
 
-async function getCard(cardID) {
+async function getList(listID) {
     const user = getStoredUser()
     const token = user.token
 
-    const res = await fetch(API_BASE_URL + `cards/${cardID}`, {
+    const res = await fetch(API_BASE_URL + `lists/${listID}`, {
         headers: {
             "Authorization": "Bearer " + token
         }
@@ -18,4 +18,4 @@ async function getCard(cardID) {
     }
 }
 
-export default getCard
+export default getList

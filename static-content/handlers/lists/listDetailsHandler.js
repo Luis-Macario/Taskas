@@ -1,6 +1,6 @@
-import getList from "../data/getList.js";
-import listView from "../views/lists/listView.js";
-import showErrorResponse from "../configs/configs.js";
+import getList from "../../data/lists/getList.js";
+import listView from "../../views/lists/ListView.js";
+import showErrorResponse from "../../configs/configs.js";
 
 
 async function listDetailsHandler(mainContent, listID) {
