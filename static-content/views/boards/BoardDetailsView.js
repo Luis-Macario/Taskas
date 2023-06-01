@@ -1,6 +1,6 @@
 import {a, br, button, div, h1, p, table, td, th, tr} from "../../DSL/tags.js";
 
-function getBoardDetails(board) {
+function boardDetailsView(board) {
 
     function redirectToListCreation() {
         window.location.hash = `boards/${board.id}/lists/create`
@@ -46,4 +46,4 @@ function getBoardDetails(board) {
     )
 }
 
-export default getBoardDetails
+export default boardDetailsView

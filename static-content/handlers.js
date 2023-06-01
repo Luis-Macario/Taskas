@@ -14,6 +14,7 @@ import listDetailsHandler from "./handlers/lists/listDetailsHandler.js";
 import createCardHandler from "./handlers/cards/createCardHandler.js";
 import cardDetailsHandler from "./handlers/cards/cardDetailsHandler.js";
 import searchBoardHandler from "./handlers/boards/searchBoardHandler.js";
+import getUsersFromBoardHandler from "./handlers/boards/getUsersFromBoardHandler.js";
 
 export const handlers = {
     getHomeHandler,
@@ -21,16 +22,12 @@ export const handlers = {
     createUserHandler,
     loginUserHandler,
     userDetailsHandler,
-    //------ Wolfie 17
     searchBoardResultsHandler,
     createBoardHandler,
     getBoardsHandler,
     getBoardDetailsHandler,
     searchBoardHandler,
-    /*
     getUsersFromBoardHandler,
-    */
-    // ---------- RICHIE 95
     createListHandler,
     listDetailsHandler,
     createCardHandler,
@@ -38,11 +35,3 @@ export const handlers = {
 }
 
 export default handlers
-
-/*
-boardDetailsHandler(mainContent, id) {
-    const board = getBoardDetails(id)
-    const view = getBoardDetailsView()
-    mainContent.replaceChildren(view)
-}
-*/

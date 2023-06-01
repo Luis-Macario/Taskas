@@ -1,51 +1,37 @@
-import {a, div, h1, p, table, td, th, tr} from "../../DSL/tags.js";
+import {a, div, h1, h5, p} from "../../DSL/tags.js";
 
-import showErrorResponse, {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
+function boardsView(boards) {
 
-async function getBoards() {
+        const boardRows = [];
 
-    const user = getStoredUser()
-    const id = user.id
-    const token = user.token
-
-    const skip = 0
-    const limit = 10
-    const res = await fetch(API_BASE_URL + `users/${id}/boards?skip=${skip}&limit=${limit}`, {
-        headers: {
-            "Authorization": "Bearer " + token
-        }
-    })
-
-    if (res.status === 200) {
-        const boards = (await res.json()).boards
-        return div({class: "card"},
-            div({class: "card-header"},
-                h1({class: "card-title"}, "My Boards")
-            ),
-            div({class: "card-body"},
-                table({class: "table"},
-                    tr({class: "table-primary"},
-                        th({class: "text-center"}, "Boards")
-                    ),
-                    ...(boards.length > 0 ? boards.map(s => {
-                                return tr({},
-                                    td({class: "text-center"},
-                                        a({href: `#boards/${s.id}`}, s.name)
-                                    )
-                                )
-                            }) :
-                            [tr({class: "table-light"},
-                                td({class: "text-center"},
-                                    p({class: "text-muted mb-0"}, "You aren't a part of any board yet")
-                                )
-                            )]
+        for (let i = 0; i < boards.length; i += 3) {
+            const boardRow = [];
+            for (let j = i; j < i + 3 && j < boards.length; j++) {
+                const board = boards[j];
+                boardRow.push(
+                    div({ class: "card" },
+                        div({ class: "card-body" },
+                            h5({ class: "card-title" }, `${board.name}`),
+                            p({ class: "card-text" }, `${board.description}`),
+                            a({ class: "card-link btn btn-primary", href: `#boards/${board.id}` }, "Details")
+                        )
                     )
-                )
-            )
-        )
-    }
-    return showErrorResponse(await res.json())
+                );
+            }
+            boardRows.push(boardRow);
+        }
+
+        return div({ class: "card" },
+            div({ class: "card-header" },
+                h1({ class: "card-title" }, "My Boards")
+            ),
+                ...(boards.length > 0 ? boardRows.map((row) => {
+                    return div({ class: "card-group" }, ...row);
+                }) : [
+                    p({ class: "text-muted mb-0" }, "You aren't a part of any board yet")
+                ])
+        );
 }
 
-export default getBoards
+export default boardsView
 

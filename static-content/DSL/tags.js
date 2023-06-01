@@ -32,6 +32,22 @@ export function h2(options = {}, string) {
     return createElement("h2", options, string);
 }
 
+export function h3(options = {}, string) {
+    return createElement("h3", options, string);
+}
+
+export function h4(options = {}, string) {
+    return createElement("h4", options, string);
+}
+
+export function h5(options = {}, string) {
+    return createElement("h5", options, string);
+}
+
+export function h6(options = {}, string) {
+    return createElement("h6", options, string);
+}
+
 export function input(options = {}, ...elements) {
     return createElement("input", options, ...elements);
 }
