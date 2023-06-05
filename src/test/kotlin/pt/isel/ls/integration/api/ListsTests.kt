@@ -1,6 +1,34 @@
 package pt.isel.ls.integration.api
 
-/*
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import org.http4k.core.Method
+import org.http4k.core.Request
+import org.http4k.core.Status
+import pt.isel.ls.api.TasksWebApi
+import pt.isel.ls.api.dto.ErrorResponse
+import pt.isel.ls.api.dto.list.CreateListRequest
+import pt.isel.ls.api.dto.list.CreateListResponse
+import pt.isel.ls.api.dto.list.GetCardFromListResponse
+import pt.isel.ls.api.dto.list.ListDTO
+import pt.isel.ls.api.dto.list.toDTO
+import pt.isel.ls.api.routers.utils.exceptions.InvalidAuthHeaderException
+import pt.isel.ls.api.routers.utils.exceptions.InvalidBodyException
+import pt.isel.ls.api.routers.utils.exceptions.InvalidListIDException
+import pt.isel.ls.api.routers.utils.exceptions.NoAuthenticationException
+import pt.isel.ls.database.memory.BoardNotFoundException
+import pt.isel.ls.database.memory.ListNotFoundException
+import pt.isel.ls.database.memory.TaskListAlreadyExistsInBoardException
+import pt.isel.ls.database.memory.TasksDataMem
+import pt.isel.ls.domain.Board
+import pt.isel.ls.domain.TaskList
+import pt.isel.ls.domain.User
+import pt.isel.ls.services.TasksServices
+import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
+import pt.isel.ls.services.utils.exceptions.IllegalListAccessException
+import pt.isel.ls.services.utils.exceptions.InvalidTokenException
+import kotlin.test.*
+
 class ListsTests {
     private val database = TasksDataMem()
     private val services = TasksServices(database)
@@ -16,14 +44,15 @@ class ListsTests {
     private val boardName = "aName"
     private val boardDescription = "aDescription"
     private val listName = "aName"
+    private val password = "teste12345"
 
-    private val userA = User(database.createUser(tokenA, nameA, emailA,), nameA, emailA, tokenA)
+    private val userA = User(database.createUser(tokenA, nameA, emailA,password), nameA, emailA, tokenA)
     private val board =
         Board(database.createBoard(userA.id, boardName, boardDescription), boardName, boardDescription, listOf())
     private val list = TaskList(database.createList(board.id, listName), board.id, listName, false, listOf())
 
     init {
-        database.createUser(tokenB, nameB, emailB,)
+        database.createUser(tokenB, nameB, emailB, password)
     }
 
     @Test
@@ -466,4 +495,3 @@ class ListsTests {
         )
     }
 }
-*/

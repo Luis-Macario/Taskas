@@ -30,7 +30,7 @@ interface AppDatabase {
     fun checkListAlreadyExistsInBoard(name: String, bid: Int): Boolean
     // fun checkListExists(lid: Int): Boolean
 
-    fun createCard(lid: Int, name: String, description: String, initDate: Date, dueDate: Date): Card
+    fun createCard(lid: Int, name: String, description: String, initDate: Date, dueDate: Date): Int
     fun getCardsFromList(lid: Int, bid: Int): List<Card>
     fun getCardDetails(cid: Int): Card
     fun moveCard(cid: Int, lid: Int, cix: Int)

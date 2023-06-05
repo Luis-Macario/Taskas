@@ -33,7 +33,7 @@ class CardServices(private val database: AppDatabase) {
         description: String,
         initDate: String,
         dueDate: String? = null
-    ): Card {
+    ): Int {
         checkToken(token)
         checkCardCredentials(name, description, initDate, dueDate)
         val list = database.getListDetails(lid)

@@ -123,7 +123,6 @@ class TasksDataMem : AppDatabase {
      *
      * @return list of boards from that User
      */
-    // TODO("Should we throw the UsersBoardDoesNotExist ??")
     override fun getBoardsFromUser(uid: Int): List<SimpleBoard> =
         userBoard.values
             .filter { it.uId == uid }
@@ -206,14 +205,13 @@ class TasksDataMem : AppDatabase {
      *
      * @return the created Card()
      */
-    override fun createCard(lid: Int, name: String, description: String, initDate: Date, dueDate: Date): Card {
+    override fun createCard(lid: Int, name: String, description: String, initDate: Date, dueDate: Date): Int {
         if (cards.values.filter { it.lid == lid }.any { it.name == name }) throw CardNameAlreadyExistsException
         val id = cardId.also { cardId += 1 }
-        val initDate = Date(System.currentTimeMillis())
         val newCard = Card(id, getListDetails(lid).bid, lid, name, description, initDate, dueDate)
 
         cards[id] = newCard
-        return newCard
+        return newCard.id
     }
 
     /**
