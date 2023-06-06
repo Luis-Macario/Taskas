@@ -70,4 +70,3 @@ class ListTests {
         assertFalse { TaskList.validName("a".repeat(TaskList.MAX_NAME_LENGTH + 1)) }
     }
 }
-

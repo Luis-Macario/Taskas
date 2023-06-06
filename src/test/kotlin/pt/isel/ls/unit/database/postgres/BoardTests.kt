@@ -49,7 +49,7 @@ class BoardTests {
 
     @Test
     fun `create board throws SQLException when creating a board with a repeated name`() {
-       val user = db.createUser(tokenA, "Teste RFL", "a45554@alunos.isel.pt", passwordA)
+        val user = db.createUser(tokenA, "Teste RFL", "a45554@alunos.isel.pt", passwordA)
         db.createBoard(user, boardName, boardDescription)
 
         assertFailsWith<SQLException> {
@@ -69,7 +69,6 @@ class BoardTests {
             )
         }
     }
-
 
     @Test
     fun `getBoard returns correct Board() after being created`() {
@@ -122,6 +121,4 @@ class BoardTests {
         assertEquals(db.getBoardDetails(board3), boardList[2])
         assertEquals(db.getBoardDetails(board4), boardList[3])
     }
-
 }
-

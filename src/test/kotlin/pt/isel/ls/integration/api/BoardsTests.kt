@@ -28,7 +28,8 @@ import pt.isel.ls.domain.User
 import pt.isel.ls.services.TasksServices
 import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
 import pt.isel.ls.services.utils.exceptions.InvalidTokenException
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class BoardsTests {
     private val database = TasksDataMem()

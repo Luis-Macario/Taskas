@@ -19,6 +19,7 @@ class BoardServicesTests {
 
     private val userA = uServices.createUser("Test User", "test_user@isel.pt", "teste12345")
     private val userB = uServices.createUser("New Test User", "new_test_user@isel.pt", "teste12345")
+
     // createBoard
     @Test
     fun `Creating board with valid token, name and description should return the correct board`() {
@@ -88,7 +89,7 @@ class BoardServicesTests {
         val user0 = userA
         val user1 = userB
         val user2 = uServices.createUser("TestUser2", "test_user2@isel.pt", "teste12345")
-        val user3 = uServices.createUser("TestUser3", "test_user3@isel.pt","teste12345")
+        val user3 = uServices.createUser("TestUser3", "test_user3@isel.pt", "teste12345")
         val board = bServices.createBoard(user0.token, "TestProject", "TestDescription")
 
         bServices.addUserToBoard(user0.token, user1.id, board.id)
@@ -142,14 +143,14 @@ class BoardServicesTests {
 
         val allLists = bServices.getListsFromBoard(user.token, board.id)
 
-         assertEquals(
-             allLists,
-             listOf(
-                 SimpleList(list0.id, list0.bid, list0.name),
-                 SimpleList(list1.id, list1.bid, list1.name),
-                 SimpleList(list2.id, list2.bid, list2.name),
-             )
-         )
+        assertEquals(
+            allLists,
+            listOf(
+                SimpleList(list0.id, list0.bid, list0.name),
+                SimpleList(list1.id, list1.bid, list1.name),
+                SimpleList(list2.id, list2.bid, list2.name)
+            )
+        )
     }
 
     @Test
@@ -166,4 +167,3 @@ class BoardServicesTests {
         }
     }
 }
-

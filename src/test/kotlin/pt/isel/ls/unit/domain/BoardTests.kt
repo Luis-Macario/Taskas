@@ -64,4 +64,3 @@ class BoardTests {
         assertFalse { Board.validName("a".repeat(Board.MAX_NAME_LENGTH + 1)) }
     }
 }
-

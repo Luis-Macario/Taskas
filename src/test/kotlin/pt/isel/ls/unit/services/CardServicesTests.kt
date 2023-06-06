@@ -62,7 +62,7 @@ class CardServicesTests {
         val user = userA
         val board = bServices.createBoard(user.token, "TestProject", "TestDescription")
         val list = lServices.createList(user.token, board.id, "TestList")
-        val card = cServices.createCard(user.token, list.id, "TestCard", "TestDescription","2023-04-23","2023-05-23")
+        val card = cServices.createCard(user.token, list.id, "TestCard", "TestDescription", "2023-04-23", "2023-05-23")
 
         assertEquals(cServices.getCardDetails(user.token, card).id, card)
     }
@@ -73,7 +73,7 @@ class CardServicesTests {
         val userWithNoAccess = userB
         val board = bServices.createBoard(user.token, "TestProject", "TestDescription")
         val list = lServices.createList(user.token, board.id, "TestList")
-        val card = cServices.createCard(user.token, list.id, "TestCard", "TestDescription", "2023-04-23","2023-05-23")
+        val card = cServices.createCard(user.token, list.id, "TestCard", "TestDescription", "2023-04-23", "2023-05-23")
 
         assertFailsWith<IllegalCardAccessException> {
             cServices.getCardDetails(
@@ -91,7 +91,7 @@ class CardServicesTests {
         val list0 = lServices.createList(user.token, board.id, "TestList0")
         val list1 = lServices.createList(user.token, board.id, "TestList1")
 
-        val card = cServices.createCard(user.token, list0.id, "TestList0", "TestList0", "2023-04-23","2023-05-23")
+        val card = cServices.createCard(user.token, list0.id, "TestList0", "TestList0", "2023-04-23", "2023-05-23")
 
         assertEquals(cServices.getCardDetails(user.token, card), lServices.getCardsFromList(user.token, list0.id)[0])
         assertEquals(lServices.getCardsFromList(user.token, list1.id), emptyList<Card>())
@@ -110,13 +110,13 @@ class CardServicesTests {
         val list0 = lServices.createList(user.token, board.id, "TestList0")
         val list1 = lServices.createList(user.token, board.id, "TestList1")
 
-        val card = cServices.createCard(user.token, list0.id, "TestList0", "TestList0", "2023-04-23","2023-05-23")
+        val card = cServices.createCard(user.token, list0.id, "TestList0", "TestList0", "2023-04-23", "2023-05-23")
 
         assertFailsWith<IllegalCardAccessException> {
             cServices.moveCard(
                 userWithNoAccess.token,
                 card,
-                MoveCardRequest(list1.id,0)
+                MoveCardRequest(list1.id, 0)
             )
         }
     }
@@ -129,7 +129,7 @@ class CardServicesTests {
         val list0 = lServices.createList(user.token, board0.id, "TestList0")
         val list1 = lServices.createList(user.token, board1.id, "TestList0")
 
-        val card = cServices.createCard(user.token, list0.id, "TestList0", "TestList0", "2023-04-23","2023-05-23")
+        val card = cServices.createCard(user.token, list0.id, "TestList0", "TestList0", "2023-04-23", "2023-05-23")
 
         assertFailsWith<IllegalMoveCardRequestException> {
             cServices.moveCard(

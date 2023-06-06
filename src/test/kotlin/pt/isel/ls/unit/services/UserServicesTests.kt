@@ -16,8 +16,9 @@ class UserServicesTests {
     private val bServices = BoardServices(database)
 
     private val userA = services.createUser("Francisco Medeiros", "RotulaDoChines@isel.pt", "teste12345")
-    private val userB = services.createUser("Luis Macário", "HonorStudent@isel.pt","teste12345")
+    private val userB = services.createUser("Luis Macário", "HonorStudent@isel.pt", "teste12345")
     private val userC = services.createUser("Ricardo Pinto", "MegaTwix@isel.pt", "teste12345")
+
     // Create new User
     @Test
     fun `Should be able to get student from id after creation`() {
@@ -58,8 +59,8 @@ class UserServicesTests {
 
         val boards = services.getBoardsFromUser(user.token, user.id)
 
-         assertEquals(SimpleBoard(0, "Projetao", "Mini descriçao"), boards[0])
-         assertEquals(SimpleBoard(1, "Projetinho", "Mega descriçao"), boards[1])
+        assertEquals(SimpleBoard(0, "Projetao", "Mini descriçao"), boards[0])
+        assertEquals(SimpleBoard(1, "Projetinho", "Mega descriçao"), boards[1])
     }
 
     @Test
@@ -70,4 +71,3 @@ class UserServicesTests {
         assertFailsWith<IllegalUserAccessException> { services.getBoardsFromUser(invalidToken, user.id) }
     }
 }
-

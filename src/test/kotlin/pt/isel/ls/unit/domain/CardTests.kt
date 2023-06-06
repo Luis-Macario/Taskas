@@ -89,4 +89,3 @@ class CardTests {
         assertFalse { Card.validName("a".repeat(Card.MAX_NAME_LENGTH + 1)) }
     }
 }
-

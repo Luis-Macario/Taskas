@@ -101,7 +101,6 @@ class CardTests {
         assertEquals(4, moveToList.size)
     }
 
-
     @Test
     fun `deleteCard should delete the list given the id`() {
         val user: Int = db.createUser(tokenA, "Teste RFL", "a12346@alunos.isel.pt", passwordA)
@@ -116,4 +115,3 @@ class CardTests {
         }
     }
 }
-

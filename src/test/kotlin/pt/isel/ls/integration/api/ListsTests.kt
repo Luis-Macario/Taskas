@@ -27,7 +27,8 @@ import pt.isel.ls.services.TasksServices
 import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
 import pt.isel.ls.services.utils.exceptions.IllegalListAccessException
 import pt.isel.ls.services.utils.exceptions.InvalidTokenException
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class ListsTests {
     private val database = TasksDataMem()
@@ -46,7 +47,7 @@ class ListsTests {
     private val listName = "aName"
     private val password = "teste12345"
 
-    private val userA = User(database.createUser(tokenA, nameA, emailA,password), nameA, emailA, tokenA)
+    private val userA = User(database.createUser(tokenA, nameA, emailA, password), nameA, emailA, tokenA)
     private val board =
         Board(database.createBoard(userA.id, boardName, boardDescription), boardName, boardDescription, listOf())
     private val list = TaskList(database.createList(board.id, listName), board.id, listName, false, listOf())

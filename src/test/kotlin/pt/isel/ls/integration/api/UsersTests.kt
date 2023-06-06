@@ -23,8 +23,8 @@ import pt.isel.ls.domain.User
 import pt.isel.ls.services.TasksServices
 import pt.isel.ls.services.utils.exceptions.IllegalUserAccessException
 import pt.isel.ls.services.utils.exceptions.InvalidTokenException
-import kotlin.test.*
-
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class UsersTests {
     private val database = TasksDataMem()
@@ -44,7 +44,7 @@ class UsersTests {
     private val userA: User = User(database.createUser(tokenA, nameA, emailA, passwordA), nameA, emailA, tokenA)
 
     init {
-        database.createUser(tokenB, nameB, emailB,passwordB)
+        database.createUser(tokenB, nameB, emailB, passwordB)
     }
 
     @Test

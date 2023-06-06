@@ -27,7 +27,6 @@ class UserTests {
         dropTableAndAddData(dataSource)
     }
 
-
     @Test
     fun `createUser creates User successfully`() {
         val newUser = db.createUser(tokenA, nameA, emailA, passwordA)
@@ -130,4 +129,3 @@ class UserTests {
         )
     }
 }
-

@@ -57,7 +57,6 @@ class BoardTests {
         assertEquals("A user with that id does not exist", msg.description)
     }
 
-
     @Test
     fun `test get board details`() {
         val donkeyUser = userA
@@ -74,7 +73,6 @@ class BoardTests {
         assertEquals(mem.userBoard[0]?.bId, board)
     }
 
-
     @Test
     fun `test get board details throws BoardNotFoundException`() {
         val msg = assertFailsWith<BoardNotFoundException> {
@@ -82,7 +80,6 @@ class BoardTests {
         }
         assertEquals("The board with the id provided doesn't exist", msg.description)
     }
-
 
     @Test
     fun `test get user available boards`() {
@@ -115,6 +112,4 @@ class BoardTests {
         }
         assertEquals("The board with the id provided doesn't exist", msg.description)
     }
-
 }
-

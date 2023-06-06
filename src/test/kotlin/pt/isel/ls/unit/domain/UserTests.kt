@@ -96,4 +96,3 @@ class UserTests {
         assertFalse { User.validEmail("abc@") }
     }
 }
-

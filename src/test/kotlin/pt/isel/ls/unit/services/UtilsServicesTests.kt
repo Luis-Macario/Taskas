@@ -1,6 +1,5 @@
 package pt.isel.ls.unit.services
-/*
-import org.junit.Test
+
 import pt.isel.ls.services.utils.MAX_DESCRIPTION_LENGTH
 import pt.isel.ls.services.utils.MIN_DESCRIPTION_LENGTH
 import pt.isel.ls.services.utils.checkToken
@@ -8,6 +7,7 @@ import pt.isel.ls.services.utils.exceptions.InvalidTokenException
 import pt.isel.ls.services.utils.validDescription
 import pt.isel.ls.services.utils.validId
 import kotlin.random.Random
+import kotlin.test.Test
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -43,4 +43,3 @@ class UtilsServicesTests {
         assertFailsWith<InvalidTokenException> { checkToken("aaaa") }
     }
 }
-*/

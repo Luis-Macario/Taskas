@@ -60,7 +60,7 @@ class CardsRoutes(private val services: CardServices) {
             val cardResponse = CreateCardResponse(card)
             println(cardResponse)
             Response(CREATED)
-                .header("Location", "/cards/${card}")
+                .header("Location", "/cards/$card")
                 .json(cardResponse)
         }
 

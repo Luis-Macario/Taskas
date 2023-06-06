@@ -27,7 +27,6 @@ import pt.isel.ls.services.utils.exceptions.IllegalMoveCardRequestException
 import pt.isel.ls.services.utils.exceptions.InvalidTokenException
 import java.sql.Date
 import kotlin.test.Test
-
 import kotlin.test.assertEquals
 
 class CardsTests {
@@ -50,7 +49,11 @@ class CardsTests {
     private val listB = database.createList(boardA, "anotherList")
     private val listC = database.createList(boardB, "anotherList")
     private val cardA = database.createCard(
-        listA, "aCard", "aDescription", Date(System.currentTimeMillis() + 1000), Date.valueOf(
+        listA,
+        "aCard",
+        "aDescription",
+        Date(System.currentTimeMillis() + 1000),
+        Date.valueOf(
             MAX_DATE
         )
     )
@@ -239,8 +242,13 @@ class CardsTests {
         assertEquals("application/json", response.header("content-type"))
         val cardResponse = Json.decodeFromString<CardDTO>(response.bodyString())
         val card = CardDTO(
-            cardA, "aCard", "aDescription", Date(System.currentTimeMillis() + 1000).toString(),
-            Date.valueOf(MAX_DATE).toString(), listA, boardA
+            cardA,
+            "aCard",
+            "aDescription",
+            Date(System.currentTimeMillis() + 1000).toString(),
+            Date.valueOf(MAX_DATE).toString(),
+            listA,
+            boardA
         )
         assertEquals(card, cardResponse)
     }

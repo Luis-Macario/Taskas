@@ -26,7 +26,6 @@ class ListTests {
         dropTableAndAddData(dataSource)
     }
 
-
     @Test
     fun `createList creates a new list with the given the name and board id`() {
         val name = "To Do Week 10"
@@ -87,7 +86,6 @@ class ListTests {
         assertEquals(emptyList(), sut)
     }
 
-
     @Test
     fun `getListDetails return correct list details`() {
         val user: Int = db.createUser(tokenA, "Teste RFL", "a12346@alunos.isel.pt", passwordA)
@@ -113,8 +111,6 @@ class ListTests {
         assertEquals(ListNotFoundException.description, msg.description)
     }
 
-
-
     @Test
     fun `deleteList should throw SQLException if given non-existent id`() {
         val db = TasksDataPostgres(url)
@@ -123,4 +119,3 @@ class ListTests {
         }
     }
 }
-

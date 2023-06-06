@@ -23,7 +23,6 @@ class ListServicesTest {
     private val userA = uServices.createUser("Test User", "test_user@isel.pt", "teste12345")
     private val userB = uServices.createUser("New Test User", "new_test_user@isel.pt", "teste12345")
 
-
     // createList
     @Test
     fun `Creating list with valid token should return the board`() {
@@ -32,7 +31,8 @@ class ListServicesTest {
         val list = lServices.createList(user.token, board.id, "TestList")
 
         assertEquals(
-            bServices.getListsFromBoard(user.token, board.id)[0], SimpleList(list.id, board.id, "TestList")
+            bServices.getListsFromBoard(user.token, board.id)[0],
+            SimpleList(list.id, board.id, "TestList")
         )
     }
 
@@ -82,18 +82,18 @@ class ListServicesTest {
         val board = bServices.createBoard(user.token, "TestProject", "TestDescription")
         val list = lServices.createList(user.token, board.id, "TestList")
 
-        val card0 = cServices.createCard(user.token, list.id, "TestLis0", "TestList0", "2023-04-23","2023-05-23")
-        val card1 = cServices.createCard(user.token, list.id, "TestList1", "TestList1", "2023-04-23","2023-05-23")
-        val card2 = cServices.createCard(user.token, list.id, "TestList2", "TestList2", "2023-04-23","2023-05-23")
+        val card0 = cServices.createCard(user.token, list.id, "TestLis0", "TestList0", "2023-04-23", "2023-05-23")
+        val card1 = cServices.createCard(user.token, list.id, "TestList1", "TestList1", "2023-04-23", "2023-05-23")
+        val card2 = cServices.createCard(user.token, list.id, "TestList2", "TestList2", "2023-04-23", "2023-05-23")
 
         val cards = lServices.getCardsFromList(user.token, list.id)
 
         assertEquals(
             cards,
             listOf(
-                cServices.getCardDetails(user.token,card0),
-                cServices.getCardDetails(user.token,card1),
-                cServices.getCardDetails(user.token,card2)
+                cServices.getCardDetails(user.token, card0),
+                cServices.getCardDetails(user.token, card1),
+                cServices.getCardDetails(user.token, card2)
             )
         )
         assertEquals(cards, database.cards.values.toList())
@@ -114,4 +114,3 @@ class ListServicesTest {
         }
     }
 }
-

@@ -24,7 +24,6 @@ class UserTests {
         assertEquals(mem.users[0]?.email, email)
     }
 
-
     @Test
     fun `test create user`() {
         val sut = mem.createUser(token, name, email, password)
@@ -34,7 +33,6 @@ class UserTests {
         assertEquals(mem.users[0]?.id, sut)
         assertEquals(mem.users[0]?.token, token)
     }
-
 
     @Test
     fun `test get user details`() {
@@ -52,5 +50,4 @@ class UserTests {
 
         assertFailsWith<UserNotFoundException> { mem.getUserDetails(10) }
     }
-
 }

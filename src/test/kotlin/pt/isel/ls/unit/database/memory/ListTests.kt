@@ -12,7 +12,7 @@ class ListTests {
     private val tokenA = "7d444840-9dc0-11d1-b245-5ffdce74fad1"
     private val passwordA = "132513E5601D28F9DBDEBD2590514E171FEFEC9A6BE60417D79B8D626077C3FB"
     private val userA: Int = mem.createUser(tokenA, "Teste RFL", "a46631@alunos.isel.pt", passwordA)
-    private val boardA : Int = mem.createBoard(userA, "To Do".repeat(4), "ISEL project")
+    private val boardA: Int = mem.createBoard(userA, "To Do".repeat(4), "ISEL project")
 
     @Test
     fun `test create taskList successfully`() {
@@ -38,13 +38,11 @@ class ListTests {
 
     @Test
     fun `test get taskList details throws ListNotFoundException`() {
-
         val msg = assertFailsWith<ListNotFoundException> {
             mem.getListDetails(0)
         }
         assertEquals("The list with the id provided doesn't exist", msg.description)
     }
-
 
     @Test
     fun `test getListsFromBoard giving the correct id`() {
@@ -70,4 +68,3 @@ class ListTests {
         assertEquals("The board with the id provided doesn't exist", msg.description)
     }
 }
-
