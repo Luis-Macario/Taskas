@@ -37,7 +37,7 @@ export function navBar(navContent) {
             :
             [div({class: "nav ms-auto me-5"},
                 a({href: "#users/login", class: "nav-item nav-link"}, "Login"),
-                a({href: "#users/create", class: "nav-item nav-link"}, "Sign Up"),
+                a({href: "#users/signup", class: "nav-item nav-link"}, "Sign Up"),
             )]
 
     const modal = Modal(navContent,

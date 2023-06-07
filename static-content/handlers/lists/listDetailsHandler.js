@@ -7,7 +7,7 @@ async function listDetailsHandler(mainContent, listID) {
     try {
         const list = await getList(listID)
         listView(mainContent, list)
-    } catch(e) {
+    } catch (e) {
         showErrorResponse(mainContent, e)
     }
 }

@@ -1,6 +1,6 @@
 import {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 
-export default async function getBoard(id){
+export default async function getBoard(id) {
 
     getStoredUser()
 
@@ -13,7 +13,7 @@ export default async function getBoard(id){
         }
     })
 
-    if(res.status === 200){
+    if (res.status === 200) {
         return await res.json()
     }
     throw res

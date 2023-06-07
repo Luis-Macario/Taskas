@@ -8,7 +8,7 @@ function getHome() {
             )
         ),
         div({class: "card-body row align-items-center"},
-            p({},"Developed for software laboratory course @ ISEL"),
+            p({}, "Developed for software laboratory course @ ISEL"),
         )
     )
 }

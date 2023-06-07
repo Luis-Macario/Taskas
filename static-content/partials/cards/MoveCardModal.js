@@ -44,7 +44,10 @@ function MoveCardModal(mainContent, closeButton, boardID, cardID, listID) {
                         } else {
                             let idx = 0
                             cards.forEach(card => {
-                                const cardItem = button({class: "dropdown-item","data-idx": idx}, `${card.name}  (${idx})`)
+                                const cardItem = button({
+                                    class: "dropdown-item",
+                                    "data-idx": idx
+                                }, `${card.name}  (${idx})`)
                                 cardItem.addEventListener("click", () => {
                                     selectedIdx = parseInt(cardItem.dataset.idx)
                                     buttonDropDownIdx.textContent = selectedIdx//cardItem.textContent

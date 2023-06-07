@@ -1,17 +1,12 @@
+export default function searchBoard(event, selectedParameter) {
+    event.preventDefault()
+    const inputValue = document.querySelector("#parameterValue").value
 
-export default function searchBoard(selectedParameter){
-    function handleSubmit(event) {
-        event.preventDefault()
-        const inputValue = document.querySelector("#parameterValue").value
-
-        switch (selectedParameter) {
-            case 'Name':
-                window.location.hash = `users/boards/search/${inputValue}`
-                break
-            default:
-                alert("Invalid Parameter")
-        }
+    switch (selectedParameter) {
+        case 'Name':
+            window.location.hash = `users/boards/search/${inputValue}`
+            break
+        default:
+            alert("Invalid Parameter")
     }
-
-    return handleSubmit
 }

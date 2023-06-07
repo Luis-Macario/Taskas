@@ -1,7 +1,7 @@
 import {br, button, div, form, input, span} from "../../DSL/tags.js";
 
-function UserCreateForm(handler) {
-    return form({ onSubmit:handler},
+function UserSignupForm(handler) {
+    return form({onSubmit: handler},
         br(),
         div({class: "input-group mb-3"},
             div({class: "input-group-prepend", style: "float:left; width:100px"},
@@ -41,4 +41,4 @@ function UserCreateForm(handler) {
     )
 }
 
-export default UserCreateForm
+export default UserSignupForm

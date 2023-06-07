@@ -24,8 +24,8 @@ function cardView(mainContent, card) {
             ),
             div({class: "card-body"},
                 div({class: "btn-group"},
-                    a({class:"btn btn-secondary", href:`#lists/${card.listID}`}, "Return to list"),
-                    a({class:"btn btn-secondary", href:`#boards/${card.boardID}`}, "Return to board")
+                    a({class: "btn btn-secondary", href: `#lists/${card.listID}`}, "Return to list"),
+                    a({class: "btn btn-secondary", href: `#boards/${card.boardID}`}, "Return to board")
                 ),
                 h1({}, "Card Info"),
                 ul({},

@@ -1,6 +1,6 @@
 import {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 
-function createCard(listID) {
+function createCard(listID, today) {
     function handleSubmit(event) {
         event.preventDefault()
 
@@ -9,7 +9,12 @@ function createCard(listID) {
         const initDate = document.querySelector("#idInitDate").value
         const dueDate = document.querySelector("#idDueDate").value
 
-        if(initDate >= dueDate){
+        if (initDate < today) {
+            alert("Init Date cannot be lower than current day")
+            return
+        }
+
+        if (initDate >= dueDate) {
             alert("Due Date can't happen before, or be equal to, Init Date")
             return
         }

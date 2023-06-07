@@ -1,6 +1,6 @@
 import {br, button, div, form, h1, input, span} from "../../DSL/tags.js";
 
-function UserLoginForm(handler){
+function UserLoginForm(handler) {
     console.log("UserLoginForm")
     return div({},
         div({class: "card"},
@@ -8,7 +8,7 @@ function UserLoginForm(handler){
                 h1({class: "card-title"}, "Login User")
             ),
             div({class: "card-body w-50 center"},
-                form({onSubmit:handler},
+                form({onSubmit: handler},
                     br(),
                     div({class: "input-group mb-3"},
                         div({class: "input-group-prepend", style: "float:left; width:100px"},

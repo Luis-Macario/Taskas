@@ -1,8 +1,11 @@
-import {API_BASE_URL} from "../../configs/configs.js";
+import {API_BASE_URL, storeUser} from "../../configs/configs.js";
+import errorModal from "../../partials/errorModal.js";
+import UserSignupForm from "../../partials/users/UserSignupForm.js";
 
-/*function createUser() {
-    function handleSubmit(event) {
+export default function userSignup() {
+    async function handleSignup(event) {
         event.preventDefault()
+        const form = event.target
 
         const username = document.querySelector("#idName").value
         const email = document.querySelector("#idEmail").value
@@ -35,15 +38,18 @@ import {API_BASE_URL} from "../../configs/configs.js";
                 password: password
             })
         }
-        fetch(API_BASE_URL + "users/", options)
-            .then(res => res.json())
-            .then(user => {
-                console.log(user)
-                window.location.hash = "users/me"
-            })
+
+        const res = await fetch(API_BASE_URL + "users/", options)
+        const body = await res.json()
+
+        if (res.status === 201) {
+            //console.log(body)
+            storeUser(body)
+            window.location.hash = "users/me"
+        } else {
+            errorModal(form, body)
+        }
     }
 
-    return handleSubmit()
+    return UserSignupForm(handleSignup)
 }
-
-export default createUser*/

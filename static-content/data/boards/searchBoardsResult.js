@@ -1,11 +1,10 @@
-import showErrorResponse, {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
+import {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 
-export default async function searchBoardsResult(query){
+export default async function searchBoardsResult(query) {
     const user = getStoredUser()
     const id = user.id
     const token = user.token
 
-    let idx = 0
 
     const options = {
         method: "GET",
@@ -42,6 +41,5 @@ export default async function searchBoardsResult(query){
         }
         return
     }
-    console.log(res)
-    showErrorResponse(mainContent, await res.json())
+    throw body
 }

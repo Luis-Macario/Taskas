@@ -1,5 +1,6 @@
 import {a, div, h1, li} from "../../DSL/tags.js";
-function usersFromBoardView(users,id) {
+
+function usersFromBoardView(users, id) {
 
     return div({class: "card"},
         div({class: "card-header"},

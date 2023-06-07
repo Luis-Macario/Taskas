@@ -1,7 +1,6 @@
-
-function createElement(tagName, options= {}, ...contents) {
+function createElement(tagName, options = {}, ...contents) {
     const element = document.createElement(tagName)
-    setAttributes(element,options)
+    setAttributes(element, options)
     contents.forEach(item => {
         const content = (typeof item === "string") ? document.createTextNode(item) : item
         element.appendChild(content)
@@ -13,7 +12,7 @@ function setAttributes(element, options) {
     for (const option in options) {
         if (options[option] == null) continue;
         const val = options[option];
-        if(val === null) continue
+        if (val === null) continue
 
         switch (option) {
             case "onClick":

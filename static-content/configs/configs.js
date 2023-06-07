@@ -5,11 +5,11 @@ export const API_BASE_URL = window.location.protocol + '//' + window.location.ho
 
 //TODO stashing this here until I decide where to put it
 function showErrorResponse(error) {
-    console.log(error)
+    console.log("Show error message:" + error)
     return div({},
-            h1({}, `${error.code} ${error.name}`),
-            p({}, `${error.description}`)
-        )
+        h1({}, `${error.code} ${error.name}`),
+        p({}, `${error.description}`)
+    )
 }
 
 export function getStoredUser() {

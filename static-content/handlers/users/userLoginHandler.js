@@ -10,4 +10,4 @@ async function userLoginHandler(mainContent) {
     }
 }
 
-export  default userLoginHandler
+export default userLoginHandler

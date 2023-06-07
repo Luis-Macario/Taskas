@@ -37,12 +37,11 @@ export default function loginUser() {
         const res = await fetch(API_BASE_URL + "users/login", options)
         const body = await res.json()
 
-        if(res.status === 200) {
+        if (res.status === 200) {
             storeUser(body)
             window.location.hash = "users/me"
-        }
-        else{
-            errorModal(form,body)
+        } else {
+            errorModal(form, body)
         }
 
     }

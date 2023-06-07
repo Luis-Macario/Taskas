@@ -84,7 +84,7 @@ The TasksDataPostgres class, an implementation of the AppDatabase interface that
 
 The TasksDataMem class, an implementation of the AppDatabase interface that interacts with a in-memory data to perform create, read and update operations.
 
-These classes have various methods that perform different operations such as createUser, getUserDetails, getUsersFromBoard, createBoard, getBoardDetails, addUserToBoard, getBoardsFromUser, etc...
+These classes have various methods that perform different operations such as userSignup, getUserDetails, getUsersFromBoard, createBoard, getBoardDetails, addUserToBoard, getBoardsFromUser, etc...
 
 ### Error Handling/Processing
 
