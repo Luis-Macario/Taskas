@@ -4,11 +4,10 @@ import showErrorResponse from "../../configs/configs.js";
 
 export default function searchBoardHandler(mainContent) {
 
-    try{
-        const searchFunction= searchBoard(selectedParameter)
-        const view = searchBoardView(searchFunction, changeParameter)
+    try {
+        const view = searchBoardView(searchBoard)
         mainContent.replaceChildren(view)
-    }catch (error){
+    } catch (error) {
         showErrorResponse(error)
     }
 }

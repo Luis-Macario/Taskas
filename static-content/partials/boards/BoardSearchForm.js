@@ -38,7 +38,7 @@ export default function boardSearchForm(submitHandler) {
             )
         ),
         br(),
-        button({type: "submit", class: "btn btn-primary w-100 btn-lg", onSubmit:submitHandler}, "Search")
+        button({type: "submit", class: "btn btn-primary w-100 btn-lg"}, "Search")
     )
 
     function changeParameter() {

@@ -16,30 +16,10 @@ export default async function searchBoardsResult(query) {
     }
 
     const res = await fetch(API_BASE_URL + `users/${id}/boards/search?search_query=${query}`, options)
-    const boards = (await res.json()).boards
-
-    function getNextBoard(){
-        idx++
-        idx = (idx > boards.length - 1) ? 0 : idx
-        showBoard(boards)
-    }
-
-    function getPreviousBoard(){
-        idx--
-        idx = (idx < 0) ? boards.length - 1 : idx
-        showBoard(boards)
-    }
+    const body = (await res.json())
 
     if (res.status === 200) {
-        idx = 0
-        if (boards.length === 0) {
-            showNoBoards()
-        } else {
-            showBoard(boards,
-
-            )
-        }
-        return
+        return body.boards
     }
     throw body
 }
