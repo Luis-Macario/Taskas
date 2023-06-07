@@ -6,46 +6,50 @@ window.addEventListener('load', loadHandler)
 window.addEventListener('hashchange', hashChangeHandler)
 
 function loadHandler() {
-    router.addRouteHandler("", handlers.getHomeHandler)
-    router.addRouteHandler("users/me", handlers.userDetailsHandler)
-    router.addRouteHandler("users/signup", handlers.createUserHandler)
-    router.addRouteHandler("users/login", handlers.loginUserHandler)
-    router.addRouteHandler("users/boards/search", handlers.searchBoardHandler)
-    router.addRouteHandler("users/boards/search/{query}", handlers.searchBoardResultsHandler)
-    router.addRouteHandler("users/boards/create", handlers.createBoardHandler)
-    router.addRouteHandler("users/boards", handlers.getBoardsHandler)
-    router.addRouteHandler("boards/{id}", handlers.getBoardDetailsHandler)
-    router.addRouteHandler("boards/{id}/users", handlers.getUsersFromBoardHandler)
-    router.addRouteHandler("boards/{id}/lists/create", handlers.createListHandler)
-    router.addRouteHandler("lists/{id}", handlers.listDetailsHandler)
-    router.addRouteHandler("lists/{id}/cards/create", handlers.createCardHandler)
-    router.addRouteHandler("cards/{id}", handlers.cardDetailsHandler)
-    router.addDefaultNotFoundRouteHandler(handlers.getNotFoundHandler)
+    router.addRouteHandler("", {handler: handlers.getHomeHandler, receives: {mainContent: {},}})
+    router.addRouteHandler("users/me", {handler: handlers.userDetailsHandler, receives: {mainContent: {},}})
+    router.addRouteHandler("users/signup", {handler: handlers.createUserHandler, receives: {mainContent: {},}})
+    router.addRouteHandler("users/login", {handler: handlers.loginUserHandler, receives: {mainContent: {},}})
+    router.addRouteHandler("users/boards/search", {handler: handlers.searchBoardHandler, receives: {mainContent: {},}})
+    router.addRouteHandler("users/boards/search/{query}", {handler: handlers.searchBoardResultsHandler, receives: {mainContent: {}, query: {index: 3}}})
+    router.addRouteHandler("users/boards/create", {handler: handlers.createBoardHandler, receives: {mainContent: {},}})
+    router.addRouteHandler("users/boards", {handler: handlers.getBoardsHandler, receives: {mainContent: {},}})
+    router.addRouteHandler("boards/{id}", {handler: handlers.getBoardDetailsHandler, receives: {mainContent: {},id: {index: 1}}})
+    router.addRouteHandler("boards/{id}/users", {handler: handlers.getUsersFromBoardHandler, receives: {mainContent: {},id: {index: 1}}})
+    router.addRouteHandler("boards/{id}/lists/create", {handler: handlers.createListHandler, receives: {mainContent: {},id: {index: 1}}})
+    router.addRouteHandler("lists/{id}", {handler: handlers.listDetailsHandler, receives: {mainContent: {},id: {index: 1}}})
+    router.addRouteHandler("lists/{id}/cards/create", {handler: handlers.createCardHandler, receives: {mainContent: {},id: {index: 1}}})
+    router.addRouteHandler("cards/{id}", {handler: handlers.cardDetailsHandler, receives: {mainContent: {},id: {index: 1}}})
+    router.addDefaultNotFoundRouteHandler({handler: handlers.getNotFoundHandler, receives: {}})
 
     hashChangeHandler()
 }
 
 function hashChangeHandler() {
-    console.log("HASH HAS CHANGED")
     const mainContent = document.getElementById("mainContent")
     let path = window.location.hash.replace("#", "")
 
-    const idStr = path.split("/")
-    const id = (idStr.length < 2) ? null : Number(idStr[1])
-    const isSearch = (idStr.length < 3) ? false : (idStr[2] === "search")
-    const query = (idStr.length < 4) ? null : idStr[3]
-    //const query = idStr.find()
+    const pathTokens = path.split("/")
 
-    console.log(`>> ${query}`)
+    const handlerObj = router.getRouteHandler(pathTokens)
 
-    path = (id !== null && !isNaN(id)) ? path.replace(RegExp("\/[0-9]+"), "/{id}") : path
-    if (isSearch && query !== null) path = path.replace(RegExp(`/${query}\$`), "/{query}")
+    const args = []
 
-    console.log(`>> ${id}`)
-    console.log(`FINAL PATH >> ${path}`)
+    if(handlerObj.receives.mainContent) {
+        args.push(mainContent)
+    }
 
-    const handler = router.getRouteHandler(path)
+    if(handlerObj.receives.id) {
+        args.push(pathTokens[handlerObj.receives.id.index])
+    }
+
+    if(handlerObj.receives.query) {
+        args.push(pathTokens[handlerObj.receives.query.index])
+    }
+
     const navContent = document.getElementById("navContent")
     navBar(navContent)
-    handler(mainContent, id, query)
+
+    const handler = handlerObj.handler
+    handler(...args)
 }

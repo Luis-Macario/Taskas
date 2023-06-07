@@ -4,7 +4,7 @@ import showErrorResponse from "../../configs/configs.js";
 import currentBoardView from "../../partials/boards/CurrentBoardView.js";
 import noBoardsView from "../../partials/boards/NoBoardView.js";
 
-export default async function searchBoardResultsHandler(mainContent, _, query) {
+export default async function searchBoardResultsHandler(mainContent, query) {
     let idx = 0
     let boards = null
     let boardCard = null
