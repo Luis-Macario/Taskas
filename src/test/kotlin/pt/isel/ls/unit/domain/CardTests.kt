@@ -1,6 +1,6 @@
 package pt.isel.ls.unit.domain
-/*
-import org.junit.Test
+
+import org.junit.jupiter.api.Test
 import pt.isel.ls.domain.Card
 import pt.isel.ls.services.utils.MAX_DATE
 import java.sql.Date
@@ -39,13 +39,13 @@ class CardTests {
         assertEquals("Invalid board id: -2", ex.message)
     }
 
-    /*@Test
+    @Test
     fun `Creating a card with an invalid lid throws IllegalArgumentException`() {
         val ex = assertFailsWith<IllegalArgumentException> {
             Card(1, 2, -3, "Finish Domain Tests", initDate = Date.valueOf("1111-1-1"))
         }
         assertEquals("Invalid list id: -3", ex.message)
-    }*/
+    }
 
     @Test
     fun `Creating a card with an invalid name throws IllegalArgumentException`() {
@@ -89,4 +89,3 @@ class CardTests {
         assertFalse { Card.validName("a".repeat(Card.MAX_NAME_LENGTH + 1)) }
     }
 }
-*/

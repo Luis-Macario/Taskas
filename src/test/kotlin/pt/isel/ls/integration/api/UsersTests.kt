@@ -1,6 +1,31 @@
 package pt.isel.ls.integration.api
 
-/*
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import org.http4k.core.Method
+import org.http4k.core.Request
+import org.http4k.core.Status
+import pt.isel.ls.api.TasksWebApi
+import pt.isel.ls.api.dto.ErrorResponse
+import pt.isel.ls.api.dto.user.CreateUserRequest
+import pt.isel.ls.api.dto.user.CreateUserResponse
+import pt.isel.ls.api.dto.user.GetBoardsFromUserResponse
+import pt.isel.ls.api.dto.user.UserDTO
+import pt.isel.ls.api.dto.user.toDTO
+import pt.isel.ls.api.routers.utils.exceptions.InvalidAuthHeaderException
+import pt.isel.ls.api.routers.utils.exceptions.InvalidBodyException
+import pt.isel.ls.api.routers.utils.exceptions.InvalidUserIDException
+import pt.isel.ls.api.routers.utils.exceptions.NoAuthenticationException
+import pt.isel.ls.database.memory.EmailAlreadyExistsException
+import pt.isel.ls.database.memory.TasksDataMem
+import pt.isel.ls.database.memory.UserNotFoundException
+import pt.isel.ls.domain.User
+import pt.isel.ls.services.TasksServices
+import pt.isel.ls.services.utils.exceptions.IllegalUserAccessException
+import pt.isel.ls.services.utils.exceptions.InvalidTokenException
+import kotlin.test.Test
+import kotlin.test.assertEquals
+
 class UsersTests {
     private val database = TasksDataMem()
     private val services = TasksServices(database)
@@ -9,22 +34,25 @@ class UsersTests {
     private val authHeaderA = "Bearer $tokenA"
     private val nameA = "Ricardo"
     private val emailA = "A47673@alunos.isel.pt"
+    private val passwordA = "6559D8CAEFE3D38D0AD455B8A072BB5A11DA31AC19DA7AFFAD563FC4D0AFF0EF"
     private val tokenB = "7d444840-9dc0-11d1-b245-5ffdce74fad1"
     private val authHeaderB = "Bearer $tokenB"
     private val nameB = "Luis"
     private val emailB = "A47671@alunos.isel.pt"
+    private val passwordB = "132513E5601D28F9DBDEBD2590514E171FEFEC9A6BE60417D79B8D626077C3FB"
 
-    private val userA: User = User(database.createUser(tokenA, nameA, emailA,), nameA, emailA, tokenA)
+    private val userA: User = User(database.createUser(tokenA, nameA, emailA, passwordA), nameA, emailA, tokenA)
 
     init {
-        database.createUser(tokenB, nameB, emailB,)
+        database.createUser(tokenB, nameB, emailB, passwordB)
     }
 
     @Test
     fun `POST to users returns a 201 response with the correct response`() {
         val name = "Francisco"
         val email = "A46631@alunos.isel.pt"
-        val requestBody = Json.encodeToString(CreateUserRequest(name, email))
+        val password = "olhaogajo"
+        val requestBody = Json.encodeToString(CreateUserRequest(name, email, password))
         val response = app(
             Request(Method.POST, "http://localhost:8080/users").body(requestBody)
         )
@@ -77,7 +105,7 @@ class UsersTests {
     fun `POST to users returns a 409 response if a user with that email already exists`() {
         val name = "anotherRicardo"
         val email = "A47673@alunos.isel.pt"
-        val requestBody = Json.encodeToString(CreateUserRequest(name, email))
+        val requestBody = Json.encodeToString(CreateUserRequest(name, email, passwordA))
         val response = app(
             Request(Method.POST, "http://localhost:8080/users").body(requestBody)
         )
@@ -244,4 +272,4 @@ class UsersTests {
             errorResponse
         )
     }
-}*/
+}

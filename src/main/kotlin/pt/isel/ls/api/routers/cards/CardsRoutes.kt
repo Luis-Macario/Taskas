@@ -57,11 +57,10 @@ class CardsRoutes(private val services: CardServices) {
                     cardRequest.initDate,
                     cardRequest.dueDate
                 )
-            println(card)
-            val cardResponse = CreateCardResponse(card.id)
+            val cardResponse = CreateCardResponse(card)
             println(cardResponse)
             Response(CREATED)
-                .header("Location", "/cards/${card.id}")
+                .header("Location", "/cards/$card")
                 .json(cardResponse)
         }
 

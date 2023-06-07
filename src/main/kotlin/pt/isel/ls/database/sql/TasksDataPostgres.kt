@@ -447,7 +447,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }*/
 
-    override fun createCard(lid: Int, name: String, description: String, initDate: Date, dueDate: Date): Card {
+    override fun createCard(lid: Int, name: String, description: String, initDate: Date, dueDate: Date): Int {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
@@ -492,16 +492,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
             } else {
                 throw SQLException("Creating card failed, no ID obtained.")
             }
-
-            return Card(
-                id = id,
-                bid = bid,
-                lid = lid,
-                name = name,
-                description = description,
-                initDate = initDate,
-                finishDate = dueDate
-            )
+            return id
         }
     }
 

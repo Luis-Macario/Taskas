@@ -1,5 +1,5 @@
 package pt.isel.ls.unit.domain
-/*
+
 import pt.isel.ls.domain.User
 import java.util.*
 import kotlin.test.Test
@@ -96,4 +96,3 @@ class UserTests {
         assertFalse { User.validEmail("abc@") }
     }
 }
-*/

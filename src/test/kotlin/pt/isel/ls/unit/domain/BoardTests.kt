@@ -1,6 +1,6 @@
 package pt.isel.ls.unit.domain
-/*
-import org.junit.Test
+
+import org.junit.jupiter.api.Test
 import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.User
 import kotlin.test.assertEquals
@@ -64,4 +64,3 @@ class BoardTests {
         assertFalse { Board.validName("a".repeat(Board.MAX_NAME_LENGTH + 1)) }
     }
 }
-*/

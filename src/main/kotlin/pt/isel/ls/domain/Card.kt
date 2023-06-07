@@ -51,6 +51,7 @@ data class Card(
     init {
         require(validId(id)) { "Invalid card id: $id" }
         require(validId(bid)) { "Invalid board id: $bid" }
+        require(validId(lid)) { "Invalid list id: $lid" }
         require(validName(name)) { "Invalid card name: $name" }
         require(validDescription(description)) { "Invalid description: $description" }
         require(validDates(initDate, finishDate)) { "Invalid dates: $finishDate happens before $initDate" }
