@@ -1,7 +1,7 @@
 import createCard from "../../data/cards/createCard.js";
 import createCardView from "../../views/cards/createCardView.js";
 
-function createCardHandler(mainContent, listID) {
+function createCardHandler(mainContent, listID) { //dd-mm-yyyy
 
     const today = new Date().toJSON().slice(0, 10)
 

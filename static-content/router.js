@@ -1,5 +1,5 @@
 const routes = []
-let notFoundRouteHandler = (mainContent, id, query) => {
+let notFoundRouteHandler = () => {
     throw "Route handler for unknown routes not defined"
 }
 
