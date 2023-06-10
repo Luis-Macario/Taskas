@@ -69,6 +69,8 @@ class TasksDataMem : AppDatabase {
 
     override fun checkEmailAlreadyExists(email: String) = users.values.any { it.email == email }
 
+    override fun getAllAvailableUser(): List<User> = users.values.map { getUserDetails(it.id) }
+
     /**
      * Creates a new board
      *

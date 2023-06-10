@@ -146,6 +146,30 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
+    override fun getAllAvailableUser(): List<User> {
+        dataSource.connection.use {
+            val stm = it.prepareStatement(
+                """
+                SELECT * FROM users
+                """.trimIndent()
+            )
+            val rs = stm.executeQuery()
+            val userList = mutableListOf<User>()
+
+            while (rs.next()) {
+                userList.add(
+                    User(
+                        id = rs.getInt("id"),
+                        name = rs.getString("name"),
+                        email = rs.getString("email"),
+                        token = rs.getString("token")
+                    )
+                )
+            }
+            return userList.toList()
+        }
+    }
+
     override fun createBoard(uid: Int, name: String, description: String): Int {
         dataSource.connection.use {
             it.autoCommit = false

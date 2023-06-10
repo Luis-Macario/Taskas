@@ -117,4 +117,13 @@ class BoardServices(private val database: AppDatabase) {
         val droppedLists = if (skip != null) lists.drop(skip) else lists
         return if (limit != null) droppedLists.take(limit) else droppedLists
     }
+
+    fun getAllUser(token: String, bid: Int): List<User> {
+        checkToken(token)
+        if (!database.checkBoardExists(bid)) throw BoardNotFoundException
+        if (!database.checkUserTokenExistsInBoard(token, bid)) throw IllegalBoardAccessException // User Access
+        val toFilterUsers = database.getUsersFromBoard(bid)
+        val allUsers = database.getAllAvailableUser()
+        return allUsers.filter { it !in toFilterUsers }
+    }
 }

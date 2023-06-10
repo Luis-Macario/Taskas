@@ -1,10 +1,10 @@
 import {button, div, h1, input, label} from "../../DSL/tags.js";
-import {getAvailableLists, getCardsFromList, moveCard} from "../../views/cards/MoveCardApiRequests.js";
+import {getAvailableLists, getCardsFromList, moveCard} from "../../data/cards/MoveCardApiRequests.js";
 
 function MoveCardModal(mainContent, closeButton, boardID, cardID, listID) {
 
     // MARTELADO HARDCORE
-    function selectIndex(resetButton = false) {
+    function selectIndex() {
         const dropDownMenuIdx = div({class: "dropdown-menu", "aria-labelledby": "dropdownMenuButton"})
 
         const checkboxInput = input({
@@ -59,14 +59,9 @@ function MoveCardModal(mainContent, closeButton, boardID, cardID, listID) {
                             })
                         }
                     })
-                    .catch(error => {
-                        // ...
-                    })
             }
         })
-        /*if (resetButton) {
-            buttonDropDownIdx.textContent = "Choose the index";
-        }*/
+
 
         return div({style: "display: flex; gap: 10px;"},
             div({class: "dropdown"}, buttonDropDownIdx, dropDownMenuIdx),
@@ -121,22 +116,19 @@ function MoveCardModal(mainContent, closeButton, boardID, cardID, listID) {
                         dropDownMenu.appendChild(listItem);
                     })
                 })
-                .catch(error => {
-                    // ...
-                })
         }
     })
 
     const dropDown = div({class: "dropdown"}, buttonDropDown, dropDownMenu)
     // Caso se queira apagar o que se tinha escolhido
-    /*
+
     closeButton.addEventListener("click", () => {
         if (selectedButton != null) {
             selectedButton = null
             buttonDropDown.textContent = "Lists Available"
             confirmButton.disabled = true
         }
-    })*/
+    })
 
     return div({
             class: "modal-fade",

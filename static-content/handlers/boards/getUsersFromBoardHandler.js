@@ -5,8 +5,7 @@ import getBoardUsers from "../../data/boards/getBoardUsers.js";
 export default async function getUsersFromBoardHandler(mainContent, id) {
     try {
         const users = (await getBoardUsers(id)).users
-        const view = boardUsersView(users, id)
-        mainContent.replaceChildren(view)
+        boardUsersView(users, id, mainContent)
     } catch (error) {
         mainContent.replaceChildren(showErrorResponse(error))
     }
