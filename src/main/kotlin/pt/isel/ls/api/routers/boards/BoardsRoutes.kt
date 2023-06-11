@@ -5,6 +5,7 @@ import org.http4k.core.Method.POST
 import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status.Companion.CREATED
+import org.http4k.core.Status.Companion.NO_CONTENT
 import org.http4k.core.Status.Companion.OK
 import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
@@ -12,8 +13,8 @@ import org.http4k.routing.routes
 import pt.isel.ls.api.dto.board.AddUserRequest
 import pt.isel.ls.api.dto.board.CreateBoardRequest
 import pt.isel.ls.api.dto.board.CreateBoardResponse
-import pt.isel.ls.api.dto.board.GetAllUsersResponse
 import pt.isel.ls.api.dto.board.GetListsFromBoardResponse
+import pt.isel.ls.api.dto.board.GetOtherUsersResponse
 import pt.isel.ls.api.dto.board.GetUsersFromBoardResponse
 import pt.isel.ls.api.dto.board.toDTO
 import pt.isel.ls.api.dto.list.toDTO
@@ -39,8 +40,8 @@ class BoardsRoutes(private val services: BoardServices) {
         "/" bind POST to ::createBoard,
         "/{boardID}" bind GET to ::getBoardDetails,
         "/{boardID}/users" bind GET to ::getUsersFromBoard,
-        "/{boardID}/allUsers" bind GET to ::getAllUsers,
         "/{boardID}/users" bind POST to ::addUserToBoard,
+        "/{boardID}/otherUsers" bind GET to ::getOtherUsers,
         "/{boardID}/lists" bind GET to ::getListsFromBoard
     )
 
@@ -117,7 +118,23 @@ class BoardsRoutes(private val services: BoardServices) {
 
             services.addUserToBoard(bearerToken, addUserRequest.userID, boardID)
 
-            Response(OK)
+            Response(NO_CONTENT)
+        }
+
+    /**
+     * Gets the list of users not in the board
+     *
+     * @param request The request information
+     * @return the corresponding [Response]
+     */
+    private fun getOtherUsers(request: Request): Response =
+        runAndHandleExceptions {
+            val boardID = request.getBoardID()
+            val bearerToken = request.getAuthorizationHeader()
+            val users = services.getAllUser(bearerToken, boardID)
+            val usersResponse = GetOtherUsersResponse(users.map { it.toDTO() })
+
+            Response(OK).json(usersResponse)
         }
 
     /**
@@ -135,15 +152,5 @@ class BoardsRoutes(private val services: BoardServices) {
             val lists = services.getListsFromBoard(bearerToken, boardID, skip, limit)
             val getListsResponse = GetListsFromBoardResponse(lists.map { it.toDTO() })
             Response(OK).json(getListsResponse)
-        }
-
-    private fun getAllUsers(request: Request): Response =
-        runAndHandleExceptions {
-            val boardID = request.getBoardID()
-            val bearerToken = request.getAuthorizationHeader()
-            val users = services.getAllUser(bearerToken, boardID)
-            val usersResponse = GetAllUsersResponse(users.map { it.toDTO() })
-
-            Response(OK).json(usersResponse)
         }
 }

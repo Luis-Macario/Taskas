@@ -12,7 +12,6 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class ListTests {
-    // TODO: FIX COMMENTED TESTS
     private val url = System.getenv("JDBC_DATABASE_URL")
     private val dataSource = PGSimpleDataSource().apply {
         this.setUrl(url)

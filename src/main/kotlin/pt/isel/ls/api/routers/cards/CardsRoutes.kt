@@ -47,7 +47,6 @@ class CardsRoutes(private val services: CardServices) {
         runAndHandleExceptions {
             val cardRequest = request.getJsonBodyTo<CreateCardRequest>()
             val bearerToken = request.getAuthorizationHeader()
-            println(cardRequest)
             val card =
                 services.createCard(
                     bearerToken,
@@ -58,7 +57,6 @@ class CardsRoutes(private val services: CardServices) {
                     cardRequest.dueDate
                 )
             val cardResponse = CreateCardResponse(card)
-            println(cardResponse)
             Response(CREATED)
                 .header("Location", "/cards/$card")
                 .json(cardResponse)
@@ -81,22 +79,6 @@ class CardsRoutes(private val services: CardServices) {
         }
 
     /**
-     * Moves a card to a different list within the same board
-     *
-     * @param request The request information
-     * @return the corresponding [Response]
-     */
-    private fun moveCard(request: Request): Response =
-        runAndHandleExceptions {
-            val cardID = request.getCardID()
-            val bearerToken = request.getAuthorizationHeader()
-            val moveCardRequest = request.getJsonBodyTo<MoveCardRequest>()
-            println(moveCardRequest)
-            services.moveCard(bearerToken, cardID, moveCardRequest)
-            Response(NO_CONTENT)
-        }
-
-    /**
      * Gets the details of a card
      *
      * @param request The request information
@@ -109,5 +91,20 @@ class CardsRoutes(private val services: CardServices) {
 
             services.deleteCard(bearerToken, cardID)
             Response(OK).json(DeletedResponse(cardID))
+        }
+
+    /**
+     * Moves a card to a different list within the same board
+     *
+     * @param request The request information
+     * @return the corresponding [Response]
+     */
+    private fun moveCard(request: Request): Response =
+        runAndHandleExceptions {
+            val cardID = request.getCardID()
+            val bearerToken = request.getAuthorizationHeader()
+            val moveCardRequest = request.getJsonBodyTo<MoveCardRequest>()
+            services.moveCard(bearerToken, cardID, moveCardRequest)
+            Response(NO_CONTENT)
         }
 }

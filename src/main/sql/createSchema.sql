@@ -6,42 +6,42 @@ DROP TABLE if EXISTS userBoards cascade;
 
 CREATE TABLE users
 (
-    id SERIAL PRIMARY KEY ,
-    name VARCHAR(50) NOT NULL ,
-    email varchar(60) NOT NULL CHECK (email SIMILAR TO '_%@_%')  UNIQUE,
-    token CHAR(36) NOT NULL CHECK ( char_length(token) = 36 ),
-    password CHAR(64) NOT NULL CHECK ( char_length(password) = 64 )
+    id       SERIAL PRIMARY KEY,
+    name     VARCHAR(50) NOT NULL,
+    email    varchar(60) NOT NULL CHECK (email SIMILAR TO '_%@_%') UNIQUE,
+    token    CHAR(36)    NOT NULL CHECK ( char_length(token) = 36 ),
+    password CHAR(64)    NOT NULL CHECK ( char_length(password) = 64 )
 );
 
 CREATE TABLE boards
 (
-    id SERIAL PRIMARY KEY ,
-    name VARCHAR(100) UNIQUE NOT NULL CHECK ( char_length(name) > 5  and char_length(name) < 100),
-    description VARCHAR(1000) NOT NULL CHECK ( char_length(description) > 0 and char_length(description) < 1000)
+    id          SERIAL PRIMARY KEY,
+    name        VARCHAR(100) UNIQUE NOT NULL CHECK ( char_length(name) > 5 and char_length(name) < 100),
+    description VARCHAR(1000)       NOT NULL CHECK ( char_length(description) > 0 and char_length(description) < 1000)
 );
 
 CREATE TABLE taskLists
 (
-    id SERIAL PRIMARY KEY ,
-    bid INT references boards(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    name VARCHAR(100) NOT NULL CHECK ( char_length(name) > 3 ),
-    archived BOOLEAN NOT NULL DEFAULT TRUE
+    id       SERIAL PRIMARY KEY,
+    bid      INT references boards (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    name     VARCHAR(100) NOT NULL CHECK ( char_length(name) > 3 ),
+    archived BOOLEAN      NOT NULL DEFAULT TRUE
 );
 
 CREATE TABLE cards
 (
-    id SERIAL PRIMARY KEY,
-    bid INT references boards(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    lid INT references taskLists(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    indexList INT NOT NULL CHECK ( indexList >= 0 ),
-    name VARCHAR(100) NOT NULL,
+    id          SERIAL PRIMARY KEY,
+    bid         INT references boards (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    lid         INT references taskLists (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    indexList   INT           NOT NULL CHECK ( indexList >= 0 ),
+    name        VARCHAR(100)  NOT NULL,
     description VARCHAR(1000) NOT NULL,
-    initDate DATE NOT NULL,
-    finishDate Date NOT NULL DEFAULT DATE('9999-12-31')
+    initDate    DATE          NOT NULL,
+    finishDate  Date          NOT NULL DEFAULT DATE('9999-12-31')
 );
 
 CREATE TABLE userBoards
 (
-    uid INT references users(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    bid INT references boards(id) ON DELETE CASCADE ON UPDATE CASCADE
+    uid INT references users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    bid INT references boards (id) ON DELETE CASCADE ON UPDATE CASCADE
 )

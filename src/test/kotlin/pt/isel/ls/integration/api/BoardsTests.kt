@@ -115,7 +115,6 @@ class BoardsTests {
             Request(Method.POST, "http://localhost:8080/boards").body(requestBody)
                 .header("Authorization", "ola")
         )
-        println(response.bodyString())
         assertEquals(Status.BAD_REQUEST, response.status)
         assertEquals("application/json", response.header("content-type"))
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
@@ -138,7 +137,6 @@ class BoardsTests {
             Request(Method.POST, "http://localhost:8080/boards").body(requestBody)
                 .header("Authorization", "Bearer ola")
         )
-        println(response.bodyString())
         assertEquals(Status.BAD_REQUEST, response.status)
         assertEquals("application/json", response.header("content-type"))
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
@@ -213,7 +211,6 @@ class BoardsTests {
                 .header("Authorization", authHeaderA)
         )
 
-        println(response)
         assertEquals(Status.BAD_REQUEST, response.status)
         assertEquals("application/json", response.header("content-type"))
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
@@ -234,7 +231,6 @@ class BoardsTests {
                 .header("Authorization", "ola")
         )
 
-        println(response)
         assertEquals(Status.BAD_REQUEST, response.status)
         assertEquals("application/json", response.header("content-type"))
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
@@ -255,7 +251,6 @@ class BoardsTests {
                 .header("Authorization", "Bearer ola")
         )
 
-        println(response)
         assertEquals(Status.BAD_REQUEST, response.status)
         assertEquals("application/json", response.header("content-type"))
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
@@ -275,7 +270,6 @@ class BoardsTests {
             Request(Method.GET, "http://localhost:8080/boards/0")
         )
 
-        println(response)
         assertEquals(Status.UNAUTHORIZED, response.status)
         assertEquals("application/json", response.header("content-type"))
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
@@ -296,7 +290,6 @@ class BoardsTests {
                 .header("Authorization", authHeaderB)
         )
 
-        println(response)
         assertEquals(Status.FORBIDDEN, response.status)
         assertEquals("application/json", response.header("content-type"))
         val errorResponse = Json.decodeFromString<ErrorResponse>(response.bodyString())
@@ -660,7 +653,6 @@ class BoardsTests {
             Request(Method.GET, "http://localhost:8080/boards/0/lists")
                 .header("Authorization", authHeaderA)
         )
-        println(response)
         assertEquals(Status.OK, response.status)
         assertEquals("application/json", response.header("content-type"))
         val listsResponse = Json.decodeFromString<GetListsFromBoardResponse>(response.bodyString())

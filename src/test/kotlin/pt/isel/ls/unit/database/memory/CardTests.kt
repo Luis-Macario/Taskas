@@ -16,7 +16,13 @@ class CardTests {
     @Test
     fun `test create card and get details`() {
         val lId = listA
-        val card = mem.createCard(lId, "Team Workk", "some work ".repeat(1), Date.valueOf("2025-1-26"), Date.valueOf("2025-1-27"))
+        val card = mem.createCard(
+            lId,
+            "Team Workk",
+            "some work ".repeat(1),
+            Date.valueOf("2025-1-26"),
+            Date.valueOf("2025-1-27")
+        )
         val sut = mem.getCardDetails(card)
 
         assertEquals(mem.cards[0]?.id, sut.id)
@@ -54,7 +60,13 @@ class CardTests {
     @Test
     fun `test move a card to another taskList`() {
         val lId = listA
-        val cId = mem.createCard(lId, "Team Work ", "some work ".repeat(1), Date.valueOf("2023-4-28"), Date.valueOf("2025-1-26"))
+        val cId = mem.createCard(
+            lId,
+            "Team Work ",
+            "some work ".repeat(1),
+            Date.valueOf("2023-4-28"),
+            Date.valueOf("2025-1-26")
+        )
 
         assertEquals(0, mem.cards[0]?.lid)
 

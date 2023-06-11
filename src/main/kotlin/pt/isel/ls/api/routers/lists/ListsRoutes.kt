@@ -78,6 +78,21 @@ class ListsRoutes(private val services: ListServices) {
         }
 
     /**
+     * Deletes a list
+     *
+     * @param request The request information
+     * @return the corresponding [Response]
+     */
+    private fun deleteList(request: Request): Response =
+        runAndHandleExceptions {
+            val listID = request.getListID()
+            val bearerToken = request.getAuthorizationHeader()
+
+            services.deleteList(bearerToken, listID)
+            Response(OK).json(DeletedResponse(listID))
+        }
+
+    /**
      * Gets the list of Lists in a Card
      *
      * @param request The request information
@@ -93,20 +108,5 @@ class ListsRoutes(private val services: ListServices) {
 
             val cardsResponse = GetCardFromListResponse(cards.map { it.toDTO() })
             Response(OK).json(cardsResponse)
-        }
-
-    /**
-     * Deletes a list
-     *
-     * @param request The request information
-     * @return the corresponding [Response]
-     */
-    private fun deleteList(request: Request): Response =
-        runAndHandleExceptions {
-            val listID = request.getListID()
-            val bearerToken = request.getAuthorizationHeader()
-
-            services.deleteList(bearerToken, listID)
-            Response(OK).json(DeletedResponse(listID))
         }
 }

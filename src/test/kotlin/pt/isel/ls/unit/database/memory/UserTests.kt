@@ -3,7 +3,7 @@ package pt.isel.ls.unit.database.memory
 import pt.isel.ls.database.memory.TasksDataMem
 import pt.isel.ls.database.memory.UserNotFoundException
 import pt.isel.ls.domain.User
-import java.util.*
+import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

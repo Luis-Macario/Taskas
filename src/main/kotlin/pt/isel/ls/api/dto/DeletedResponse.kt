@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class DeletedResponse(val entityID: Int) {
-    private val message = "Successfully deleted the entity"
+    val message = "Successfully deleted the entity"
 }

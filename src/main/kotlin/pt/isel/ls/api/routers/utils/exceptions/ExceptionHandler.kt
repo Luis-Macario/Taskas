@@ -59,7 +59,7 @@ fun exceptionHandler(exception: Exception): Response =
     } else {
         Response(Status.INTERNAL_SERVER_ERROR).json(
             ErrorResponse(
-                code = 9000, // TODO: Figure out what codes to use
+                code = 9999,
                 name = "Unknown Error: " + exception.javaClass.simpleName,
                 description = "An unknown error has occurred: " + exception.message
             )
@@ -108,6 +108,7 @@ fun TaskException.toStatus() =
                 InvalidListIDException -> Status.BAD_REQUEST
                 InvalidUserIDException -> Status.BAD_REQUEST
                 InvalidBodyException -> Status.BAD_REQUEST
+                InvalidQueryException -> Status.BAD_REQUEST
                 NoAuthenticationException -> Status.UNAUTHORIZED
             }
 

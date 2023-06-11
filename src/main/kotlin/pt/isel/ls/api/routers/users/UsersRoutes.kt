@@ -66,10 +66,7 @@ class UsersRoutes(private val services: UserServices) {
     private fun loginUser(request: Request): Response =
         runAndHandleExceptions {
             val userRequest = request.getJsonBodyTo<LoginUserRequest>()
-            println("userRequest : $userRequest")
             val user = services.loginUser(userRequest.email, userRequest.password)
-            println("user $user")
-            // Alterar para uma dto do login
             val userResponse = LoginUserResponse(user.id, user.token, user.name)
 
             Response(OK).json(userResponse)
@@ -124,7 +121,6 @@ class UsersRoutes(private val services: UserServices) {
             val bearerToken = request.getAuthorizationHeader()
             val boards = services.searchBoardsFromUser(bearerToken, uid, searchQuery, skip, limit)
 
-            println(searchQuery)
             val boardsResponse = GetSearchBoardsFromUserResponse(boards.map { it.toDTO() })
 
             Response(OK).json(boardsResponse)

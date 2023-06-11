@@ -9,7 +9,7 @@ import pt.isel.ls.domain.hashPassword
 import pt.isel.ls.services.utils.checkToken
 import pt.isel.ls.services.utils.exceptions.IllegalUserAccessException
 import pt.isel.ls.services.utils.exceptions.InvalidUserCredentialsException
-import java.util.*
+import java.util.UUID
 
 class UserServices(private val database: AppDatabase) {
     /**
@@ -31,9 +31,7 @@ class UserServices(private val database: AppDatabase) {
     }
 
     fun loginUser(email: String, password: String): User {
-        println("login : $email $password")
         val user = database.loginUser(email)
-        println(">>>>>>>>> $user")
         if (hashPassword(password) != user.password) throw InvalidUserCredentialsException
 
         return user.user
@@ -75,6 +73,7 @@ class UserServices(private val database: AppDatabase) {
         limit: Int? = null
     ): List<SimpleBoard> {
         val boards = getBoardsFromUser(token, uid, skip, limit)
+        // TODO: MOVE SEARCH TO SQL
         return if (searchQuery == null) {
             boards
         } else {

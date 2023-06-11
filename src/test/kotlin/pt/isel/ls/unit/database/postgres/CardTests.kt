@@ -85,7 +85,6 @@ class CardTests {
         val db = TasksDataPostgres(url)
 
         val cardDetails = db.getCardDetails(1)
-        println(cardDetails)
         var oldList = db.getCardsFromList(cardDetails.lid, cardDetails.bid)
         var moveToList = db.getCardsFromList(2, 1)
 

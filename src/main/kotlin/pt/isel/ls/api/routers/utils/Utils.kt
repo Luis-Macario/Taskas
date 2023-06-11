@@ -11,10 +11,14 @@ import pt.isel.ls.api.routers.utils.exceptions.InvalidBoardIDException
 import pt.isel.ls.api.routers.utils.exceptions.InvalidBodyException
 import pt.isel.ls.api.routers.utils.exceptions.InvalidCardIDException
 import pt.isel.ls.api.routers.utils.exceptions.InvalidListIDException
+import pt.isel.ls.api.routers.utils.exceptions.InvalidQueryException
 import pt.isel.ls.api.routers.utils.exceptions.InvalidUserIDException
 import pt.isel.ls.api.routers.utils.exceptions.NoAuthenticationException
 
 private const val BEARER_REGEX: String = "^Bearer .+\$"
+private const val MINIMUM_SKIP = 0
+private const val MINIMUM_LIMIT = 0
+private const val MAXIMUM_LIMIT = 100
 
 /**
  * Parses Bearer Token
@@ -41,10 +45,23 @@ fun Request.getAuthorizationHeader(): String =
  * Attempts to get the string skip and limit queries of the [Request]
  *
  * @return a pair of: the skip amount or null; the limit amount or null.
+ * @throws InvalidQueryException if at least one of the queries is invalid
  */
 fun Request.getPaging(): Pair<Int?, Int?> {
-    val skip = query("skip")?.toIntOrNull()?.coerceAtLeast(0) ?: 0 // ?: throw InvalidQuerySkipException
-    val limit = query("limit")?.toIntOrNull()?.coerceAtLeast(0) ?: 100 // ?: throw InvalidQueryLimitException
+    val skipQuery = query("skip")
+    val skip =
+        if (skipQuery != null) {
+            skipQuery.toIntOrNull()?.takeIf { it >= MINIMUM_SKIP } ?: throw InvalidQueryException
+        } else {
+            null
+        }
+    val limitQuery = query("limit")
+    val limit =
+        if (limitQuery != null) {
+            limitQuery.toIntOrNull()?.takeIf { it in MINIMUM_LIMIT..MAXIMUM_LIMIT } ?: throw InvalidQueryException
+        } else {
+            null
+        }
     return Pair(skip, limit)
 }
 
@@ -93,6 +110,7 @@ inline fun <reified T> Request.getJsonBodyTo(): T =
  *
  * @param data the data to put in the [Response] body
  * @return the updated [Response]
+ * @throws InvalidBodyException if the data provided is invalid
  */
 inline fun <reified T> Response.json(data: T): Response =
     try {

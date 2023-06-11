@@ -1,8 +1,8 @@
-openapi: 3.0.0
+openapi: 3.0.1
 info:
   description: Simple Task Management API
-  version: "0.1.0"
-  title: Task Management API
+  version: "1.0.0"
+  title: TASKAS - TASKs ASsistant
   license:
     name: GNU Affero General Public License 3.0
     url: 'https://www.gnu.org/licenses/agpl-3.0.en.html'
@@ -10,6 +10,8 @@ info:
 servers:
   - description: localhost
     url: http://localhost:8080/api
+  - description: Render
+    url: https://service-ls-2223-2-leic42d-g03.onrender.com/api
 
 tags:
   - name: User Management
@@ -48,6 +50,43 @@ paths:
                 $ref: '#/components/schemas/AppError'
         '409':
           description: Provided email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+  /users/login:
+    post:
+      tags:
+        - User Management
+      summary: Gets the user token
+      description: |
+        Gets the user's token from their email + password
+      requestBody:
+        description: User object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUserRequest'
+
+      responses:
+        '200':
+          description: The user's details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginUserResponse'
+        '400':
+          description: Invalid body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '404':
+          description: User not found
           content:
             application/json:
               schema:
@@ -107,6 +146,21 @@ paths:
           required: true
           schema:
             type: integer
+        - in: query
+          name: skip
+          description: number of boards to skip for pagination
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: limit
+          description: maximum number of boards to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 100
       responses:
         '200':
           description: The user's boards
@@ -115,7 +169,67 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetUserBoardsResponse'
         '400':
-          description: Invalid userID or Invalid Authentication
+          description: Invalid userID, queries, or Invalid Authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '401':
+          $ref: '#/components/responses/UserNotAuthenticatedResponse'
+        '403':
+          description: User doesn't have access to that user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+  /users/{userID}/boards/search:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - User Management
+      summary: get all user available boards
+      description: |
+        Get a list of all the boards availabe to the provided user
+      parameters:
+        - name: userID
+          in: path
+          description: The user's id
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: search_query
+          description: The search query
+          schema:
+            type: string
+        - in: query
+          name: skip
+          description: number of boards to skip for pagination
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: limit
+          description: maximum number of boards to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 100
+      responses:
+        '200':
+          description: The user's boards
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSearchBoardsFromUserResponse'
+        '400':
+          description: Invalid userID, queries, or Invalid Authentication
           content:
             application/json:
               schema:
@@ -226,7 +340,7 @@ paths:
         - Board Management
       summary: get all users
       description: |
-        Get a list of all the boards availabe to the provided user
+        Get a list of all the users in the board
       parameters:
         - name: boardID
           in: path
@@ -234,6 +348,21 @@ paths:
           required: true
           schema:
             type: integer
+        - in: query
+          name: skip
+          description: number of boards to skip for pagination
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: limit
+          description: maximum number of boards to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 100
       responses:
         '200':
           description: The users
@@ -242,7 +371,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetBoardUsersResponse'
         '400':
-          description: Invalid boardID or invalid Authentication
+          description: Invalid boardID, queries, or invalid Authentication
           content:
             application/json:
               schema:
@@ -317,6 +446,52 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
 
+  /boards/{boardID}/otherUsers:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Board Management
+      summary: get all users not in the board
+      description: |
+        Get a list of all the users that are not already in the board
+      parameters:
+        - name: boardID
+          in: path
+          description: The board's id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOtherUsersResponse'
+        '400':
+          description: Invalid boardID, or invalid Authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '401':
+          $ref: '#/components/responses/UserNotAuthenticatedResponse'
+        '403':
+          description: User doesn't have access to that board
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '404':
+          description: Board not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
   /boards/{boardID}/lists:
     get:
       security:
@@ -333,6 +508,21 @@ paths:
           required: true
           schema:
             type: integer
+        - in: query
+          name: skip
+          description: number of boards to skip for pagination
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: limit
+          description: maximum number of boards to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 100
       responses:
         '200':
           description: The board's lists
@@ -341,7 +531,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetBoardsListsResponse'
         '400':
-          description: Invalid boardID or invalid Authentication
+          description: Invalid boardID, queries, or invalid Authentication
           content:
             application/json:
               schema:
@@ -463,6 +653,51 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
 
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+        - List Management
+      summary: Deletes the list
+      description: |
+        Get the list and all the cards inside the list
+      parameters:
+        - name: listID
+          in: path
+          description: The list's id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List was deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletedResponse'
+        '400':
+          description: Invalid ID provided or Invalid Authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '401':
+          $ref: '#/components/responses/UserNotAuthenticatedResponse'
+        '403':
+          description: User doesn't have access to that list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '404':
+          description: List not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
   /lists/{listID}/cards:
     get:
       security:
@@ -479,6 +714,21 @@ paths:
           required: true
           schema:
             type: integer
+        - in: query
+          name: skip
+          description: number of boards to skip for pagination
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: limit
+          description: maximum number of boards to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 100
       responses:
         '200':
           description: The list's cards
@@ -608,6 +858,51 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
 
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+        - Card Management
+      summary: deletes a card
+      description: |
+        Deletes the card
+      parameters:
+        - name: cardID
+          in: path
+          description: The card's id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: card was deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletedResponse'
+        '400':
+          description: Invalid cardID provided or Invalid Authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '401':
+          $ref: '#/components/responses/UserNotAuthenticatedResponse'
+        '403':
+          description: User doesn't have access to that card
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '404':
+          description: Card not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
   /cards/{cardID}/move:
     post:
       security:
@@ -633,7 +928,7 @@ paths:
               $ref: '#/components/schemas/MoveCardRequest'
       responses:
         '204':
-          description: the card's details
+          description: Card was moved
         '400':
           description: Invalid cardID, Invalid/Missing Request Body or Invalid Authentication
           content:
@@ -684,6 +979,22 @@ components:
           schema:
             $ref: '#/components/schemas/AppError'
   schemas:
+
+    DeletedResponse:
+      type: object
+      required:
+        - entityID
+        - message
+      properties:
+        entityID:
+          type: integer
+          description: The entity's ID
+          example: 1
+        message:
+          type: string
+          description: Additional Information
+          example: "Successfully deleted the entity"
+
     User:
       type: object
       required:
@@ -704,7 +1015,7 @@ components:
           description: User's Unique Email
           example: "a47673@alunos.isel.pt"
 
-    Board:
+    SimpleBoard:
       type: object
       required:
         - id
@@ -724,12 +1035,37 @@ components:
           description: Board's Description
           example: "aBoard's Description"
 
-    List:
+    Board:
       type: object
       required:
         - id
         - name
-        - boardID
+        - description
+        - lists
+      properties:
+        id:
+          type: integer
+          description: Board's Unique Identifier
+          example: 1
+        name:
+          type: string
+          description: Board's Unique Name
+          example: "aBoard"
+        description:
+          type: string
+          description: Board's Description
+          example: "aBoard's Description"
+        lists:
+          type: array
+          description: Board's Lists
+          items:
+            $ref: '#/components/schemas/SimpleList'
+
+    SimpleList:
+      type: object
+      required:
+        - id
+        - name
       properties:
         id:
           type: integer
@@ -739,10 +1075,32 @@ components:
           type: string
           description: List's Name
           example: "aList"
-        boardID:
+
+    List:
+      type: object
+      required:
+        - id
+        - bid
+        - name
+        - cards
+      properties:
+        id:
           type: integer
-          description: Board's Unique Identifier
+          description: List's Unique Identifier
           example: 1
+        bid:
+          type: integer
+          description: List's Board ID
+          example: 1
+        name:
+          type: string
+          description: List's Name
+          example: "aList"
+        cards:
+          type: array
+          description: List's Cards
+          items:
+            $ref: '#/components/schemas/Card'
 
     Card:
       type: object
@@ -750,6 +1108,7 @@ components:
         - id
         - name
         - description
+        - initialDate
         - dueDate
         - boardID
       properties:
@@ -765,6 +1124,11 @@ components:
           type: string
           description: Card's Description
           example: "aCard's Description"
+        initialDate:
+          type: string
+          format: date
+          description: Card's Initial Date
+          example: "2017-07-21"
         dueDate:
           type: string
           format: date
@@ -784,6 +1148,7 @@ components:
       required:
         - name
         - email
+        - password
       properties:
         name:
           type: string
@@ -793,6 +1158,10 @@ components:
           type: string
           description: User's Unique Email
           example: "a47673@alunos.isel.pt"
+        password:
+          type: string
+          description: User's Password
+          example: RicardoPassword123!
     CreateUserResponse:
       type: object
       required:
@@ -808,6 +1177,43 @@ components:
           type: integer
           description: User's Unique Identifier
           example: 1
+
+    LoginUserRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          description: User's Unique Email
+          example: "a47673@alunos.isel.pt"
+        password:
+          type: string
+          description: User's Password
+          example: RicardoPassword123!
+
+    LoginUserResponse:
+      type: object
+      required:
+        - id
+        - token
+        - name
+      properties:
+        id:
+          type: integer
+          description: User's Unique Identifier
+          example: 1
+        token:
+          type: string
+          format: uuid
+          description: User's Token
+          example: "7d444840-9dc0-11d1-b245-5ffdce74fad2"
+        name:
+          type: string
+          description: User's Name
+          example: "Ricardo Pinto"
+
 
     CreateBoardRequest:
       type: object
@@ -842,9 +1248,29 @@ components:
         lists:
           type: array
           items:
-            $ref: '#/components/schemas/Board'
+            $ref: '#/components/schemas/SimpleBoard'
+
+    GetSearchBoardsFromUserResponse:
+      type: object
+      required:
+        - boards
+      properties:
+        lists:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleBoard'
 
     GetBoardUsersResponse:
+      type: object
+      required:
+        - users
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+
+    GetOtherUsersResponse:
       type: object
       required:
         - users
@@ -896,7 +1322,7 @@ components:
         lists:
           type: array
           items:
-            $ref: '#/components/schemas/List'
+            $ref: '#/components/schemas/SimpleList'
 
     CreateCardRequest:
       type: object
@@ -904,6 +1330,7 @@ components:
         - listID
         - name
         - description
+        - initDate
       properties:
         listID:
           type: integer
@@ -917,6 +1344,11 @@ components:
           type: string
           description: Card's Description
           example: "aCard's Description"
+        initDate:
+          type: string
+          format: date
+          description: Card's Initial Date
+          example: "2017-07-21"
         dueDate:
           type: string
           format: date
@@ -946,10 +1378,15 @@ components:
       type: object
       required:
         - listID
+        - cix
       properties:
         listID:
           type: integer
           description: The List's ID where the card is to be moved into
+          example: 1
+        cix:
+          type: integer
+          description: Cards new index
           example: 1
 
     AppError:

@@ -30,7 +30,7 @@ class BoardTests {
 
     @Test
     fun `Creating a board with an invalid name throws IllegalArgumentException`() {
-        val ex = assertFailsWith<IllegalArgumentException>() {
+        val ex = assertFailsWith<IllegalArgumentException> {
             Board(1, " ", "Projeto Kapa Mega Giga Tera Fixe", listOf())
         }
 

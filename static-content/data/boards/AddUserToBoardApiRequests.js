@@ -37,7 +37,7 @@ export async function getAllUsers(mainContent, boardId) {
         }
     }
 
-    const res = await fetch(API_BASE_URL + `boards/${boardId}/allUsers`, options)
+    const res = await fetch(API_BASE_URL + `boards/${boardId}/otherUsers`, options)
     if (res.status === 200) {
         return (await res.json()).users
     } else {

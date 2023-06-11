@@ -503,8 +503,6 @@ class TasksDataPostgres(url: String) : AppDatabase {
             stm.setDate(6, initDate)
             stm.setDate(7, dueDate)
 
-            println("PGSQL: $initDate")
-
             val affectedRows: Int = stm.executeUpdate()
             if (affectedRows == 0) {
                 throw SQLException("Creating card failed, no rows affected.")
