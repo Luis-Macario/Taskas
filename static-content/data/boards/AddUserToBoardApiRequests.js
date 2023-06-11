@@ -17,7 +17,7 @@ export async function addUsersBoard(mainContent, bid, uid) {
     }
 
     const res = await fetch(API_BASE_URL + `boards/${bid}/users`, options)
-    if (res.status === 200) {
+    if (res.status === 204) {
         console.log("User added")
         window.location.reload()
     } else {
