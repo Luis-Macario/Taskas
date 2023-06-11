@@ -1,4 +1,4 @@
-export default function searchBoard(event, selectedParameter) {
+export default function searchBoardData(event, selectedParameter) {
     event.preventDefault()
     const inputValue = document.querySelector("#parameterValue").value
 

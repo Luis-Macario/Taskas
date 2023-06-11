@@ -1,6 +1,6 @@
 import {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 
-function createCard(listID, today) {
+function createCardData(listID, today) {
     function handleSubmit(event) {
         event.preventDefault()
 
@@ -54,4 +54,4 @@ function createCard(listID, today) {
     return handleSubmit
 }
 
-export default createCard
+export default createCardData

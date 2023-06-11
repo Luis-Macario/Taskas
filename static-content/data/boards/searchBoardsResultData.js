@@ -1,6 +1,6 @@
 import {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 
-export default async function searchBoardsResult(query) {
+export default async function searchBoardsResultData(query) {
     const user = getStoredUser()
     const id = user.id
     const token = user.token

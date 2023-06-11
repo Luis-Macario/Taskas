@@ -84,7 +84,7 @@ The TasksDataPostgres class, an implementation of the AppDatabase interface that
 
 The TasksDataMem class, an implementation of the AppDatabase interface that interacts with a in-memory data to perform create, read and update operations.
 
-These classes have various methods that perform different operations such as userSignup, getUserDetails, getUsersFromBoard, createBoard, getBoardDetails, addUserToBoard, getBoardsFromUser, etc...
+These classes have various methods that perform different operations such as userSignupData, getUserDetails, getUsersFromBoard, createBoardData, getBoardDetails, addUserToBoard, getBoardsFromUser, etc...
 
 ### Error Handling/Processing
 
@@ -110,6 +110,17 @@ For phase 3 delivery the following navigation graph show the inter-page connetio
 In phase 3, we refactored the project to have dedicated directories for the DSL, views (the nodes in the graph), 
 and partials (repeating elements in each view).
 
+During phase 4, after receiveing the lecturer's input we implemented a MVC inspired architecture, which led to a major refactoring of the
+project, following the refactoring web requests follow the following graph :
+
+![MVC](MVC.png)
+
+If, for example, the user requests the page to search for a board, the Handler(Controller) module will get the function that searchs for
+boards from the Data(Model) module, it will then feed said function to the View module, which uses partials to create the components of said view.
+The resulting content is then appended.
+
+The main objective for this phase was to host the application on Render, for which we had to create a dockerfile, you can view the site at
+https://service-ls-2223-2-leic42d-g03.onrender.com.
 ## Critical Evaluation
 
 We realized the need to upgrade our database connection to better support transactions. In the next phase, we will implement 

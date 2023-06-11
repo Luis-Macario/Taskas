@@ -1,6 +1,6 @@
 import {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 
-export default async function createBoard() {
+export default async function createBoardData() {
     function handleSubmit(event) {
         event.preventDefault()
 

@@ -1,13 +1,13 @@
 import {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 
-export default async function getBoardUsers(id) {
+export default async function getBoardData(id) {
+
+    getStoredUser()
 
     const user = getStoredUser()
     const token = user.token
 
-    const skip = 0
-    const limit = 10
-    const res = await fetch(API_BASE_URL + `boards/${id}/users?skip=${skip}&limit=${limit}`, {
+    const res = await fetch(API_BASE_URL + `boards/${id}`, {
         headers: {
             "Authorization": "Bearer " + token
         }
@@ -17,4 +17,5 @@ export default async function getBoardUsers(id) {
         return await res.json()
     }
     throw res
+
 }

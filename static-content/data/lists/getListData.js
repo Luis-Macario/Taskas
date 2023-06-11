@@ -1,7 +1,7 @@
 import {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 
 
-async function getList(listID) {
+async function getListData(listID) {
     const user = getStoredUser()
     const token = user.token
 
@@ -18,4 +18,4 @@ async function getList(listID) {
     }
 }
 
-export default getList
+export default getListData

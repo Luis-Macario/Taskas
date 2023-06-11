@@ -1,4 +1,4 @@
-import loginUser from "../../data/users/userLogin.js";
+import loginUser from "../../data/users/userLoginData.js";
 import showErrorResponse from "../../configs/configs.js";
 
 async function userLoginHandler(mainContent) {

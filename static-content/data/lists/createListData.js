@@ -1,6 +1,6 @@
 import {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 
-export default async function createList(event, boardID) {
+export default async function createListData(event, boardID) {
     event.preventDefault()
 
     const user = getStoredUser()

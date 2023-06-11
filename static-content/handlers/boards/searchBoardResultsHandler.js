@@ -1,4 +1,4 @@
-import searchBoardsResult from "../../data/boards/searchBoardsResult.js";
+import searchBoardsResultData from "../../data/boards/searchBoardsResultData.js";
 import searchBoardResultsView from "../../views/boards/BoardSearchResults.js";
 import showErrorResponse from "../../configs/configs.js";
 import currentBoardView from "../../partials/boards/CurrentBoardView.js";
@@ -9,7 +9,7 @@ export default async function searchBoardResultsHandler(mainContent, query) {
     let boards = null
     let boardCard = null
     try {
-        boards = await searchBoardsResult(query)
+        boards = await searchBoardsResultData(query)
         const firstPartial = (boards.length > 0) ?
             await currentBoardView(boards[0], getDetails, getPreviousBoard, getNextBoard, idx, boards.length) :
             (() => {

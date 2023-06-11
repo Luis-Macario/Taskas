@@ -12,6 +12,7 @@ function usersFromBoardView(users, id, mainContent) {
     function closeModal() {
         mainContent.removeChild(modal)
     }
+
     async function confirm() {
         console.log(selectedUserModal)
         if (selectedUserModal != null) {
@@ -33,7 +34,9 @@ function usersFromBoardView(users, id, mainContent) {
     const modal = Modal(mainContent,
         {
             title: "Add users to this Board",
-            body: addUserToBoardModal(mainContent,id, selected => {selectedUserModal = selected}),
+            body: addUserToBoardModal(mainContent, id, selected => {
+                selectedUserModal = selected
+            }),
             buttons: div({}, closeButton, confirmButton)
         })
 

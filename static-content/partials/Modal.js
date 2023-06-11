@@ -17,9 +17,7 @@ function Modal(mainContent, parts) {
             div({class: "modal-content"},
                 div({class: "modal-header"},
                     div({class: "row"},
-                        div({class: "col-10"},
-                            h1({}, title)
-                        )
+                        h1({}, title)
                     )
                 ),
                 div({class: "modal-body", style: "display: flex; gap: 10px;"},

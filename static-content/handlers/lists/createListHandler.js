@@ -1,9 +1,9 @@
-import createList from "../../data/lists/createList.js";
+import createListData from "../../data/lists/createListData.js";
 import createListView from "../../views/lists/ListCreate.js";
 
 
 async function createListHandler(mainContent, boardId) {
-    const view = createListView(createList, boardId)
+    const view = createListView(createListData, boardId)
     mainContent.replaceChildren(view)
 }
 

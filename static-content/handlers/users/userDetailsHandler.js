@@ -1,6 +1,6 @@
 import showErrorResponse from "../../configs/configs.js";
 import UserDetailsView from "../../views/users/userDetailsView.js";
-import getUser from "../../data/users/userDetails.js";
+import getUser from "../../data/users/getUserData.js";
 
 async function userDetailsHandler(mainContent) {
     try {

@@ -1,7 +1,7 @@
 import {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 
 
-async function getCard(cardID) {
+async function getCardData(cardID) {
     const user = getStoredUser()
     const token = user.token
 
@@ -18,4 +18,4 @@ async function getCard(cardID) {
     }
 }
 
-export default getCard
+export default getCardData
