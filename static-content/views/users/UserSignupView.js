@@ -1,7 +1,7 @@
 import {div, h1} from "../../DSL/tags.js";
 import UserSignupForm from "../../partials/users/UserSignupForm.js";
 
-function userSignupView(handleSubmit) {
+function UserSignupView(handleSubmit) {
     return div({},
         div({class: "card"},
             div({class: "card-header"},
@@ -14,4 +14,4 @@ function userSignupView(handleSubmit) {
     )
 }
 
-export default userSignupView
+export default UserSignupView

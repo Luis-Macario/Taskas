@@ -1,4 +1,3 @@
-import UserLoginForm from "../../partials/users/UserLoginForm.js";
 import errorModal from "../../partials/errorModal.js";
 import {API_BASE_URL, storeUser} from "../../configs/configs.js";
 
@@ -46,5 +45,5 @@ export default function loginUser() {
 
     }
 
-    return UserLoginForm(handleSubmit)
+    return handleSubmit
 }

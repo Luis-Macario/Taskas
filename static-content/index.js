@@ -8,7 +8,7 @@ window.addEventListener('hashchange', hashChangeHandler)
 function loadHandler() {
     router.addRouteHandler("", {handler: handlers.getHomeHandler, receives: {mainContent: {},}})
     router.addRouteHandler("users/me", {handler: handlers.userDetailsHandler, receives: {mainContent: {},}})
-    router.addRouteHandler("users/signup", {handler: handlers.createUserHandler, receives: {mainContent: {},}})
+    router.addRouteHandler("users/signup", {handler: handlers.userSignupHandler, receives: {mainContent: {},}})
     router.addRouteHandler("users/login", {handler: handlers.loginUserHandler, receives: {mainContent: {},}})
     router.addRouteHandler("users/boards/search", {handler: handlers.searchBoardHandler, receives: {mainContent: {},}})
     router.addRouteHandler("users/boards/search/{query}", {

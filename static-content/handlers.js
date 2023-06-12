@@ -21,7 +21,7 @@ import cardDetailsHandler from "./handlers/cards/cardDetailsHandler.js";
 export const handlers = {
     getHomeHandler,
     getNotFoundHandler,
-    createUserHandler: userSignupHandler,
+    userSignupHandler,
     loginUserHandler,
     userDetailsHandler,
     searchBoardResultsHandler,

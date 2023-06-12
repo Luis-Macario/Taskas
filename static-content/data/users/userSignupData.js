@@ -1,6 +1,5 @@
 import {API_BASE_URL, storeUser} from "../../configs/configs.js";
 import errorModal from "../../partials/errorModal.js";
-import UserSignupForm from "../../partials/users/UserSignupForm.js";
 
 export default function userSignupData() {
     async function handleSignup(event) {
@@ -51,5 +50,5 @@ export default function userSignupData() {
         }
     }
 
-    return UserSignupForm(handleSignup)
+    return handleSignup
 }
