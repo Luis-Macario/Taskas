@@ -1,6 +1,6 @@
 import {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
 
-async function listDelete(bid, lid) {
+async function listDeleteData(bid, lid) {
 
     const user = getStoredUser()
     const token = user.token
@@ -23,4 +23,4 @@ async function listDelete(bid, lid) {
         })
 }
 
-export default listDelete
+export default listDeleteData

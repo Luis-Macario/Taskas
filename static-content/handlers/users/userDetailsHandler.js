@@ -5,7 +5,8 @@ import getUser from "../../data/users/getUserData.js";
 async function userDetailsHandler(mainContent) {
     try {
         const userData = await getUser()
-        UserDetailsView(mainContent, userData)
+        const view = UserDetailsView(userData)
+        mainContent.replaceChildren(view)
     } catch (e) {
         showErrorResponse(mainContent, e)
     }

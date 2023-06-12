@@ -1,8 +1,7 @@
-import {br, button, div, form, h1, input, span} from "../../DSL/tags.js";
+import {br, button, div, form, input, span} from "../../DSL/tags.js";
 
-function boardCreate(createBoardFunction) {
-
-    const myForm = form({},
+export default function createBoardForm(handler) {
+    return form({onSubmit: handler()},
         br(),
         div({class: "input-group mb-3"},
             div({class: "input-group-prepend", style: "float:left; width:100px"},
@@ -28,17 +27,4 @@ function boardCreate(createBoardFunction) {
         button({type: "submit", class: "btn btn-primary w-100 btn-lg"}, "Create Board")
     )
 
-    myForm.addEventListener('submit', createBoardFunction)
-    return (
-        div({class: "card"},
-            div({class: "card-header"},
-                h1({class: "card-title"}, "Create Board")
-            ),
-            div({class: "card-body w-50 center"},
-                myForm
-            )
-        )
-    )
 }
-
-export default boardCreate

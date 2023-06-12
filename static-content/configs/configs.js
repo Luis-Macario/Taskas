@@ -4,7 +4,7 @@ export const hardCodedBearer = "160ee838-150b-4ca1-a2ff-2e964383c315"
 export const API_BASE_URL = window.location.protocol + '//' + window.location.host + '/api/'
 
 //TODO stashing this here until I decide where to put it
-function showErrorResponse(error) {
+export default function showErrorResponse(error) {
     console.log("Show error message:" + error)
     return div({},
         h1({}, `${error.code} ${error.name}`),
@@ -24,5 +24,3 @@ export function getStoredUser() {
 export function storeUser(user) {
     localStorage.setItem("user", JSON.stringify(user));
 }
-
-export default showErrorResponse

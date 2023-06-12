@@ -42,7 +42,6 @@ export default function boardSearchForm(submitHandler) {
     )
 
     function changeParameter() {
-        //TODO:Review Implementations
         selectedParameter = this.innerText
         document.querySelector("#parameterButton").innerText = selectedParameter;
         document.querySelector("#parameterValue").placeholder = `Insert desired ${selectedParameter}`;
