@@ -1,15 +1,12 @@
-import {div, h1} from "../../DSL/tags.js";
 import UserLoginForm from "../../partials/users/UserLoginForm.js";
+import Page from "../../partials/Page.js";
+import {div} from "../../DSL/tags.js";
 
 export default function UserLoginView(handleSubmit) {
-    return div({},
-        div({class: "card"},
-            div({class: "card-header"},
-                h1({class: "card-title"}, "Login User")
-            ),
-            div({class: "card-body w-50 center"},
-                UserLoginForm(handleSubmit)
-            )
+    return Page(
+        "Login User",
+        div({class: "w-50"},
+            UserLoginForm(handleSubmit)
         )
     )
 }

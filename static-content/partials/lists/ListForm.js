@@ -12,7 +12,7 @@ function ListForm(handler, boardId) {
         input(({
             type: "text", id: "idName", name: "idName",
             class: "form-control",
-            placeholder: "Enter the List name", minlength: "3", maxlength: "60",
+            placeholder: "Enter the list name", minlength: "3", maxlength: "60",
             required: true
         })), br(),
         button({type: "submit", class: "btn btn-primary w-100 btn-lg"}, "Create List")

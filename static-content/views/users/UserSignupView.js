@@ -1,15 +1,12 @@
-import {div, h1} from "../../DSL/tags.js";
+import {div} from "../../DSL/tags.js";
 import UserSignupForm from "../../partials/users/UserSignupForm.js";
+import Page from "../../partials/Page.js";
 
 function UserSignupView(handleSubmit) {
-    return div({},
-        div({class: "card"},
-            div({class: "card-header"},
-                h1({class: "card-title"}, "Register User")
-            ),
-            div({class: "card-body w-50 center"},
-                UserSignupForm(handleSubmit)
-            )
+    return Page(
+        "Register User",
+        div({class: "w-50"},
+            UserSignupForm(handleSubmit)
         )
     )
 }

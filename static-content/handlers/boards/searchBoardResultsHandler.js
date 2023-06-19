@@ -1,7 +1,7 @@
 import searchBoardsResultData from "../../data/boards/searchBoardsResultData.js";
 import searchBoardResultsView from "../../views/boards/BoardSearchResults.js";
 import showErrorResponse from "../../configs/configs.js";
-import currentBoardView from "../../partials/boards/CurrentBoardView.js";
+import currentBoardCard from "../../partials/boards/CurrentBoardCard.js";
 import noBoardsView from "../../partials/boards/NoBoardView.js";
 
 export default async function searchBoardResultsHandler(mainContent, query) {
@@ -11,7 +11,7 @@ export default async function searchBoardResultsHandler(mainContent, query) {
     try {
         boards = await searchBoardsResultData(query)
         const firstPartial = (boards.length > 0) ?
-            await currentBoardView(boards[0], getDetails, getPreviousBoard, getNextBoard, idx, boards.length) :
+            await currentBoardCard(boards[0], getDetails, getPreviousBoard, getNextBoard, idx, boards.length) :
             (() => {
                 idx = -1;
                 return noBoardsView(query)
@@ -29,7 +29,7 @@ export default async function searchBoardResultsHandler(mainContent, query) {
         idx = (idx > boards.length - 1) ? 0 : idx
         const newBoard = boards[idx]
         boardCard.replaceChildren(
-            currentBoardView(newBoard, getDetails, getPreviousBoard, getNextBoard, idx, boards.length)
+            currentBoardCard(newBoard, getDetails, getPreviousBoard, getNextBoard, idx, boards.length)
         )
     }
 
@@ -38,7 +38,7 @@ export default async function searchBoardResultsHandler(mainContent, query) {
         idx = (idx < 0) ? boards.length - 1 : idx
         const newBoard = boards[idx]
         boardCard.replaceChildren(
-            currentBoardView(newBoard, getDetails, getPreviousBoard, getNextBoard, idx, boards.length)
+            currentBoardCard(newBoard, getDetails, getPreviousBoard, getNextBoard, idx, boards.length)
         )
     }
 

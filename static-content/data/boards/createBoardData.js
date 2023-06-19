@@ -1,7 +1,8 @@
 import {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
+import errorModal from "../../partials/errorModal.js";
 
 export default function createBoardData() {
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault()
 
         const user = getStoredUser()
@@ -32,14 +33,19 @@ export default function createBoardData() {
                 description: description
             })
         }
-        console.log(name + " " + description)
-        fetch(API_BASE_URL + `boards/`, options)
-            .then(res => res.json())
-            .then(board => {
-                console.log(board)
-                window.location.hash = "boards/" + board.id
-            })
+
+        const res = await (fetch(API_BASE_URL + `boards/`, options))
+
+        const body = await res.json()
+
+        if (res.ok) {
+            window.location.hash = "boards/" + body.id //board.id
+        } else {
+            errorModal(this, body)
+        }
+
     }
+
 
     return handleSubmit
 }

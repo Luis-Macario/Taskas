@@ -1,11 +1,10 @@
-import {a, div, h1, h5, p} from "../../DSL/tags.js";
+import {a, div, h5, p} from "../../DSL/tags.js";
+import Page from "../../partials/Page.js";
 
 function boardsView(boardRows) {
 
-    return div({class: "card"},
-        div({class: "card-header"},
-            h1({class: "card-title"}, "My Boards")
-        ),
+    return Page(
+        "My Boards",
         ...boardRows.length > 0 ? boardRows.map((row) => {
                 return div(
                     {class: "card-group"},
@@ -24,7 +23,8 @@ function boardsView(boardRows) {
                 div({class: "card-body"},
                     h5({class: "text-muted mb-0"}, "You aren't a part of any board yet")
                 )
-            ])
+            ]
+    )
 }
 
 export default boardsView

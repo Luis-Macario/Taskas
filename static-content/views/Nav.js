@@ -1,17 +1,3 @@
-/**
- * <div class="col-6 ">
- *             <a href="#" class="btn btn-primary"> Home </a>
- *             <a href="#users/boards/create" class="btn btn-primary"> Create Board </a>
- *             <a href="#users/boards/search" class="btn btn-primary"> Search Board </a>
- *             <a href="#users/boards" class="btn btn-primary"> My Boards </a>   <!-- hardcoded 1 as default user -->
- *             <a href="#users/" class="btn btn-primary"> My Details </a>      <!-- hardcoded 1 as default user -->
- *         </div>
- *         <div class="col-md-2 offset-md-2">
- *             <a href="#users/login" class="btn btn-primary"> Login</a>
- *             <a href="#users/create" class="btn btn-primary"> Sign Up</a>
- *         </div>
- */
-
 import {a, button, div, nav} from "../DSL/tags.js";
 import {getStoredUser, storeUser} from "../configs/configs.js";
 import Modal from "../partials/Modal.js";

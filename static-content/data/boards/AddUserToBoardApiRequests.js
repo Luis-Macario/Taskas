@@ -21,7 +21,7 @@ export async function addUsersBoard(mainContent, bid, uid) {
         console.log("User added")
         window.location.reload()
     } else {
-        showErrorResponse(mainContent, await (res.json()))
+        throw (await (res.json()))
     }
 }
 

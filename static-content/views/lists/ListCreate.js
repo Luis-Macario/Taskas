@@ -1,12 +1,11 @@
-import {div, h1} from "../../DSL/tags.js";
+import {div} from "../../DSL/tags.js";
 import ListForm from "../../partials/lists/ListForm.js";
+import Page from "../../partials/Page.js";
 
 function createListView(handleSubmit, boardId) {
-    return div({},
-        div({class: "card-header"},
-            h1({class: "card-title"}, "Create List")
-        ),
-        div({class: "card-body w-50 center "},
+    return Page(
+        "Create List",
+        div({class: "w-50"},
             ListForm(handleSubmit, boardId)
         )
     )

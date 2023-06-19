@@ -1,13 +1,14 @@
-import {br, button, div, form, input, li, ul} from "../../DSL/tags.js";
+import {button, div, form, input, li, ul} from "../../DSL/tags.js";
 
 export default function boardSearchForm(submitHandler) {
     let selectedParameter = null
-    return form({
+    return form(
+        {
+            class: "w-75",
             onSubmit: (event) => {
                 submitHandler(event, selectedParameter)
             }
         },
-        br(),
         div({class: "input-group mb-3 d-flex align-items-center"},
             div({class: "input-group-prepend"},
                 div({class: "btn-group flex-grow-1"},
@@ -37,8 +38,7 @@ export default function boardSearchForm(submitHandler) {
                 )
             )
         ),
-        br(),
-        button({type: "submit", class: "btn btn-primary w-100 btn-lg"}, "Search")
+        button({type: "submit", class: "btn w-50 btn-primary btn-lg"}, "Search")
     )
 
     function changeParameter() {

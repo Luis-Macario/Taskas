@@ -1,6 +1,6 @@
 import {button, div, h5, p} from "../../DSL/tags.js";
 
-export default function currentBoardView(board, getDetails, getPreviousBoard, getNextBoard, idx, size) {
+export default function currentBoardCard(board, getDetails, getPreviousBoard, getNextBoard, idx, size) {
     return div({},
         div({class: "card-header"},
             div({class: "row"},
