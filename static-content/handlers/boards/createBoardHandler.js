@@ -3,12 +3,11 @@ import createBoardData from "../../data/boards/createBoardData.js";
 import showErrorResponse from "../../configs/configs.js";
 
 
-export default async function createBoardHandler(mainContent) {
+export default async function createBoardHandler() {
     try {
         const createBoardFunction = createBoardData
-        const view = boardCreateView(createBoardFunction)
-        mainContent.replaceChildren(view)
+        return boardCreateView(createBoardFunction)
     } catch (error) {
-        mainContent.replaceChildren(showErrorResponse(error))
+        return showErrorResponse(error)
     }
 }

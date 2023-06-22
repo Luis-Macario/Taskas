@@ -2,12 +2,11 @@ import searchBoardView from "../../views/boards/BoardSearch.js";
 import searchBoardData from "../../data/boards/searchBoardData.js";
 import showErrorResponse from "../../configs/configs.js";
 
-export default function searchBoardHandler(mainContent) {
+export default async function searchBoardHandler() {
 
     try {
-        const view = searchBoardView(searchBoardData)
-        mainContent.replaceChildren(view)
+        return searchBoardView(searchBoardData)
     } catch (error) {
-        showErrorResponse(error)
+        return showErrorResponse(error)
     }
 }

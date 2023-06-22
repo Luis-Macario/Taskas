@@ -1,8 +1,7 @@
-import getHome from "../views/HomeView.js";
+import HomeView from "../views/HomeView.js";
 
-function getHomeHandler(mainContent) {
-    const view = getHome()
-    mainContent.replaceChildren(view)
+async function getHomeHandler() {
+    return HomeView()
 }
 
 export default getHomeHandler

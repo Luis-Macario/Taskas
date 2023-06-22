@@ -1,7 +1,7 @@
 import {br, button, form, input, label} from "../../DSL/tags.js";
 
 
-function CardForm(handler) {
+function CardForm(handler, today) {
     return form({onSubmit: handler},
         br(),
         label({for: "cardName", class: "col-form-label"}, "Name:"), br(),
@@ -23,7 +23,7 @@ function CardForm(handler) {
             type: "date", id: "idInitDate", name: "idInitDate",
             class: "form-control",
             placeholder: "Enter the Card Init Date", minlength: "3", maxlength: "60",
-            required: true
+            required: true, value: today
         })), br(),
         label({for: "cardDueDate", class: "col-form-label"}, "Due Date:"), br(),
         input(({

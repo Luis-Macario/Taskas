@@ -7,7 +7,6 @@ import noBoardsView from "../../partials/boards/NoBoardView.js";
 export default async function searchBoardResultsHandler(mainContent, query) {
     let idx = 0
     let boards = null
-    let boardCard = null
     try {
         boards = await searchBoardsResultData(query)
         const firstPartial = (boards.length > 0) ?
@@ -17,18 +16,16 @@ export default async function searchBoardResultsHandler(mainContent, query) {
                 return noBoardsView(query)
             })()
 
-        const view = await searchBoardResultsView(firstPartial, idx, boards.length, query)
-        mainContent.replaceChildren(view)
-        boardCard = document.getElementById("boardCard")
+        return searchBoardResultsView(firstPartial, idx, boards.length, query)
     } catch (error) {
-        mainContent.replaceChildren(showErrorResponse(error))
+        return showErrorResponse(error)
     }
 
     function getNextBoard() {
         idx++
         idx = (idx > boards.length - 1) ? 0 : idx
         const newBoard = boards[idx]
-        boardCard.replaceChildren(
+        document.getElementById("boardCard").replaceChildren(
             currentBoardCard(newBoard, getDetails, getPreviousBoard, getNextBoard, idx, boards.length)
         )
     }
@@ -37,7 +34,7 @@ export default async function searchBoardResultsHandler(mainContent, query) {
         idx--
         idx = (idx < 0) ? boards.length - 1 : idx
         const newBoard = boards[idx]
-        boardCard.replaceChildren(
+        document.getElementById("boardCard").replaceChildren(
             currentBoardCard(newBoard, getDetails, getPreviousBoard, getNextBoard, idx, boards.length)
         )
     }

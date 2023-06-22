@@ -45,10 +45,9 @@ export default async function getUsersFromBoardHandler(mainContent, id) {
                 buttons: div({}, closeButton, confirmButton)
             })
 
-        const view = boardUsersView(users, id, addUserBoard)
-        mainContent.replaceChildren(view)
+        return boardUsersView(users, id, addUserBoard)
     } catch (error) {
-        mainContent.replaceChildren(showErrorResponse(error))
+        return showErrorResponse(error)
     }
 
 }

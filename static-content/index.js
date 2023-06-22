@@ -72,5 +72,7 @@ function hashChangeHandler() {
     navBar(navContent)
 
     const handler = handlerObj.handler
+
     handler(...args)
+        .then(res => mainContent.replaceChildren(res))
 }

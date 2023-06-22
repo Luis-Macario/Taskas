@@ -2,13 +2,12 @@ import showErrorResponse from "../../configs/configs.js";
 import UserDetailsView from "../../views/users/userDetailsView.js";
 import getUser from "../../data/users/getUserData.js";
 
-async function userDetailsHandler(mainContent) {
+async function userDetailsHandler() {
     try {
         const userData = await getUser()
-        const view = UserDetailsView(userData)
-        mainContent.replaceChildren(view)
+        return UserDetailsView(userData)
     } catch (e) {
-        showErrorResponse(mainContent, e)
+        return showErrorResponse(e)
     }
 }
 

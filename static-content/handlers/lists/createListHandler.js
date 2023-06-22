@@ -3,8 +3,7 @@ import createListView from "../../views/lists/ListCreate.js";
 
 
 async function createListHandler(mainContent, boardId) {
-    const view = createListView(createListData, boardId)
-    mainContent.replaceChildren(view)
+    return createListView(createListData, boardId)
 }
 
 export default createListHandler

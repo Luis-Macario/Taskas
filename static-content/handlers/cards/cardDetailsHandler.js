@@ -21,10 +21,9 @@ async function cardDetailsHandler(mainContent, cardID) {
             mainContent.removeChild(modal);
         })
 
-        const view = cardView(card, moveCardButton)
-        mainContent.replaceChildren(view)
+        return cardView(card, moveCardButton)
     } catch (e) {
-        showErrorResponse(mainContent, e)
+        return showErrorResponse(e)
     }
 }
 

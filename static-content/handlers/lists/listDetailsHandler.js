@@ -41,11 +41,10 @@ async function listDetailsHandler(mainContent, listID) {
                 buttons: div({}, declineButton, confirmButton)
             })
 
-        const view = listView(list, deleteListButton, createCardButton)
-        mainContent.replaceChildren(view)
+        return listView(list, deleteListButton, createCardButton)
 
     } catch (e) {
-        showErrorResponse(mainContent, e)
+        return showErrorResponse(e)
     }
 }
 

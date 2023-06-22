@@ -1,15 +1,17 @@
 import createCardData from "../../data/cards/createCardData.js";
 import createCardView from "../../views/cards/createCardView.js";
+import showErrorResponse from "../../configs/configs.js";
 
-function createCardHandler(mainContent, listID) { //dd-mm-yyyy
+async function createCardHandler(mainContent, listID) { //dd-mm-yyyy
+    try {
+        const today = new Date().toJSON().slice(0, 10)
 
-    const today = new Date().toJSON().slice(0, 10)
+        const createCardFunction = createCardData(listID, today)
+        return createCardView(createCardFunction, today)
 
-    const createCardFunction = createCardData(listID, today)
-    const view = createCardView(createCardFunction)
-
-    mainContent.replaceChildren(view)
-    document.getElementById("idInitDate").value = today
+    } catch (error) {
+        showErrorResponse(error)
+    }
 }
 
 export default createCardHandler

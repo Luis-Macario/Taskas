@@ -1,8 +1,7 @@
 import getNotFound from "../views/NotFoundView.js";
 
-function getNotFoundHandler(mainContent) {
-    const view = getNotFound()
-    mainContent.replaceChildren(view)
+async function getNotFoundHandler() {
+    return getNotFound()
 }
 
 export default getNotFoundHandler
