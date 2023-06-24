@@ -8,6 +8,8 @@ import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.SimpleList
 import pt.isel.ls.domain.User
 import pt.isel.ls.domain.checkBoardCredentials
+import pt.isel.ls.services.utils.LIMIT_DEFAULT
+import pt.isel.ls.services.utils.SKIP_DEFAULT
 import pt.isel.ls.services.utils.checkToken
 import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
 
@@ -93,9 +95,7 @@ class BoardServices(private val database: AppDatabase) {
         if (!database.checkBoardExists(bid)) throw BoardNotFoundException
         if (!database.checkUserTokenExistsInBoard(token, bid)) throw IllegalBoardAccessException
 
-        val users = database.getUsersFromBoard(bid)
-        val droppedUsers = if (skip != null) users.drop(skip) else users
-        return if (limit != null) droppedUsers.take(limit) else droppedUsers
+        return database.getUsersFromBoard(bid, skip ?: SKIP_DEFAULT, limit ?: LIMIT_DEFAULT)
     }
 
     /**
@@ -113,16 +113,14 @@ class BoardServices(private val database: AppDatabase) {
         if (!database.checkBoardExists(bid)) throw BoardNotFoundException
         if (!database.checkUserTokenExistsInBoard(token, bid)) throw IllegalBoardAccessException
 
-        val lists = database.getListsFromBoard(bid)
-        val droppedLists = if (skip != null) lists.drop(skip) else lists
-        return if (limit != null) droppedLists.take(limit) else droppedLists
+        return database.getListsFromBoard(bid, skip ?: SKIP_DEFAULT, limit ?: LIMIT_DEFAULT)
     }
 
     fun getAllUser(token: String, bid: Int): List<User> {
         checkToken(token)
         if (!database.checkBoardExists(bid)) throw BoardNotFoundException
         if (!database.checkUserTokenExistsInBoard(token, bid)) throw IllegalBoardAccessException // User Access
-        val toFilterUsers = database.getUsersFromBoard(bid)
+        val toFilterUsers = database.getUsersFromBoard(bid, SKIP_DEFAULT, LIMIT_DEFAULT)
         val allUsers = database.getAllAvailableUser()
         return allUsers.filter { it !in toFilterUsers }
     }

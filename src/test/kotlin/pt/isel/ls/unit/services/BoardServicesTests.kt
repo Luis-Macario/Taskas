@@ -41,7 +41,7 @@ class BoardServicesTests {
 
         bServices.addUserToBoard(user.token, newUser.id, board.id)
 
-        assertTrue(database.getUsersFromBoard(board.id).contains(newUser))
+        assertTrue(database.getUsersFromBoard(board.id, 0, 30).contains(newUser))
     }
 
     @Test

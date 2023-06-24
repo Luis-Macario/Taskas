@@ -6,6 +6,8 @@ import pt.isel.ls.domain.SimpleBoard
 import pt.isel.ls.domain.User
 import pt.isel.ls.domain.checkUserCredentials
 import pt.isel.ls.domain.hashPassword
+import pt.isel.ls.services.utils.LIMIT_DEFAULT
+import pt.isel.ls.services.utils.SKIP_DEFAULT
 import pt.isel.ls.services.utils.checkToken
 import pt.isel.ls.services.utils.exceptions.IllegalUserAccessException
 import pt.isel.ls.services.utils.exceptions.InvalidUserCredentialsException
@@ -27,14 +29,14 @@ class UserServices(private val database: AppDatabase) {
         val hashedPassword = hashPassword(password)
         val id = database.createUser(token, name, email, hashedPassword)
 
-        return User(id, name, email, token)
+        return User(id, name, email, token, hashedPassword)
     }
 
     fun loginUser(email: String, password: String): User {
         val user = database.loginUser(email)
         if (hashPassword(password) != user.password) throw InvalidUserCredentialsException
 
-        return user.user
+        return user
     }
 
     /**
@@ -59,10 +61,7 @@ class UserServices(private val database: AppDatabase) {
         val user = database.getUserDetails(uid)
         if (user.token != token) throw IllegalUserAccessException
 
-        val boards = database.getBoardsFromUser(uid)
-        val droppedBoards = if (skip != null) boards.drop(skip) else boards
-        return if (limit != null) droppedBoards.take(limit) else droppedBoards
-        // TODO: MOVE PAGING TO SQL
+        return database.getBoardsFromUser(uid, skip ?: SKIP_DEFAULT, limit ?: LIMIT_DEFAULT)
     }
 
     fun searchBoardsFromUser(
@@ -72,12 +71,14 @@ class UserServices(private val database: AppDatabase) {
         skip: Int? = null,
         limit: Int? = null
     ): List<SimpleBoard> {
-        val boards = getBoardsFromUser(token, uid, skip, limit)
-        // TODO: MOVE SEARCH TO SQL
+        checkToken(token)
+        val user = database.getUserDetails(uid)
+        if (user.token != token) throw IllegalUserAccessException
+
         return if (searchQuery == null) {
-            boards
+            database.getBoardsFromUser(uid, skip ?: SKIP_DEFAULT, limit ?: LIMIT_DEFAULT)
         } else {
-            boards.filter { it.name.lowercase().contains(searchQuery.lowercase()) }
+            database.searchBoardsFromUser(uid, skip ?: SKIP_DEFAULT, limit ?: LIMIT_DEFAULT, searchQuery)
         }
     }
 }

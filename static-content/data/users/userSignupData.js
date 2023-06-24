@@ -42,7 +42,6 @@ export default function userSignupData() {
         const body = await res.json()
 
         if (res.status === 201) {
-            //console.log(body)
             storeUser(body)
             window.location.hash = "users/me"
         } else {

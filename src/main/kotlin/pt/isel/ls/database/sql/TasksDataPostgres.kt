@@ -1,7 +1,6 @@
 package pt.isel.ls.database.sql
 
 import org.postgresql.ds.PGSimpleDataSource
-import pt.isel.ls.api.dto.user.LoginUserResponseDb
 import pt.isel.ls.database.AppDatabase
 import pt.isel.ls.database.memory.CardNotFoundException
 import pt.isel.ls.database.memory.ListNotFoundException
@@ -44,7 +43,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
-    override fun loginUser(email: String): LoginUserResponseDb {
+    override fun loginUser(email: String): User {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
@@ -56,22 +55,14 @@ class TasksDataPostgres(url: String) : AppDatabase {
 
             val rs = stm.executeQuery()
             if (rs.next()) {
-                /*return User(
-                     id = rs.getInt("id"),
-                     name = rs.getString("name"),
-                     email = rs.getString("email"),
-                     token = rs.getString("token"),
-                     password = rs.getString("password")
-                 )*/
-                return LoginUserResponseDb(
-                    User(
-                        id = rs.getInt("id"),
-                        name = rs.getString("name"),
-                        email = rs.getString("email"),
-                        token = rs.getString("token")
-                    ),
+                return User(
+                    id = rs.getInt("id"),
+                    name = rs.getString("name"),
+                    email = rs.getString("email"),
+                    token = rs.getString("token"),
                     password = rs.getString("password")
                 )
+
             } else {
                 throw UserNotFoundException
             }
@@ -94,7 +85,8 @@ class TasksDataPostgres(url: String) : AppDatabase {
                     id = rs.getInt("id"),
                     name = rs.getString("name"),
                     email = rs.getString("email"),
-                    token = rs.getString("token")
+                    token = rs.getString("token"),
+                    password = rs.getString("password")
                 )
             } else {
                 throw UserNotFoundException
@@ -102,17 +94,21 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
-    override fun getUsersFromBoard(bid: Int): List<User> {
+    override fun getUsersFromBoard(bid: Int, skip: Int, limit: Int): List<User> {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
-                SELECT id, name, email, token
+                SELECT id, name, email, token, password
                 FROM userboards
                 JOIN users u on u.id = userboards.uid
                 where bid = ?
+                OFFSET COALESCE(?, 0) 
+                LIMIT COALESCE(?, 30)
                 """.trimIndent()
             )
             stm.setInt(1, bid)
+            stm.setInt(2, skip)
+            stm.setInt(3, limit)
 
             val rs = stm.executeQuery()
             val userList = mutableListOf<User>()
@@ -123,7 +119,8 @@ class TasksDataPostgres(url: String) : AppDatabase {
                         id = rs.getInt("id"),
                         name = rs.getString("name"),
                         email = rs.getString("email"),
-                        token = rs.getString("token")
+                        token = rs.getString("token"),
+                        password = rs.getString("password")
                     )
                 )
             }
@@ -162,7 +159,8 @@ class TasksDataPostgres(url: String) : AppDatabase {
                         id = rs.getInt("id"),
                         name = rs.getString("name"),
                         email = rs.getString("email"),
-                        token = rs.getString("token")
+                        token = rs.getString("token"),
+                        password = rs.getString("password")
                     )
                 )
             }
@@ -245,7 +243,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
-    override fun getBoardsFromUser(uid: Int): List<SimpleBoard> {
+    override fun getBoardsFromUser(uid: Int, skip: Int, limit: Int): List<SimpleBoard> {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
@@ -253,9 +251,13 @@ class TasksDataPostgres(url: String) : AppDatabase {
                 FROM userboards
                 JOIN boards b on b.id = userboards.bid
                 where uid = ?
+                OFFSET COALESCE(?, 0) 
+                LIMIT COALESCE(?, 30)
                 """.trimIndent()
             )
             stm.setInt(1, uid)
+            stm.setInt(2, skip)
+            stm.setInt(3, limit)
 
             val rs = stm.executeQuery()
             val boardList = mutableListOf<SimpleBoard>()
@@ -340,6 +342,39 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
+    override fun searchBoardsFromUser(uid: Int, skip: Int, limit: Int, searchQuery: String): List<SimpleBoard> {
+        dataSource.connection.use {
+            val stm = it.prepareStatement(
+                """
+                SELECT id, name, description
+                FROM userboards
+                JOIN boards b on b.id = userboards.bid
+                where uid = ? and lower(b.name) LIKE lower(?)
+                OFFSET ?
+                LIMIT ?
+                """.trimIndent()
+            )
+            stm.setInt(1, uid)
+            stm.setString(2, "%$searchQuery%")
+            stm.setInt(3, skip)
+            stm.setInt(4, limit)
+
+            val rs = stm.executeQuery()
+            val boardList = mutableListOf<SimpleBoard>()
+
+            while (rs.next()) {
+                boardList.add(
+                    SimpleBoard(
+                        id = rs.getInt("id"),
+                        name = rs.getString("name"),
+                        description = rs.getString("description")
+                    )
+                )
+            }
+            return boardList.toList()
+        }
+    }
+
     override fun createList(bid: Int, name: String): Int {
         dataSource.connection.use {
             val stm = it.prepareStatement(
@@ -367,7 +402,7 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
-    override fun getListsFromBoard(bid: Int): List<SimpleList> {
+    override fun getListsFromBoard(bid: Int, skip: Int, limit: Int): List<SimpleList> {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
@@ -375,9 +410,13 @@ class TasksDataPostgres(url: String) : AppDatabase {
                 FROM tasklists as tk
                 JOIN boards b on b.id = tk.bid
                 where tk.bid = ?
+                OFFSET COALESCE(?, 0) 
+                LIMIT COALESCE(?, 30)
                 """.trimIndent()
             )
             stm.setInt(1, bid)
+            stm.setInt(2, skip)
+            stm.setInt(3, limit)
 
             val rs = stm.executeQuery()
             val simpleList = mutableListOf<SimpleList>()
@@ -455,21 +494,6 @@ class TasksDataPostgres(url: String) : AppDatabase {
             return rs.getBoolean(1)
         }
     }
-    // Probably not necessary
-    /*override fun checkListExists(lid: Int): Boolean {
-        dataSource.connection.use {
-            val stm = it.prepareStatement(
-                """
-                SELECT EXISTS(SELECT 1 FROM tasklists WHERE id = ?)
-                """.trimIndent()
-            )
-            stm.setInt(1, lid)
-
-            val rs = stm.executeQuery()
-            rs.next()
-            return rs.getBoolean(1)
-        }
-    }*/
 
     override fun createCard(lid: Int, name: String, description: String, initDate: Date, dueDate: Date): Int {
         dataSource.connection.use {
@@ -518,17 +542,21 @@ class TasksDataPostgres(url: String) : AppDatabase {
         }
     }
 
-    override fun getCardsFromList(lid: Int, bid: Int): List<Card> {
+    override fun getCardsFromList(lid: Int, bid: Int, skip: Int, limit: Int): List<Card> {
         dataSource.connection.use {
             val stm = it.prepareStatement(
                 """
                 SELECT c.id, c.bid,c.lid, c.name, c.description, c.initdate, c.finishdate
                 FROM cards as c
                 WHERE c.bid = ? and c.lid = ?
+                OFFSET COALESCE(?, 0) 
+                LIMIT COALESCE(?, 30)
                 """.trimIndent()
             )
             stm.setInt(1, bid)
             stm.setInt(2, lid)
+            stm.setInt(3, skip)
+            stm.setInt(4, limit)
 
             val rs = stm.executeQuery()
             val tasksList = mutableListOf<Card>()

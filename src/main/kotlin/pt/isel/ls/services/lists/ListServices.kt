@@ -6,6 +6,8 @@ import pt.isel.ls.database.memory.TaskListAlreadyExistsInBoardException
 import pt.isel.ls.domain.Card
 import pt.isel.ls.domain.TaskList
 import pt.isel.ls.domain.checkListCredentials
+import pt.isel.ls.services.utils.LIMIT_DEFAULT
+import pt.isel.ls.services.utils.SKIP_DEFAULT
 import pt.isel.ls.services.utils.checkToken
 import pt.isel.ls.services.utils.exceptions.IllegalBoardAccessException
 import pt.isel.ls.services.utils.exceptions.IllegalListAccessException
@@ -48,7 +50,7 @@ class ListServices(private val database: AppDatabase) {
         val simpleList = database.getListDetails(lid)
         if (!database.checkUserTokenExistsInBoard(token, simpleList.bid)) throw IllegalListAccessException
 
-        val cards = database.getCardsFromList(simpleList.id, simpleList.bid)
+        val cards = database.getCardsFromList(simpleList.id, simpleList.bid, SKIP_DEFAULT, LIMIT_DEFAULT)
 
         return TaskList(
             lid,
@@ -73,9 +75,7 @@ class ListServices(private val database: AppDatabase) {
         val list = database.getListDetails(lid)
         if (!database.checkUserTokenExistsInBoard(token, list.bid)) throw IllegalListAccessException
 
-        val cards = database.getCardsFromList(lid, list.bid)
-        val droppedCards = if (skip != null) cards.drop(skip) else cards
-        return if (limit != null) droppedCards.take(limit) else droppedCards
+        return database.getCardsFromList(lid, list.bid, skip ?: SKIP_DEFAULT, limit ?: LIMIT_DEFAULT)
     }
 
     fun deleteList(token: String, lid: Int) {

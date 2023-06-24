@@ -1,6 +1,5 @@
 package pt.isel.ls.database.memory
 
-import pt.isel.ls.api.dto.user.LoginUserResponseDb
 import pt.isel.ls.database.AppDatabase
 import pt.isel.ls.domain.Board
 import pt.isel.ls.domain.Card
@@ -37,12 +36,13 @@ class TasksDataMem : AppDatabase {
 
     override fun createUser(token: String, name: String, email: String, password: String): Int {
         val id = userId.also { userId += 1 }
-        users[id] = User(id, name, email, token)
+        users[id] = User(id, name, email, token, password)
         return id
     }
 
-    override fun loginUser(email: String): LoginUserResponseDb {
-        TODO("Not yet implemented")
+    override fun loginUser(email: String): User {
+        val u = users.values.firstOrNull { it.email == email } ?: throw UserNotFoundException
+        return User(u.id, u.name, u.email, u.token, u.password)
     }
 
     /**
@@ -62,9 +62,11 @@ class TasksDataMem : AppDatabase {
      *
      * @return the list of users from that specific board
      */
-    override fun getUsersFromBoard(bid: Int): List<User> =
+    override fun getUsersFromBoard(bid: Int, skip: Int, limit: Int): List<User> =
         userBoard.values
             .filter { it.bId == bid }
+            .drop(skip)
+            .take(limit)
             .map { getUserDetails(it.uId) }
 
     override fun checkEmailAlreadyExists(email: String) = users.values.any { it.email == email }
@@ -79,7 +81,7 @@ class TasksDataMem : AppDatabase {
      * @param description board's descritpion
      *
      * @throws UserNotFoundException if the user was not found
-     * @throws BoardNameAlreadyExistsException if the board  name already exists
+     * @throws BoardNameAlreadyExistsException if the board name already exists
      * @return the created Board()
      */
     override fun createBoard(uid: Int, name: String, description: String): Int {
@@ -105,16 +107,9 @@ class TasksDataMem : AppDatabase {
      * @param uid user's unique identifier
      * @param bid board's unique identifier
      *
-     * @throws UserNotFoundException if the user was not found
-     * @throws BoardNotFoundException if the board was not found
-     * @throws UserAlreadyExistsInBoardException if a board already contains a User with that id
      */
     override fun addUserToBoard(uid: Int, bid: Int) {
         val id = userBoardId.also { userBoardId += 1 }
-        if (!users.values.any { it.id == uid }) throw UserNotFoundException
-        if (!boards.values.any { it.id == bid }) throw BoardNotFoundException
-        if (userBoard.values.any { it.uId == uid && it.bId == bid }) throw UserAlreadyExistsInBoardException
-
         userBoard[id] = UserBoard(uid, bid)
     }
 
@@ -125,9 +120,11 @@ class TasksDataMem : AppDatabase {
      *
      * @return list of boards from that User
      */
-    override fun getBoardsFromUser(uid: Int): List<SimpleBoard> =
+    override fun getBoardsFromUser(uid: Int, skip: Int, limit: Int): List<SimpleBoard> =
         userBoard.values
             .filter { it.uId == uid }
+            .drop(skip)
+            .take(limit)
             .map { board ->
                 getBoardDetails(board.bId)
             }
@@ -149,13 +146,21 @@ class TasksDataMem : AppDatabase {
         return boards.values.any { it.name == name }
     }
 
+    override fun searchBoardsFromUser(uid: Int, skip: Int, limit: Int, searchQuery: String) =
+        userBoard.values
+            .filter { it.uId == uid && boards.values.any { b -> b.name.lowercase().contains(searchQuery.lowercase()) } }
+            .drop(skip)
+            .take(limit)
+            .map { board ->
+                getBoardDetails(board.bId)
+            }
+
     /**
      * Creates a new List
      *
      * @param bid board's unique identifier
      * @param name list's name
      *
-     *  @throws BoardNotFoundException if the board was not found
      * @return the created TaskList()
      */
     override fun createList(bid: Int, name: String): Int {
@@ -170,13 +175,13 @@ class TasksDataMem : AppDatabase {
      *
      * @param bid board's unique identifier
      *
-     * @throws BoardNotFoundException if the board was not found
      * @return the list of TaskList from that Board
      */
-    override fun getListsFromBoard(bid: Int): List<SimpleList> {
-        if (!boards.values.any { it.id == bid }) throw BoardNotFoundException
+    override fun getListsFromBoard(bid: Int, skip: Int, limit: Int): List<SimpleList> {
         return taskLists.values
             .filter { it.bid == bid }
+            .drop(skip)
+            .take(limit)
             .map {
                 SimpleList(it.id, bid, it.name)
             }
@@ -225,10 +230,11 @@ class TasksDataMem : AppDatabase {
      * @return list of cards from a TaskList
      */
 
-    override fun getCardsFromList(lid: Int, bid: Int): List<Card> {
-        if (!taskLists.values.any { it.id == lid }) throw ListNotFoundException
+    override fun getCardsFromList(lid: Int, bid: Int, skip: Int, limit: Int): List<Card> {
         return cards.values
             .filter { it.lid == lid }
+            .drop(skip)
+            .take(limit)
             .map {
                 getCardDetails(it.id)
             }
