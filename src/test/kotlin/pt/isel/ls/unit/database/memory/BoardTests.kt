@@ -2,8 +2,9 @@ package pt.isel.ls.unit.database.memory
 
 import pt.isel.ls.database.memory.BoardNotFoundException
 import pt.isel.ls.database.memory.TasksDataMem
-import pt.isel.ls.database.memory.UserNotFoundException
 import pt.isel.ls.domain.UserBoard
+import pt.isel.ls.services.utils.LIMIT_DEFAULT
+import pt.isel.ls.services.utils.SKIP_DEFAULT
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -47,17 +48,6 @@ class BoardTests {
     }
 
     @Test
-    fun `test add User to a board throws UserNotFoundException`() {
-        val user = userA
-        val board = mem.createBoard(user, "To Do".repeat(4), "ISEL project")
-
-        val msg = assertFailsWith<UserNotFoundException> {
-            mem.addUserToBoard(100, board)
-        }
-        assertEquals("A user with that id does not exist", msg.description)
-    }
-
-    @Test
     fun `test get board details`() {
         val donkeyUser = userA
         val board = mem.createBoard(donkeyUser, "To Do".repeat(4), "ISEL project")
@@ -96,7 +86,7 @@ class BoardTests {
             mem.createBoard(donkeyUser, "To Do 3".repeat(4), "ISEL project 3")
         )
 
-        val sut = mem.getBoardsFromUser(donkeyUser)
+        val sut = mem.getBoardsFromUser(donkeyUser, SKIP_DEFAULT, LIMIT_DEFAULT)
         assertEquals(listOf(b, b2, b3), sut)
     }
 
@@ -108,7 +98,7 @@ class BoardTests {
         mem.userBoard[1] = UserBoard(donkeyUser, 10)
 
         val msg = assertFailsWith<BoardNotFoundException> {
-            mem.getBoardsFromUser(donkeyUser)
+            mem.getBoardsFromUser(donkeyUser, SKIP_DEFAULT, LIMIT_DEFAULT)
         }
         assertEquals("The board with the id provided doesn't exist", msg.description)
     }

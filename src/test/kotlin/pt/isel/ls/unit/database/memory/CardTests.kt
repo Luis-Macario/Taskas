@@ -1,6 +1,8 @@
 package pt.isel.ls.unit.database.memory
 
 import pt.isel.ls.database.memory.TasksDataMem
+import pt.isel.ls.services.utils.LIMIT_DEFAULT
+import pt.isel.ls.services.utils.SKIP_DEFAULT
 import java.sql.Date
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -52,7 +54,7 @@ class CardTests {
                 mem.createCard(lId, "Team Work4", "some work 4".repeat(1), initDate, cardDate)
             )
 
-        val sut = mem.getCardsFromList(lId, boardA)
+        val sut = mem.getCardsFromList(lId, boardA, SKIP_DEFAULT, LIMIT_DEFAULT)
 
         assertEquals(listOf(c, c2, c3, c4), sut)
     }

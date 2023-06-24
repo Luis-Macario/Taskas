@@ -46,9 +46,12 @@ class BoardsTests {
     private val emailB = "A47671@alunos.isel.pt"
     private val boardName = "aName"
     private val boardDescription = "aDescription"
+    private val passwordGeral = "C04825961B2415A75D4DE08598E8BBF4D1ECDCAE1A44D58E7CE03111BDA25A3A"
 
-    private val userA: User = User(database.createUser(tokenA, nameA, emailA, password), nameA, emailA, tokenA)
-    private val userB: User = User(database.createUser(tokenB, nameB, emailB, password), nameB, emailB, tokenB)
+    private val userA: User =
+        User(database.createUser(tokenA, nameA, emailA, password), nameA, emailA, tokenA, passwordGeral)
+    private val userB: User =
+        User(database.createUser(tokenB, nameB, emailB, password), nameB, emailB, tokenB, passwordGeral)
     private val board =
         Board(database.createBoard(userA.id, boardName, boardDescription), boardName, boardDescription, listOf())
 

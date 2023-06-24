@@ -86,12 +86,30 @@ class UserTests {
     @Test
     fun `getUsersFromBoard returns correct users list`() {
         val listUser = listOf<User>(
-            User(1, "Francisco Medeiros", "a46631@alunos.isel.pt", "160ee838-150b-4ca1-a2ff-2e964383c315"),
-            User(2, "Ricardo Pinto", "a47673@alunos.isel.pt", "12971dc2-6816-4851-b110-e19065747785"),
-            User(3, "Luis Macario", "a47671@alunos.isel.pt", "658baaa9-4035-415e-9674-6957704600ba")
+            User(
+                1,
+                "Francisco Medeiros",
+                "a46631@alunos.isel.pt",
+                "160ee838-150b-4ca1-a2ff-2e964383c315",
+                "C04825961B2415A75D4DE08598E8BBF4D1ECDCAE1A44D58E7CE03111BDA25A3A"
+            ),
+            User(
+                2,
+                "Ricardo Pinto",
+                "a47673@alunos.isel.pt",
+                "12971dc2-6816-4851-b110-e19065747785",
+                "6559D8CAEFE3D38D0AD455B8A072BB5A11DA31AC19DA7AFFAD563FC4D0AFF0EF"
+            ),
+            User(
+                3,
+                "Luis Macario",
+                "a47671@alunos.isel.pt",
+                "658baaa9-4035-415e-9674-6957704600ba",
+                "132513E5601D28F9DBDEBD2590514E171FEFEC9A6BE60417D79B8D626077C3FB"
+            )
 
         )
-        val sut = db.getUsersFromBoard(1)
+        val sut = db.getUsersFromBoard(1, 0, 30)
 
         assertEquals(3, sut.size)
         assertEquals(listUser, sut)
@@ -99,7 +117,7 @@ class UserTests {
 
     @Test
     fun `getUsersFromBoard returns empty list for wrong board id`() {
-        val sut = db.getUsersFromBoard(100)
+        val sut = db.getUsersFromBoard(100, 0, 30)
         assertEquals(0, sut.size)
         assertEquals(emptyList(), sut)
     }

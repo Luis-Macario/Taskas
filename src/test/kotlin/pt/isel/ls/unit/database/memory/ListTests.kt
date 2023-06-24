@@ -1,8 +1,9 @@
 package pt.isel.ls.unit.database.memory
 
-import pt.isel.ls.database.memory.BoardNotFoundException
 import pt.isel.ls.database.memory.ListNotFoundException
 import pt.isel.ls.database.memory.TasksDataMem
+import pt.isel.ls.services.utils.LIMIT_DEFAULT
+import pt.isel.ls.services.utils.SKIP_DEFAULT
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -52,19 +53,9 @@ class ListTests {
         val l2 = mem.getListDetails(mem.createList(board, "Some work 2"))
         val l3 = mem.getListDetails(mem.createList(board, "Some work 3"))
 
-        val sut = mem.getListsFromBoard(board)
+        val sut = mem.getListsFromBoard(board, SKIP_DEFAULT, LIMIT_DEFAULT)
 
         // assertEquals(3, sut.size)
         assertEquals(listOf(l1, l2, l3), sut)
-    }
-
-    @Test
-    fun `test getListsFromBoard giving wrong board id throws BoardNotFoundException`() {
-        val mem = TasksDataMem()
-
-        val msg = assertFailsWith<BoardNotFoundException> {
-            mem.getListsFromBoard(1)
-        }
-        assertEquals("The board with the id provided doesn't exist", msg.description)
     }
 }

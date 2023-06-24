@@ -11,10 +11,11 @@ import kotlin.test.assertTrue
 class UserTests {
 
     private val token = UUID.randomUUID().toString()
+    private val password = "132513E5601D28F9DBDEBD2590514E171FEFEC9A6BE60417D79B8D626077C3FB"
 
     @Test
     fun `Creates a valid user`() {
-        val user = User(1, "Joel", "joel@gmail.com", token)
+        val user = User(1, "Joel", "joel@gmail.com", token, password)
 
         assertEquals(1, user.id)
         assertEquals("Joel", user.name)
@@ -25,7 +26,7 @@ class UserTests {
     @Test
     fun `Creating a user with an invalid id throws IllegalArgumentException`() {
         val msg = assertFailsWith<IllegalArgumentException> {
-            User(-1, "joel", "joel@hotmail.com", token)
+            User(-1, "joel", "joel@hotmail.com", token, password)
         }
 
         assertEquals("Invalid user id: -1", msg.message)
@@ -34,7 +35,7 @@ class UserTests {
     @Test
     fun `Creating a user with an invalid name throws IllegalArgumentException`() {
         val msg = assertFailsWith<IllegalArgumentException> {
-            User(1, "", "joel@hotmail.com", token)
+            User(1, "", "joel@hotmail.com", token, password)
         }
 
         assertEquals("Invalid username: ", msg.message)
@@ -43,7 +44,7 @@ class UserTests {
     @Test
     fun `Creating a user with an invalid email throws IllegalArgumentException`() {
         val msg = assertFailsWith<IllegalArgumentException> {
-            User(1, "Joel", "joe", token)
+            User(1, "Joel", "joe", token, password)
         }
 
         assertEquals("Invalid email: joe", msg.message)

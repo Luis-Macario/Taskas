@@ -16,8 +16,8 @@ data class User(
     val id: Int,
     val name: String,
     val email: String,
-    val token: String
-    // val password: String
+    val token: String,
+    val password: String
 ) {
     companion object {
         private const val EMAIL_REGEX = "^(.+)@(.+)$"

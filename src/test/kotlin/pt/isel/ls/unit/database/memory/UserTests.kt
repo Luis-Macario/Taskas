@@ -17,7 +17,7 @@ class UserTests {
 
     @Test
     fun `test create user manually`() {
-        val user = User(0, name, email, token)
+        val user = User(0, name, email, token, password)
         mem.users[0] = user
 
         assertEquals(mem.users[0]?.name, name)

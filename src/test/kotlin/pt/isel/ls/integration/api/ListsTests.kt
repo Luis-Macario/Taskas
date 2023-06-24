@@ -47,7 +47,7 @@ class ListsTests {
     private val listName = "aName"
     private val password = "teste12345"
 
-    private val userA = User(database.createUser(tokenA, nameA, emailA, password), nameA, emailA, tokenA)
+    private val userA = User(database.createUser(tokenA, nameA, emailA, password), nameA, emailA, tokenA, password)
     private val board =
         Board(database.createBoard(userA.id, boardName, boardDescription), boardName, boardDescription, listOf())
     private val list = TaskList(database.createList(board.id, listName), board.id, listName, false, listOf())

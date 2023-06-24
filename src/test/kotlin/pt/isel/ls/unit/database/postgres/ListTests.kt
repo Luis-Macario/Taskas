@@ -4,6 +4,8 @@ import org.postgresql.ds.PGSimpleDataSource
 import pt.isel.ls.database.memory.ListNotFoundException
 import pt.isel.ls.database.sql.TasksDataPostgres
 import pt.isel.ls.domain.SimpleList
+import pt.isel.ls.services.utils.LIMIT_DEFAULT
+import pt.isel.ls.services.utils.SKIP_DEFAULT
 import java.sql.SQLException
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -68,7 +70,7 @@ class ListTests {
             SimpleList(newList3, board, listName)
         )
 
-        val sut = db.getListsFromBoard(board)
+        val sut = db.getListsFromBoard(board, SKIP_DEFAULT, LIMIT_DEFAULT)
 
         assertEquals(3, sut.size)
         assertEquals(listTaskList, sut)
@@ -79,7 +81,7 @@ class ListTests {
         val db = TasksDataPostgres(url)
 
         val bid = 100
-        val sut = db.getListsFromBoard(bid)
+        val sut = db.getListsFromBoard(bid, SKIP_DEFAULT, LIMIT_DEFAULT)
 
         assertEquals(0, sut.size)
         assertEquals(emptyList(), sut)

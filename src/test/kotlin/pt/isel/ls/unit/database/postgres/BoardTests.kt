@@ -2,6 +2,8 @@ package pt.isel.ls.unit.database.postgres
 
 import org.postgresql.ds.PGSimpleDataSource
 import pt.isel.ls.database.sql.TasksDataPostgres
+import pt.isel.ls.services.utils.LIMIT_DEFAULT
+import pt.isel.ls.services.utils.SKIP_DEFAULT
 import java.sql.SQLException
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -113,7 +115,7 @@ class BoardTests {
         val board3 = db.createBoard(newUser, boardName + 'b', boardDescription)
         val board4 = db.createBoard(newUser, boardName + 'c', boardDescription)
 
-        val boardList = db.getBoardsFromUser(newUser)
+        val boardList = db.getBoardsFromUser(newUser, SKIP_DEFAULT, LIMIT_DEFAULT)
 
         assertEquals(4, boardList.size)
         assertEquals(db.getBoardDetails(board), boardList[0])

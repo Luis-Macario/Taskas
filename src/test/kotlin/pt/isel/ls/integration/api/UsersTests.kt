@@ -41,7 +41,7 @@ class UsersTests {
     private val emailB = "A47671@alunos.isel.pt"
     private val passwordB = "132513E5601D28F9DBDEBD2590514E171FEFEC9A6BE60417D79B8D626077C3FB"
 
-    private val userA: User = User(database.createUser(tokenA, nameA, emailA, passwordA), nameA, emailA, tokenA)
+    private val userA: User = User(database.createUser(tokenA, nameA, emailA, passwordA), nameA, emailA, tokenA, passwordA)
 
     init {
         database.createUser(tokenB, nameB, emailB, passwordB)

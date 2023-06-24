@@ -62,7 +62,6 @@ class TasksDataPostgres(url: String) : AppDatabase {
                     token = rs.getString("token"),
                     password = rs.getString("password")
                 )
-
             } else {
                 throw UserNotFoundException
             }
