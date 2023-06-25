@@ -1,7 +1,7 @@
 import {button, div} from "../../DSL/tags.js";
 import {getAllUsers} from "../../data/boards/AddUserToBoardApiRequests.js";
 
-export default function addUserToBoardModal(mainContent, id, callbck) {
+export default function addUserToBoardModal(mainContent, id, callback) {
 
     let buttonDropDownClicked = false
     const dropDownMenu = div({class: "dropdown-menu", "aria-labelledby": "dropdownMenuButton"})
@@ -31,7 +31,7 @@ export default function addUserToBoardModal(mainContent, id, callbck) {
                             userItem.addEventListener('click', () => {
                                 buttonDropDown.textContent = userItem.textContent
                                 selectedUser = listId
-                                callbck(selectedUser)
+                                callback(selectedUser)
                             });
                             dropDownMenu.appendChild(userItem)
                         })

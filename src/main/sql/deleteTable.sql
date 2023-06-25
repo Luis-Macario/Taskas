@@ -1,10 +1,10 @@
 --apaga todos os dados existentes nas tabelas
 BEGIN transaction;
 
-TRUNCATE users;
-TRUNCATE boards;
-TRUNCATE tasklists;
-TRUNCATE cards;
-TRUNCATE userboards;
+TRUNCATE users CASCADE;
+TRUNCATE boards CASCADE;
+TRUNCATE tasklists CASCADE;
+TRUNCATE cards CASCADE;
+TRUNCATE userboards CASCADE;
 
 COMMIT transaction;

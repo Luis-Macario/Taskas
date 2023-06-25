@@ -21,7 +21,7 @@ export default async function getUsersFromBoardHandler(mainContent, id) {
         async function confirm() {
             console.log(selectedUserModal)
             if (selectedUserModal != null) {
-                await addUsersBoard(mainContent, id, selectedUserModal).then(() => window.location.reload())
+                await addUsersBoard(mainContent, id, selectedUserModal)
             }
         }
 

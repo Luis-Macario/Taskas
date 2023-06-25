@@ -19,6 +19,7 @@ class UserServices(private val database: AppDatabase) {
      *
      * @param name user's name
      * @param email user's email
+     * @param password user's password
      *
      * @return user object
      */

@@ -1,4 +1,5 @@
 import {div, h1, p} from "../DSL/tags.js";
+import {hashChangeHandler} from "../index.js";
 
 export const hardCodedBearer = "160ee838-150b-4ca1-a2ff-2e964383c315"
 export const API_BASE_URL = window.location.protocol + '//' + window.location.host + '/api/'
@@ -10,6 +11,10 @@ export default function showErrorResponse(error) {
         h1({}, `${error.code} ${error.name}`),
         p({}, `${error.description}`)
     )
+}
+
+export function refreshMainContent() {
+    hashChangeHandler()
 }
 
 export function getStoredUser() {

@@ -1,4 +1,4 @@
-import showErrorResponse, {API_BASE_URL, getStoredUser} from "../../configs/configs.js";
+import showErrorResponse, {API_BASE_URL, getStoredUser, refreshMainContent} from "../../configs/configs.js";
 
 export async function addUsersBoard(mainContent, bid, uid) {
 
@@ -19,7 +19,7 @@ export async function addUsersBoard(mainContent, bid, uid) {
     const res = await fetch(API_BASE_URL + `boards/${bid}/users`, options)
     if (res.status === 204) {
         console.log("User added")
-        window.location.reload()
+        refreshMainContent()
     } else {
         throw (await (res.json()))
     }

@@ -11,6 +11,7 @@ import java.security.MessageDigest
  * @property name name of the user
  * @property email email of the user
  * @property token bearer token of the user
+ * @property password the users password (encoded to sha265)
  */
 data class User(
     val id: Int,

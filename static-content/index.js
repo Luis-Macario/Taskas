@@ -6,20 +6,20 @@ window.addEventListener('load', loadHandler)
 window.addEventListener('hashchange', hashChangeHandler)
 
 function loadHandler() {
-    router.addRouteHandler("", {handler: handlers.getHomeHandler, receives: {mainContent: {},}})
-    router.addRouteHandler("users/me", {handler: handlers.userDetailsHandler, receives: {mainContent: {},}})
-    router.addRouteHandler("users/signup", {handler: handlers.userSignupHandler, receives: {mainContent: {},}})
-    router.addRouteHandler("users/login", {handler: handlers.loginUserHandler, receives: {mainContent: {},}})
-    router.addRouteHandler("users/boards/search", {handler: handlers.searchBoardHandler, receives: {mainContent: {},}})
+    router.addRouteHandler("", {handler: handlers.getHomeHandler, receives: {}})
+    router.addRouteHandler("users/me", {handler: handlers.userDetailsHandler, receives: {}})
+    router.addRouteHandler("users/signup", {handler: handlers.userSignupHandler, receives: {}})
+    router.addRouteHandler("users/login", {handler: handlers.loginUserHandler, receives: {}})
+    router.addRouteHandler("users/boards/search", {handler: handlers.searchBoardHandler, receives: {}})
     router.addRouteHandler("users/boards/search/{query}", {
         handler: handlers.searchBoardResultsHandler,
         receives: {mainContent: {}, query: {index: 3}}
     })
-    router.addRouteHandler("users/boards/create", {handler: handlers.createBoardHandler, receives: {mainContent: {},}})
-    router.addRouteHandler("users/boards", {handler: handlers.getBoardsHandler, receives: {mainContent: {},}})
+    router.addRouteHandler("users/boards/create", {handler: handlers.createBoardHandler, receives: {}})
+    router.addRouteHandler("users/boards", {handler: handlers.getBoardsHandler, receives: {}})
     router.addRouteHandler("boards/{id}", {
         handler: handlers.getBoardDetailsHandler,
-        receives: {mainContent: {}, id: {index: 1}}
+        receives: {id: {index: 1}}
     })
     router.addRouteHandler("boards/{id}/users", {
         handler: handlers.getUsersFromBoardHandler,
@@ -27,7 +27,7 @@ function loadHandler() {
     })
     router.addRouteHandler("boards/{id}/lists/create", {
         handler: handlers.createListHandler,
-        receives: {mainContent: {}, id: {index: 1}}
+        receives: {id: {index: 1}}
     })
     router.addRouteHandler("lists/{id}", {
         handler: handlers.listDetailsHandler,
@@ -35,7 +35,7 @@ function loadHandler() {
     })
     router.addRouteHandler("lists/{id}/cards/create", {
         handler: handlers.createCardHandler,
-        receives: {mainContent: {}, id: {index: 1}}
+        receives: {id: {index: 1}}
     })
     router.addRouteHandler("cards/{id}", {
         handler: handlers.cardDetailsHandler,
@@ -46,7 +46,7 @@ function loadHandler() {
     hashChangeHandler()
 }
 
-function hashChangeHandler() {
+export function hashChangeHandler() {
     const mainContent = document.getElementById("mainContent")
     let path = window.location.hash.replace("#", "")
 
